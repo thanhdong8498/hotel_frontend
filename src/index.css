@@ -1,0 +1,25 @@
+:root {
+  --primary-color: #cd9a2b;
+  --white: #fff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  font-family: 'Roboto';
+}
+
+a {
+  text-decoration: none;
+  color: unset
+}
+
+
+.carousel {
+  text-align: center;
+}
