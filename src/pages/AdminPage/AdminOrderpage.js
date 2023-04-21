@@ -140,7 +140,7 @@ function AdminOrderpage() {
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     <Typography gutterBottom variant="h5" component="div" sx={{ padding: "20px", fontSize: "2.4rem" }}>
-                        Danh sách đặt phòng
+                        Danh sách đặt đồ ăn
                     </Typography>
                 </div>
                 <Divider />
