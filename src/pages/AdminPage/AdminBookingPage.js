@@ -8,6 +8,7 @@ import axios from "axios";
 import { HotelState } from "../../components/MyContext/MyContext";
 
 function AdminBookingPage() {
+    const [flag, setFlag] = useState(false);
     const [booking, setBooking] = useState([]);
     useEffect(() => {
         async function getBookingList() {
@@ -15,7 +16,7 @@ function AdminBookingPage() {
             setBooking(response.data);
         }
         getBookingList();
-    }, [booking]);
+    }, [flag]);
     const { setAlert } = HotelState();
 
     const handleCheckout = async (id) => {
@@ -26,10 +27,10 @@ function AdminBookingPage() {
                 message: "Đã thực hiện trả phòng thành công!",
                 type: "success",
             });
-            setBooking([]);
+            setFlag(!flag);
         }
     };
-    console.log(booking);
+    console.log("rerender");
     const columns = [
         {
             field: "id",

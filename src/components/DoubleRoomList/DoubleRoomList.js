@@ -7,7 +7,7 @@ import BathtubIcon from "@mui/icons-material/Bathtub";
 import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
 import { useNavigate } from "react-router-dom";
 
-function DoubleRoomList({doubleRooms}) {
+function DoubleRoomList({ doubleRooms }) {
     const navigate = useNavigate();
     const TagReview = styled("div")({
         marginBottom: "10px",
@@ -40,7 +40,7 @@ function DoubleRoomList({doubleRooms}) {
             border: "1px solid #c40025",
         },
     });
-    
+
     return (
         <>
             {doubleRooms &&
@@ -49,7 +49,10 @@ function DoubleRoomList({doubleRooms}) {
                         <Grid key={index} item lg={3}>
                             <Card>
                                 <CardMedia
-                                    sx={{ height: "165px" }}
+                                    onClick={() => {
+                                        navigate(`/room/${item._id}`);
+                                    }}
+                                    sx={{ height: "165px", cursor: "pointer" }}
                                     image={`${process.env.REACT_APP_HOST_URL}${item.cover}`}
                                 />
                                 <CardContent sx={{ textAlign: "center" }}>

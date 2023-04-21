@@ -48,7 +48,10 @@ function SingleRoomList({ singleRooms }) {
                         <Grid key={index} item lg={3} md={6} sm={12} xs={12}>
                             <Card>
                                 <CardMedia
-                                    sx={{ height: "165px" }}
+                                    onClick={() => {
+                                        navigate(`/room/${item._id}`);
+                                    }}
+                                    sx={{ height: "165px", cursor: "pointer" }}
                                     image={`${process.env.REACT_APP_HOST_URL}${item.cover}`}
                                 />
                                 <CardContent sx={{ textAlign: "center" }}>
@@ -63,6 +66,9 @@ function SingleRoomList({ singleRooms }) {
                                             "&:hover": {
                                                 color: "var(--primary-color)",
                                             },
+                                        }}
+                                        onClick={() => {
+                                            navigate(`/room/${item._id}`);
                                         }}
                                     >
                                         {item.title}

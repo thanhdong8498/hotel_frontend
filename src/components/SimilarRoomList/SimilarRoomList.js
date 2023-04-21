@@ -7,7 +7,7 @@ import BathtubIcon from "@mui/icons-material/Bathtub";
 import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
 import { useNavigate } from "react-router-dom";
 
-function VipRoomList({ vipRooms }) {
+function SimilarRoomList({ similarRooms }) {
     const navigate = useNavigate();
     const TagReview = styled("div")({
         marginBottom: "10px",
@@ -43,16 +43,13 @@ function VipRoomList({ vipRooms }) {
 
     return (
         <>
-            {vipRooms &&
-                vipRooms.map((item, index) => {
+            {similarRooms &&
+                similarRooms.map((item, index) => {
                     return (
-                        <Grid key={index} item lg={3}>
+                        <Grid key={index} item lg={4}>
                             <Card>
                                 <CardMedia
-                                    onClick={() => {
-                                        navigate(`/room/${item._id}`);
-                                    }}
-                                    sx={{ height: "165px", cursor: "pointer" }}
+                                    sx={{ height: "165px" }}
                                     image={`${process.env.REACT_APP_HOST_URL}${item.cover}`}
                                 />
                                 <CardContent sx={{ textAlign: "center" }}>
@@ -67,9 +64,6 @@ function VipRoomList({ vipRooms }) {
                                             "&:hover": {
                                                 color: "var(--primary-color)",
                                             },
-                                        }}
-                                        onClick={() => {
-                                            navigate(`/room/${item._id}`);
                                         }}
                                     >
                                         {item.title}
@@ -132,4 +126,4 @@ function VipRoomList({ vipRooms }) {
     );
 }
 
-export default VipRoomList;
+export default SimilarRoomList;

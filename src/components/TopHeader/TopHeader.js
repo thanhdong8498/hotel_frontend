@@ -104,10 +104,10 @@ function TopHeader() {
                         </>
                     )}
 
-                    <Link to={"/cart"}>
+                    <Link to={"/order"}>
                         <NavItem sx={{ display: { xs: "none", sm: "none", md: "flex" } }}>
                             <ShoppingCartIcon style={{ fontSize: "20px", marginRight: "6px" }} />
-                            Giỏ hàng
+                            Order
                         </NavItem>
                     </Link>
                     <Separate sx={{ display: { xs: "none", sm: "none", md: "block" } }} />
@@ -126,7 +126,7 @@ function TopHeader() {
                         }}
                     >
                         <Link
-                            to={"/booking"}
+                            to={"/room"}
                             style={{
                                 width: "100%",
                                 height: "100%",

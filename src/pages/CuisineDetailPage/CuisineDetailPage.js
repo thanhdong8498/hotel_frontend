@@ -1,15 +1,12 @@
-import { Grid, Typography, Divider, Button } from "@mui/material";
-import { styled } from "@mui/system";
+import styled from "@emotion/styled";
+import { Button, Divider, Grid, selectClasses, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import { useNavigate, useParams } from "react-router-dom";
-import DefaultAdminLayout from "./DefaultAdminLayout";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import parse from "html-react-parser";
-import { useDispatch } from "react-redux";
-import { getListCuisine } from "../../redux/slices/CuisineSlice";
+import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { HotelState } from "../../components/MyContext/MyContext";
+import parse from "html-react-parser";
 
 const TagItem = styled("li")({
     display: "inline-block",
@@ -22,7 +19,7 @@ const StyledSpan = styled("span")({
     color: "#323c42",
     padding: "4px 9px",
     margin: "5px",
-    fontSize: "1.5rem",
+    fontSize: "1.6rem",
     position: "relative",
     "&::before": {
         left: "0",
@@ -38,10 +35,23 @@ const StyledSpan = styled("span")({
         borderWidth: "4px",
     },
 });
+const StyledTextField = styled("input")`
+    height: 45px;
+    padding: 0 20px;
+    color: #333;
+    line-height: 45px;
+    border: 1px solid #e1e1e1 !important;
+    box-shadow: none;
+    background: #fff;
 
-function AdminCuisineDetail() {
-    const dispatch = useDispatch();
+    width: 100px;
+    outline: none;
+    border: initial;
+    font-size: 1.4rem;
+`;
+function CuisineDetailPage() {
     const navigate = useNavigate();
+
     const params = useParams();
     const cuisineId = params.id;
     const { setAlert } = HotelState();
@@ -49,15 +59,16 @@ function AdminCuisineDetail() {
     useEffect(() => {
         async function getDetail() {
             const detail = await axios.get(`api/cuisine/detail/${cuisineId}`);
-
             setDetail(detail.data);
         }
         getDetail();
     }, []);
+    const [quantity, setQuantity] = useState(0);
     const [detail, setDetail] = useState();
+
     const caroselItem =
         detail &&
-        detail.images.map((item,index) => {
+        detail.images.map((item, index) => {
             return (
                 <div key={index}>
                     <img
@@ -68,26 +79,27 @@ function AdminCuisineDetail() {
                 </div>
             );
         });
-    const handleDeleteCuisine = async () => {
-        let confirm = window.confirm("Xác nhận xóa??");
-        if (confirm) {
-            const res = await axios.delete(`api/cuisine/delete/${cuisineId}`);
-            if (res.status === 200) {
-                setAlert({
-                    open: true,
-                    message: "Đã xóa thành công!",
-                    type: "success",
-                });
 
-                const response = await axios.get("/api/cuisine/list");
-                dispatch(getListCuisine([...response.data]));
-                navigate("/admin/cuisine");
-            }
+    const handleOrder = async () => {
+        const response = await axios.post("/api/order/create", {
+            cuisineName: detail.title,
+            promotionalPrice: detail.promotionalPrice,
+            totalPrice: Number(quantity * detail.promotionalPrice),
+            quantity: quantity,
+            cuisineId: cuisineId,
+        });
+        if (response.status === 200) {
+            setAlert({
+                open: true,
+                message: "Đã thực hiện trả phòng thành công!",
+                type: "success",
+            });
+            navigate("/order");
         }
     };
     return (
-        <DefaultAdminLayout>
-            <>
+        detail && (
+            <ContainerComponent>
                 <Grid
                     container
                     sx={{
@@ -96,14 +108,19 @@ function AdminCuisineDetail() {
                     }}
                     spacing={2}
                 >
-                    <Grid item lg={2}></Grid>
-                    <Grid item lg={4}>
+                    <Grid item lg={6}>
                         <Carousel>{caroselItem}</Carousel>
                     </Grid>
-                    <Grid item lg={4}>
-                        <Typography variant="h3">{detail && detail.title}</Typography>
-                        <div>
-                            <span style={{ fontSize: "2rem", fontWeight: "600", color: "var(--primary-color)" }}>
+                    <Grid item lg={6}>
+                        <Typography variant="h2">{detail && detail.title}</Typography>
+                        <div style={{ marginTop: "20px", paddingLeft: "10px" }}>
+                            <span
+                                style={{
+                                    fontSize: "2.4rem",
+                                    fontWeight: "600",
+                                    color: "var(--primary-color)",
+                                }}
+                            >
                                 {detail && detail.promotionalPrice.toLocaleString() + "₫"}
                             </span>
                             {detail && detail.listedPrice && (
@@ -119,11 +136,54 @@ function AdminCuisineDetail() {
                                 </span>
                             )}
                         </div>
-                        <Divider sx={{ marginTop: "12px" }} variant="fullWidth" orientation="horizontal" />
-                        <p style={{ margin: "12px 0" }}>{detail && detail.summary}</p>
-                        <Divider sx={{ marginTop: "12px" }} variant="fullWidth" orientation="horizontal" />
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                            <span>Tags:</span>
+                        <Divider sx={{ margin: "20px 0" }} variant="fullWidth" orientation="horizontal" />
+                        <p style={{ margin: "12px 0", fontSize: "1.8rem", textAlign: "justify" }}>
+                            {detail && detail.summary}
+                        </p>
+                        <Divider sx={{ margin: "20px 0" }} variant="fullWidth" orientation="horizontal" />
+                        <div
+                            style={{
+                                margin: "20px 0",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    margin: "20px 0",
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <StyledTextField
+                                    type="number"
+                                    value={quantity}
+                                    onChange={(event) => {
+                                        setQuantity(event.target.value);
+                                    }}
+                                />
+                                <Button
+                                    onClick={handleOrder}
+                                    variant="contained"
+                                    color="error"
+                                    size="large"
+                                    sx={{ marginLeft: "20px" }}
+                                >
+                                    đặt hàng
+                                </Button>
+                            </div>
+                            <div>
+                                <span style={{ fontSize: "2rem" }}>Tổng tiền: </span>
+                                <span style={{ fontSize: "2rem", color: "var(--primary-color)" }}>
+                                    {Number(quantity * detail.promotionalPrice).toLocaleString()}đ
+                                </span>
+                            </div>
+                        </div>
+                        <Divider />
+
+                        <div style={{ display: "flex", alignItems: "center", marginTop: "20px" }}>
+                            <span style={{ fontSize: "1.6rem" }}>Tags:</span>
                             <ul style={{ listStyle: "none", marginBottom: "0", marginLeft: "0" }}>
                                 {detail &&
                                     detail.tags.map((item) => {
@@ -136,9 +196,8 @@ function AdminCuisineDetail() {
                             </ul>
                         </div>
                     </Grid>
-                    <Grid item lg={2}></Grid>
-                    <Grid item lg={2}></Grid>
-                    <Grid item lg={8}>
+
+                    <Grid item lg={12}>
                         <div
                             style={{
                                 color: "white",
@@ -165,28 +224,19 @@ function AdminCuisineDetail() {
                                 marginBottom: "20px",
                             }}
                         >
-                            <div style={{ width: "100%" }} className="ql-editor" datagramm="false">
+                            <div
+                                style={{ width: "100%", fontSize: "1.8rem", textAlign: "justify" }}
+                                className="ql-editor"
+                                datagramm="false"
+                            >
                                 {detail && parse(detail.description)}
                             </div>
                         </div>
                     </Grid>
-                    <Grid sx={{ textAlign: "center" }} item lg={12}>
-                        <Button
-                            onClick={() => {
-                                navigate(`/admin/cuisine/edit/${cuisineId}`);
-                            }}
-                            variant="contained"
-                        >
-                            Chỉnh sửa
-                        </Button>
-                        <Button onClick={handleDeleteCuisine} variant="contained" sx={{ marginLeft: "20px" }}>
-                            Xóa
-                        </Button>
-                    </Grid>
                 </Grid>
-            </>
-        </DefaultAdminLayout>
+            </ContainerComponent>
+        )
     );
 }
 
-export default AdminCuisineDetail;
+export default CuisineDetailPage;

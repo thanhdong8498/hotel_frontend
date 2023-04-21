@@ -40,6 +40,9 @@ export default function NavComponent() {
                 const response = await axios.get("api/auth/me");
                 const user = response.data;
                 dispatch(loginSuccess({ ...user }));
+                if (user.role === "regular") {
+                    navigate("/");
+                }
             } catch (error) {
                 console.log(error);
                 if (error.response.status === 401) {

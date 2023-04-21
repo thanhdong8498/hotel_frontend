@@ -142,7 +142,7 @@ function MainHeader() {
                             visibility: { sm: "visible", md: "hidden" },
                         }}
                     >
-                        <Link to={"/cart"}>
+                        <Link to={"/order"}>
                             <ShoppingCartIcon
                                 sx={{
                                     fill: "black",

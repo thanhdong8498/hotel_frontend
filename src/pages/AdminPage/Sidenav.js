@@ -18,6 +18,7 @@ import FastfoodIcon from "@mui/icons-material/Fastfood";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import EventNoteIcon from "@mui/icons-material/EventNote";
+import RoomServiceIcon from "@mui/icons-material/RoomService";
 
 const drawerWidth = 240;
 
@@ -194,6 +195,33 @@ export default function Sidenav() {
                                 />
                             </ListItemIcon>
                             <StyledListItemText primary="Quản lý đặt phòng" sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                        <ListItemButton
+                            sx={{
+                                minHeight: 48,
+                                justifyContent: open ? "initial" : "center",
+                                px: 2.5,
+                            }}
+                            onClick={() => {
+                                navigate("/admin/order");
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0,
+                                    mr: open ? 3 : "auto",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <RoomServiceIcon
+                                    sx={{
+                                        fill: "black",
+                                        width: "26px",
+                                        height: "24px",
+                                    }}
+                                />
+                            </ListItemIcon>
+                            <StyledListItemText primary="Quản lý đặt đồ ăn" sx={{ opacity: open ? 1 : 0 }} />
                         </ListItemButton>
                     </ListItem>
                 </List>

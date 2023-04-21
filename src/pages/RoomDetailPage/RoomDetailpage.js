@@ -19,6 +19,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { useSelector } from "react-redux";
 import { HotelState } from "../../components/MyContext/MyContext";
+import SimilarRoomList from "../../components/SimilarRoomList/SimilarRoomList";
 
 const StyledTextField = styled("input")`
     height: 35px;
@@ -39,14 +40,72 @@ function RoomDetailpage() {
     const params = useParams();
     const roomId = params.id;
 
+    const [bookSuccess, setbookSuccess] = useState(false);
+    const [roomType, setRoomType] = useState("");
     useEffect(() => {
         async function getDetail() {
             const detail = await axios.get(`api/room/${roomId}`);
-
             setDetail(detail.data);
+            setRoomType(detail.data.roomType);
         }
+        async function getSimilarRoom() {
+            if (roomType !== "") {
+                const rooms = await axios.get(`api/room/${roomType}?sort=price,asc`);
+                setSimilarRoom(rooms.data);
+            }
+        }
+        async function getVipRoom() {
+            if (roomType !== "") {
+                const rooms = await axios.get(`api/room/vip?sort=price,desc`);
+                setVipRooms(rooms.data);
+            }
+        }
+
         getDetail();
-    }, [detail]);
+        getSimilarRoom();
+        getVipRoom();
+    }, [bookSuccess, roomType, roomId]);
+    const [vipRooms, setVipRooms] = useState();
+    console.log(vipRooms);
+    const bestRooms =
+        vipRooms &&
+        vipRooms.slice(0, 4).map((item, index) => {
+            return (
+                <div style={{ margin: "6.5px 0", display: "flex" }} key={index}>
+                    <img
+                        src={`${process.env.REACT_APP_HOST_URL}${item.cover}`}
+                        alt=""
+                        style={{ width: "35%", userSelect: "none", cursor: "pointer" }}
+                        onClick={() => {
+                            navigate(`/room/${item._id}`);
+                        }}
+                    />
+                    <div style={{ marginLeft: "12px" }}>
+                        <Typography
+                            sx={{
+                                fontSize: "1.8rem",
+                                fontWeight: "600",
+                                cursor: "pointer",
+                                marginBottom: "12px",
+                                "&.MuiTypography-root:hover": {
+                                    color: "var(--primary-color)",
+                                },
+                            }}
+                        >
+                            {item.title}
+                        </Typography>
+                        <span style={{ fontSize: "1.6rem", fontWeight: "600", color: "var(--primary-color)" }}>
+                            {item.price.toLocaleString() + "đ"}
+                        </span>
+                    </div>
+                </div>
+            );
+        });
+    const [similarRoom, setSimilarRoom] = useState([]);
+    const similar = similarRoom.filter((room) => {
+        return room._id !== roomId;
+    });
+
     const [seletedRoom, setSeletedRoom] = useState([]);
     const [receiveDate, setReceiveDate] = useState(null);
     const [checkoutDate, setCheckoutDate] = useState(null);
@@ -138,7 +197,7 @@ function RoomDetailpage() {
                     message: "Đã đặt phòng thành công!",
                     type: "success",
                 });
-                setDetail();
+                setbookSuccess(!bookSuccess);
                 setSeletedRoom([]);
                 setCheckoutDate(null);
                 setReceiveDate(null);
@@ -167,7 +226,7 @@ function RoomDetailpage() {
                             <Carousel>{caroselItem}</Carousel>
                         </Grid>
 
-                        <Grid item lg={8}>
+                        <Grid item lg={8} xs={12}>
                             <Typography sx={{ textAlign: "left" }} variant="h4">
                                 {detail && detail.title}
                             </Typography>
@@ -229,7 +288,7 @@ function RoomDetailpage() {
                                     padding: "5px 10px",
                                     borderRadius: "10px",
                                     display: "flex",
-                                    justifyContent: "space-around",
+                                    justifyContent: "space-between",
                                     flexWrap: "wrap",
                                     marginBottom: "20px",
                                 }}
@@ -237,31 +296,31 @@ function RoomDetailpage() {
                                 {detail && detail.services[0].includes("roomCoffee") && (
                                     <div style={{ fontSize: "1.6rem", display: "flex", alignItems: "center" }}>
                                         <CoffeeIcon fontSize="large" />
-                                        <span style={{ marginLeft: "24px" }}>Cafe Buổi Sáng</span>
+                                        <span style={{ marginLeft: "12px" }}>Cafe Buổi Sáng</span>
                                     </div>
                                 )}
                                 {detail && detail.services[0].includes("roomBathtub") && (
                                     <div style={{ fontSize: "1.6rem", display: "flex", alignItems: "center" }}>
                                         <BathtubIcon fontSize="large" />
-                                        <span style={{ marginLeft: "24px" }}>Bồn Tắm Hoa Sen</span>
+                                        <span style={{ marginLeft: "12px" }}>Bồn Tắm Hoa Sen</span>
                                     </div>
                                 )}
                                 {detail && detail.services[0].includes("roomWifi") && (
                                     <div style={{ fontSize: "1.6rem", display: "flex", alignItems: "center" }}>
                                         <WifiIcon fontSize="large" />
-                                        <span style={{ marginLeft: "24px" }}>Internet Không Dây</span>
+                                        <span style={{ marginLeft: "12px" }}>Internet Không Dây</span>
                                     </div>
                                 )}
                                 {detail && detail.services[0].includes("roomFood") && (
                                     <div style={{ fontSize: "1.6rem", display: "flex", alignItems: "center" }}>
                                         <DinnerDiningIcon fontSize="large" />
-                                        <span style={{ marginLeft: "24px" }}>Gọi Đồ Ăn Tại Phòng</span>
+                                        <span style={{ marginLeft: "12px" }}>Gọi Đồ Ăn Tại Phòng</span>
                                     </div>
                                 )}
                                 {detail && detail.services[0].includes("roomStove") && (
                                     <div style={{ fontSize: "1.6rem", display: "flex", alignItems: "center" }}>
                                         <MicrowaveIcon fontSize="large" />
-                                        <span style={{ marginLeft: "24px" }}>Bếp Nấu Tại Phòng</span>
+                                        <span style={{ marginLeft: "12px" }}>Bếp Nấu Tại Phòng</span>
                                     </div>
                                 )}
                             </div>
@@ -524,6 +583,76 @@ function RoomDetailpage() {
                                         Phòng bạn đã chọn
                                     </div>
                                 </div>
+                            </div>
+                        </Grid>
+                        <Grid item lg={8}>
+                            <div
+                                onClick={() => {
+                                    navigate(`/${roomType}-room`);
+                                }}
+                                style={{
+                                    color: "white",
+                                    backgroundColor: "var(--primary-color)",
+                                    marginLeft: "10px",
+                                    fontSize: "1.8rem",
+                                    borderRadius: "10px 10px 0px 0px",
+                                    display: "inline-block",
+                                    height: "40px",
+                                    lineHeight: "40px",
+                                    padding: "0 15px",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Phòng tương tự
+                            </div>
+                            <div
+                                style={{
+                                    border: "1px solid #cd9a2b",
+                                    padding: "10px",
+                                    borderRadius: "10px",
+                                    display: "flex",
+                                    justifyContent: "space-around",
+                                    flexWrap: "wrap",
+                                    marginBottom: "20px",
+                                }}
+                            >
+                                <Grid container spacing={2}>
+                                    <SimilarRoomList similarRooms={similar.slice(0, 3)} />
+                                </Grid>
+                            </div>
+                        </Grid>
+                        <Grid item lg={4}>
+                            <div
+                                onClick={() => {
+                                    navigate(`/${roomType}-room`);
+                                }}
+                                style={{
+                                    color: "white",
+                                    backgroundColor: "var(--primary-color)",
+                                    marginLeft: "10px",
+                                    fontSize: "1.8rem",
+                                    borderRadius: "10px 10px 0px 0px",
+                                    display: "inline-block",
+                                    height: "40px",
+                                    lineHeight: "40px",
+                                    padding: "0 15px",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Phòng tốt nhất
+                            </div>
+                            <div
+                                style={{
+                                    border: "1px solid #cd9a2b",
+                                    padding: "5px 10px",
+                                    borderRadius: "10px",
+                                    display: "flex",
+                                    justifyContent: "space-around",
+                                    flexWrap: "wrap",
+                                    marginBottom: "20px",
+                                }}
+                            >
+                                {bestRooms}
                             </div>
                         </Grid>
                     </Grid>

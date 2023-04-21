@@ -1,8 +1,10 @@
 import AboutPage from "../pages/AboutPage/AboutPage";
+import AccountPage from "../pages/AccountPage/AccountPage";
 import AdminBookingPage from "../pages/AdminPage/AdminBookingPage";
 import AdminCuisineDetail from "../pages/AdminPage/AdminCuisineDetail";
 import AdminCuisineEdit from "../pages/AdminPage/AdminCuisineEdit";
 import AdminCuisinePage from "../pages/AdminPage/AdminCuisinePage";
+import AdminOrderPage from "../pages/AdminPage/AdminOrderpage";
 import AdminPage from "../pages/AdminPage/AdminPage";
 import AdminRoomDetail from "../pages/AdminPage/AdminRoomDetail";
 import AdminRoomEdit from "../pages/AdminPage/AdminRoomEdit";
@@ -10,8 +12,8 @@ import AdminRoomPage from "../pages/AdminPage/AdminRoomPage";
 import AdminUserPage from "../pages/AdminPage/AdminUserPage";
 import CreateRoom from "../pages/AdminPage/CreateRoom";
 import CuisineCreate from "../pages/AdminPage/CuisineCreate";
-import BookingPage from "../pages/BookingPage/BookingPage";
 import ContactPage from "../pages/ContactPage/ContactPage";
+import CuisineDetailPage from "../pages/CuisineDetailPage/CuisineDetailPage";
 import CuisinePage from "../pages/CuisinePage/CuisinePage";
 import DoubleRoom from "../pages/DoubleRoom/DoubleRoom";
 import DrinkPage from "../pages/DrinkPage/DrinkPage";
@@ -20,6 +22,7 @@ import GalleryPage from "../pages/GalleryPage/GalleryPage";
 import HomePage from "../pages/HomPage/HomePage";
 import Login from "../pages/Login/Login";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
+import OrderPage from "../pages/OrderPage/OrderPage";
 import Register from "../pages/Register/Register";
 import RoomDetailPage from "../pages/RoomDetailPage/RoomDetailpage";
 import RoomPage from "../pages/RoomPage/RoomPage";
@@ -32,14 +35,15 @@ export const routes = [
         page: HomePage,
         isShowHeader: true,
     },
-    {
-        path: "/booking",
-        page: BookingPage,
-        isShowHeader: true,
-    },
+
     {
         path: "/cuisine",
         page: CuisinePage,
+        isShowHeader: true,
+    },
+    {
+        path: "/cuisine/:id",
+        page: CuisineDetailPage,
         isShowHeader: true,
     },
     {
@@ -146,6 +150,20 @@ export const routes = [
     {
         path: "admin/booking",
         page: AdminBookingPage,
+    },
+    {
+        path: "admin/order",
+        page: AdminOrderPage,
+    },
+    {
+        path: "/order",
+        page: OrderPage,
+        isShowHeader: true,
+    },
+    {
+        path: "/account",
+        page: AccountPage,
+        isShowHeader: true,
     },
     {
         path: "*",

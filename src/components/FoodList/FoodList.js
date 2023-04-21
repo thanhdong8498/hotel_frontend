@@ -1,6 +1,8 @@
 import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function FoodList({ food }) {
+    const navigate = useNavigate();
     return (
         <>
             {food &&
@@ -15,8 +17,11 @@ function FoodList({ food }) {
                                 }}
                             >
                                 <CardMedia
-                                    sx={{ height: "225px" }}
+                                    sx={{ height: "225px", cursor: "pointer" }}
                                     image={`${process.env.REACT_APP_HOST_URL}${item.images[0]}`}
+                                    onClick={() => {
+                                        navigate(`/cuisine/${item._id}`);
+                                    }}
                                 />
                                 <CardContent>
                                     <Typography
@@ -30,6 +35,9 @@ function FoodList({ food }) {
                                             "&:hover": {
                                                 color: "var(--primary-color)",
                                             },
+                                        }}
+                                        onClick={() => {
+                                            navigate(`/cuisine/${item._id}`);
                                         }}
                                     >
                                         {item.title}
