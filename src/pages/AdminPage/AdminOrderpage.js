@@ -129,7 +129,7 @@ function AdminOrderpage() {
         createAt: moment(item.createAt).format("HH:MM DD/MM/YYYY"),
         cuisineName: item.cuisineName,
         quantity: item.quantity,
-        totalPrice: item.totalPrice,
+        totalPrice: item.totalPrice.toLocaleString() + "đ",
         isAccept: item.isAccept === true ? "Đã xác nhận" : "Chưa xác nhận",
         isDelivery: item.isDelivery === true ? "Đã giao hàng" : "Chưa giao hàng",
     }));
