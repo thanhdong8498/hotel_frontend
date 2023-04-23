@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Button, Card, CardContent, CardMedia, Divider, Grid, selectClasses, Typography } from "@mui/material";
+import { Button, Card, CardContent, CardMedia, Divider, Grid, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
