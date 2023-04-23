@@ -28,8 +28,8 @@ function GalleryPage() {
             <a key={index} href={`${process.env.REACT_APP_HOST_URL}${item}`}>
                 <StyledImg
                     sx={{
-                        width: { lg: "25%", md: "50%", sm: "100%", ms: "100%" },
-                        height: { lg: "250px", md: "500px", sm: "500px", ms: "500px" },
+                        width: { lg: "25%", md: "50%", sm: "100%", ms: "100%", xs: "100%" },
+                        height: { lg: "250px", md: "500px", sm: "500px", ms: "250px", xs: "250px" },
                         padding: "5px",
                         borderRadius: "15px",
                         overflow: "hidden",
