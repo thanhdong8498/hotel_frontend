@@ -136,6 +136,9 @@ function RoomPage() {
                                                             color: "var(--primary-color)",
                                                         },
                                                     }}
+                                                    onClick={() => {
+                                                        navigate(`/room/${item._id}`);
+                                                    }}
                                                 >
                                                     {item.title}
                                                 </Typography>

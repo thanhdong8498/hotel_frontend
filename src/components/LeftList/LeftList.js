@@ -160,7 +160,7 @@ function LeftList() {
                     <StyledListItemText primary="Thư viện ảnh" />
                 </ListItemButton>
             </Link>
-            <Link to={"/booking"}>
+            <Link to={"/room"}>
                 <ListItemButton>
                     <ListItemIcon>
                         <DateRangeIcon fontSize="large" />

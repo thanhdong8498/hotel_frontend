@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-
+import AliceCarousel from "react-alice-carousel";
+import "react-alice-carousel/lib/alice-carousel.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import parse from "html-react-parser";
 import { Carousel } from "react-responsive-carousel";
 import { useNavigate, useParams } from "react-router-dom";
-import { Box, Button, Divider, Grid, styled, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, CardMedia, Divider, Grid, styled, Typography } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import CropIcon from "@mui/icons-material/Crop";
 import CoffeeIcon from "@mui/icons-material/Coffee";
@@ -19,7 +20,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { useSelector } from "react-redux";
 import { HotelState } from "../../components/MyContext/MyContext";
-import SimilarRoomList from "../../components/SimilarRoomList/SimilarRoomList";
+import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
 
 const StyledTextField = styled("input")`
     height: 35px;
@@ -35,6 +36,37 @@ const StyledTextField = styled("input")`
     font-size: 1.4rem;
     border-radius: 5px;
 `;
+const TagReview = styled("div")({
+    marginBottom: "10px",
+    position: "relative",
+    display: "inline-block",
+
+    "&::before": {
+        borderBottom: "3px double #333",
+        top: "0",
+        content: '" "',
+        position: "absolute",
+        height: "3px",
+        left: "0",
+        margin: "0 auto",
+        right: "0",
+        width: "100%",
+    },
+});
+const BookButton = styled("button")({
+    padding: "10px 7px",
+    backgroundColor: "#c40025",
+    border: "1px solid #c40025",
+    color: "#fff",
+    fontSize: "1.2rem",
+    transition: "all 0.3s",
+    cursor: "pointer",
+    "&:hover": {
+        backgroundColor: "#fff",
+        color: "#c40025",
+        border: "1px solid #c40025",
+    },
+});
 function RoomDetailpage() {
     const [detail, setDetail] = useState();
     const params = useParams();
@@ -91,6 +123,10 @@ function RoomDetailpage() {
                                     color: "var(--primary-color)",
                                 },
                             }}
+                            onClick={() => {
+                                navigate(`/room/${item._id}`);
+                                window.scrollTo(0, 0);
+                            }}
                         >
                             {item.title}
                         </Typography>
@@ -104,6 +140,72 @@ function RoomDetailpage() {
     const [similarRoom, setSimilarRoom] = useState([]);
     const similar = similarRoom.filter((room) => {
         return room._id !== roomId;
+    });
+
+    const items = similar.map((item, index) => {
+        return (
+            <Card sx={{ margin: "5px" }} key={index}>
+                <CardMedia sx={{ height: "165px" }} image={`${process.env.REACT_APP_HOST_URL}${item.cover}`} />
+                <CardContent sx={{ textAlign: "center" }}>
+                    <Typography
+                        fontSize="1.4rem"
+                        sx={{
+                            width: "100%",
+                            textTransform: "uppercase",
+                            textAlign: "center",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                            "&:hover": {
+                                color: "var(--primary-color)",
+                            },
+                        }}
+                        onClick={() => {
+                            navigate(`/room/${item._id}`);
+                            window.scrollTo(0, 0);
+                        }}
+                    >
+                        {item.title}
+                    </Typography>
+                    <div style={{ display: "flex", justifyContent: "center", padding: "12px 0" }}>
+                        {item.services[0].includes("roomCoffee") && <CoffeeIcon sx={{ margin: "0 6px" }} />}
+                        {item.services[0].includes("roomBathtub") && <BathtubIcon sx={{ margin: "0 6px" }} />}
+                        {item.services[0].includes("roomWifi") && <WifiOutlinedIcon sx={{ margin: "0 6px" }} />}
+                        {item.services[0].includes("roomStove") && <MicrowaveIcon sx={{ margin: "0 6px" }} />}
+                        {item.services[0].includes("roomFood") && <DinnerDiningIcon sx={{ margin: "0 6px" }} />}
+                    </div>
+                    <TagReview>
+                        <ul
+                            style={{
+                                paddingTop: "10px",
+                                listStyle: "none",
+                                display: "flex",
+                            }}
+                        >
+                            <li style={{ fontSize: "1.5rem", margin: "0 6px" }}>{item.adults + " Khách"}</li>
+                            <li style={{ fontSize: "1.5rem", margin: "0 6px" }}>{item.area + "m²"}</li>
+                        </ul>
+                    </TagReview>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            marginTop: "12px",
+                        }}
+                    >
+                        <span style={{ color: "#c40025", fontWeight: "600", fontSize: "1.8rem" }}>
+                            {item.price.toLocaleString()}₫/Đêm
+                        </span>
+                        <BookButton
+                            onClick={() => {
+                                navigate(`/room/${item._id}`);
+                            }}
+                        >
+                            ĐẶT PHÒNG
+                        </BookButton>
+                    </div>
+                </CardContent>
+            </Card>
+        );
     });
 
     const [seletedRoom, setSeletedRoom] = useState([]);
@@ -220,7 +322,7 @@ function RoomDetailpage() {
                             padding: "12px 0",
                             width: "100%",
                         }}
-                        spacing={2}
+                        spacing={{ lg: 2, xs: 0 }}
                     >
                         <Grid item lg={12}>
                             <Carousel>{caroselItem}</Carousel>
@@ -585,7 +687,7 @@ function RoomDetailpage() {
                                 </div>
                             </div>
                         </Grid>
-                        <Grid item lg={8}>
+                        <Grid item lg={8} md={12} xs={12} sm={12} ms={12}>
                             <div
                                 onClick={() => {
                                     navigate(`/${roomType}-room`);
@@ -607,18 +709,45 @@ function RoomDetailpage() {
                             </div>
                             <div
                                 style={{
+                                    width: "100%",
                                     border: "1px solid #cd9a2b",
-                                    padding: "10px",
+                                    padding: "10px 5px",
                                     borderRadius: "10px",
                                     display: "flex",
-                                    justifyContent: "space-around",
+                                    alignItems: "center",
                                     flexWrap: "wrap",
                                     marginBottom: "20px",
                                 }}
                             >
-                                <Grid container spacing={2}>
-                                    <SimilarRoomList similarRooms={similar.slice(0, 3)} />
-                                </Grid>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        height: "100%",
+                                        width: "100%",
+                                    }}
+                                >
+                                    <AliceCarousel
+                                        mouseTracking
+                                        infinite
+                                        autoPlayInterval={2000}
+                                        animationDuration={2500}
+                                        items={items}
+                                        disableDotsControls
+                                        autoPlay
+                                        disableButtonsControls
+                                        responsive={{
+                                            0: {
+                                                items: 1,
+                                            },
+                                            767: {
+                                                items: 2,
+                                            },
+                                            992: {
+                                                items: 3,
+                                            },
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </Grid>
                         <Grid item lg={4}>

@@ -1,11 +1,13 @@
 import DefaultAdminLayout from "./DefaultAdminLayout";
 import { Box, Button, Divider, Paper, Typography } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridCloseIcon } from "@mui/x-data-grid";
 import moment from "moment";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { HotelState } from "../../components/MyContext/MyContext";
+import { blue, grey } from "@mui/material/colors";
 
 function AdminOrderpage() {
     const [flag, setFlag] = useState(false);
@@ -76,7 +78,29 @@ function AdminOrderpage() {
         {
             field: "totalPrice",
             headerName: "Tổng tiền",
-            width: 250,
+            width: 200,
+        },
+        {
+            field: "isCancelled",
+            headerName: "Đã hủy",
+            type: "boolean",
+            width: 140,
+            editable: true,
+            renderCell: (params) => {
+                return params.value ? (
+                    <CheckCircleIcon
+                        style={{
+                            color: blue[500],
+                        }}
+                    />
+                ) : (
+                    <GridCloseIcon
+                        style={{
+                            color: grey[500],
+                        }}
+                    />
+                );
+            },
         },
         {
             field: "isAccept",
@@ -101,7 +125,7 @@ function AdminOrderpage() {
                                 handleAccept(params.id);
                             }}
                             variant="contained"
-                            disabled={params.row.isAccept === "Đã xác nhận"}
+                            disabled={params.row.isAccept === "Đã xác nhận" || params.row.isCancelled}
                         >
                             chấp nhận
                         </Button>
@@ -111,7 +135,9 @@ function AdminOrderpage() {
                             }}
                             variant="contained"
                             disabled={
-                                params.row.isDelivery === "Đã giao hàng" || params.row.isAccept === "Chưa xác nhận"
+                                params.row.isDelivery === "Đã giao hàng" ||
+                                params.row.isAccept === "Chưa xác nhận" ||
+                                params.row.isCancelled
                             }
                         >
                             giao xong
@@ -130,6 +156,7 @@ function AdminOrderpage() {
         cuisineName: item.cuisineName,
         quantity: item.quantity,
         totalPrice: item.totalPrice.toLocaleString() + "đ",
+        isCancelled: item.isCancelled,
         isAccept: item.isAccept === true ? "Đã xác nhận" : "Chưa xác nhận",
         isDelivery: item.isDelivery === true ? "Đã giao hàng" : "Chưa giao hàng",
     }));

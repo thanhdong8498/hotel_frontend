@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Button, Divider, Grid, selectClasses, Typography } from "@mui/material";
+import { Button, Card, CardContent, CardMedia, Divider, Grid, selectClasses, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
@@ -7,6 +7,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { HotelState } from "../../components/MyContext/MyContext";
 import parse from "html-react-parser";
+import { useSelector } from "react-redux";
+import AliceCarousel from "react-alice-carousel";
 
 const TagItem = styled("li")({
     display: "inline-block",
@@ -51,18 +53,20 @@ const StyledTextField = styled("input")`
 `;
 function CuisineDetailPage() {
     const navigate = useNavigate();
-
+    const isLogined = useSelector((state) => state.auth.isLogined);
     const params = useParams();
     const cuisineId = params.id;
     const { setAlert } = HotelState();
-
+    const [cuisineType, setCuisineType] = useState("");
+    console.log(cuisineType);
     useEffect(() => {
         async function getDetail() {
             const detail = await axios.get(`api/cuisine/detail/${cuisineId}`);
             setDetail(detail.data);
+            setCuisineType(detail.data.type);
         }
         getDetail();
-    }, []);
+    }, [cuisineId]);
     const [quantity, setQuantity] = useState(0);
     const [detail, setDetail] = useState();
 
@@ -80,21 +84,109 @@ function CuisineDetailPage() {
             );
         });
 
+    useEffect(() => {
+        async function getSimilarCuisine() {
+            if (cuisineType !== "") {
+                const response = await axios.get(`api/cuisine/${cuisineType}`);
+                setSimlarCuisine(response.data);
+            }
+        }
+        getSimilarCuisine();
+    }, [cuisineType]);
+    const [simlarCuisine, setSimlarCuisine] = useState([]);
+    const similarCuisineArr = simlarCuisine.filter((item) => {
+        return item._id !== cuisineId;
+    });
+    console.log(similarCuisineArr);
+    const items = similarCuisineArr.map((item, index) => {
+        return (
+            <Card
+                key={index}
+                sx={{
+                    margin: "5px",
+                    "& .MuiCardContent-root:last-child": {
+                        paddingBottom: "16px",
+                    },
+                }}
+            >
+                <CardMedia
+                    sx={{ height: "225px", cursor: "pointer" }}
+                    image={`${process.env.REACT_APP_HOST_URL}${item.images[0]}`}
+                    onClick={() => {
+                        navigate(`/cuisine/${item._id}`);
+                        window.scrollTo(0, 0);
+                    }}
+                />
+                <CardContent>
+                    <Typography
+                        fontSize="1.4rem"
+                        sx={{
+                            width: "100%",
+                            textTransform: "uppercase",
+
+                            fontWeight: "600",
+                            cursor: "pointer",
+                            "&:hover": {
+                                color: "var(--primary-color)",
+                            },
+                        }}
+                        onClick={() => {
+                            navigate(`/cuisine/${item._id}`);
+                            window.scrollTo(0, 0);
+                        }}
+                    >
+                        {item.title}
+                    </Typography>
+                    <div style={{ marginTop: "6px" }}>
+                        <span
+                            style={{
+                                color: "var(--primary-color)",
+                                fontWeight: "600",
+                                fontSize: "1.8rem",
+                            }}
+                        >
+                            {item.promotionalPrice.toLocaleString()}₫
+                        </span>
+                        <span
+                            style={{
+                                fontSize: "1.6rem",
+                                marginLeft: "6px",
+                                textDecoration: "line-through",
+                                color: "#acacac",
+                            }}
+                        >
+                            {item.listedPrice && item.listedPrice.toLocaleString() + "₫"}
+                        </span>
+                    </div>
+                </CardContent>
+            </Card>
+        );
+    });
+
     const handleOrder = async () => {
-        const response = await axios.post("/api/order/create", {
-            cuisineName: detail.title,
-            promotionalPrice: detail.promotionalPrice,
-            totalPrice: Number(quantity * detail.promotionalPrice),
-            quantity: quantity,
-            cuisineId: cuisineId,
-        });
-        if (response.status === 200) {
-            setAlert({
-                open: true,
-                message: "Đã thực hiện trả phòng thành công!",
-                type: "success",
-            });
-            navigate("/order");
+        if (isLogined) {
+            const confirmOrder = window.confirm("Xác nhận đặt đồ ăn?");
+            if (confirmOrder) {
+                const response = await axios.post("/api/order/create", {
+                    cuisineName: detail.title,
+                    promotionalPrice: detail.promotionalPrice,
+                    totalPrice: Number(quantity * detail.promotionalPrice),
+                    quantity: quantity,
+                    cuisineId: cuisineId,
+                });
+                if (response.status === 200) {
+                    setAlert({
+                        open: true,
+                        message: "Đã đặt đồ ăn thành công!",
+                        type: "success",
+                    });
+                }
+                navigate("/order");
+            }
+        } else {
+            if (window.confirm("Bạn cần đăng nhập để gọi đồ ăn! Quay về trang đăng nhập?")) {
+                navigate("/login");
+            }
         }
     };
     return (
@@ -169,16 +261,19 @@ function CuisineDetailPage() {
                                     color="error"
                                     size="large"
                                     sx={{ marginLeft: "20px" }}
+                                    disabled={quantity <= 0}
                                 >
                                     đặt hàng
                                 </Button>
                             </div>
-                            <div>
-                                <span style={{ fontSize: "2rem" }}>Tổng tiền: </span>
-                                <span style={{ fontSize: "2rem", color: "var(--primary-color)" }}>
-                                    {Number(quantity * detail.promotionalPrice).toLocaleString()}đ
-                                </span>
-                            </div>
+                            {quantity > 0 && (
+                                <div>
+                                    <span style={{ fontSize: "2rem" }}>Tổng tiền: </span>
+                                    <span style={{ fontSize: "2rem", color: "var(--primary-color)" }}>
+                                        {Number(quantity * detail.promotionalPrice).toLocaleString()}đ
+                                    </span>
+                                </div>
+                            )}
                         </div>
                         <Divider />
 
@@ -230,6 +325,65 @@ function CuisineDetailPage() {
                                 datagramm="false"
                             >
                                 {detail && parse(detail.description)}
+                            </div>
+                        </div>
+                    </Grid>
+                    <Grid item lg={12}>
+                        <div
+                            onClick={() => {
+                                navigate(`/${cuisineType}`);
+                            }}
+                            style={{
+                                color: "white",
+                                backgroundColor: "var(--primary-color)",
+                                marginLeft: "10px",
+                                fontSize: "1.8rem",
+                                borderRadius: "10px 10px 0px 0px",
+                                display: "inline-block",
+                                height: "40px",
+                                lineHeight: "40px",
+                                padding: "0 15px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            Sản phẩm tương tự
+                        </div>
+                        <div
+                            style={{
+                                border: "1px solid #cd9a2b",
+                                padding: "5px 10px",
+                                borderRadius: "10px",
+                                display: "flex",
+                                justifyContent: "space-around",
+                                flexWrap: "wrap",
+                                marginBottom: "20px",
+                            }}
+                        >
+                            <div
+                                style={{
+                                    display: "flex",
+                                    height: "100%",
+                                    width: "100%",
+                                }}
+                            >
+                                <AliceCarousel
+                                    mouseTracking
+                                    infinite
+                                    autoPlayInterval={2000}
+                                    animationDuration={2500}
+                                    items={items}
+                                    disableDotsControls
+                                    autoPlay
+                                    disableButtonsControls
+                                    responsive={{
+                                        0: {
+                                            items: 1,
+                                        },
+                                        992: {
+                                            items: 4,
+                                        },
+                                    }}
+                                />
                             </div>
                         </div>
                     </Grid>

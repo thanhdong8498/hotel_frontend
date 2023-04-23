@@ -1,6 +1,7 @@
 import AboutPage from "../pages/AboutPage/AboutPage";
 import AccountPage from "../pages/AccountPage/AccountPage";
 import AdminBookingPage from "../pages/AdminPage/AdminBookingPage";
+import AdminContactPage from "../pages/AdminPage/AdminContactPage";
 import AdminCuisineDetail from "../pages/AdminPage/AdminCuisineDetail";
 import AdminCuisineEdit from "../pages/AdminPage/AdminCuisineEdit";
 import AdminCuisinePage from "../pages/AdminPage/AdminCuisinePage";
@@ -154,6 +155,10 @@ export const routes = [
     {
         path: "admin/order",
         page: AdminOrderPage,
+    },
+    {
+        path: "admin/contact",
+        page: AdminContactPage,
     },
     {
         path: "/order",

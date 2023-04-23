@@ -1,9 +1,10 @@
-import { Box, Divider, Paper, Typography } from "@mui/material";
+import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 
 function OrderPage() {
+    const [clickCancel, setClickCancel] = useState(false);
     const [userOrder, setUserOrder] = useState([]);
     useEffect(() => {
         async function getUserOrder() {
@@ -12,8 +13,15 @@ function OrderPage() {
             setUserOrder(orders.data);
         }
         getUserOrder();
-    }, []);
+    }, [clickCancel]);
     console.log(userOrder);
+    const handleCancel = async (id) => {
+        const response = await axios.put(`api/order/cancelled/${id}`);
+        if (response.status === 200) {
+            alert("hủy thành công");
+        }
+        setClickCancel(!clickCancel);
+    };
     const orderList = userOrder.map((item, index) => {
         return (
             <div
@@ -38,20 +46,106 @@ function OrderPage() {
                     />
                     <h2>{item.cuisineName}</h2>
                 </div>
-                <Typography sx={{ width: "20%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600" }}>
+                <Typography
+                    sx={{
+                        width: "16%",
+                        textAlign: "center",
+                        fontSize: "1.6rem",
+                        fontWeight: "600",
+                        margin: "0 5px",
+                        display: { xs: "none", ms: "none", md: "block" },
+                    }}
+                >
                     {item.promotionalPrice.toLocaleString()}đ
                 </Typography>
-                <Typography sx={{ width: "20%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600" }}>
+                <Typography
+                    sx={{ width: "16%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600", margin: "0 5px" }}
+                >
                     {item.quantity}
                 </Typography>
-                <Typography sx={{ width: "20%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600" }}>
+                <Typography
+                    sx={{ width: "16%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600", margin: "0 5px" }}
+                >
                     {item.totalPrice.toLocaleString()}đ
                 </Typography>
-                <Typography sx={{ width: "20%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600" }}>
-                    {item.isAccept === true ? "Đã xác nhận" : "Chưa xác nhận"}
-                    <br />
-                    {item.isDelivery === true ? "Đã giao" : "Chưa giao"}
-                </Typography>
+                <Box sx={{ width: "16%", display: "flex", flexDirection: "column" }}>
+                    {item.isAccept === true && item.isCancelled === false && (
+                        <Typography
+                            sx={{
+                                width: "100%",
+                                textAlign: "center",
+                                fontSize: "1.6rem",
+                                fontWeight: "600",
+                                margin: "0 5px",
+                            }}
+                        >
+                            Đã xác nhận
+                        </Typography>
+                    )}
+                    {item.isAccept === false && item.isCancelled === false && (
+                        <Typography
+                            sx={{
+                                width: "100%",
+                                textAlign: "center",
+                                fontSize: "1.6rem",
+                                fontWeight: "600",
+                                margin: "0 5px",
+                            }}
+                        >
+                            Chưa xác nhận
+                        </Typography>
+                    )}
+                    {item.isDelivery === true && item.isCancelled === false && (
+                        <Typography
+                            sx={{
+                                width: "100%",
+                                textAlign: "center",
+                                fontSize: "1.6rem",
+                                fontWeight: "600",
+                                margin: "0 5px",
+                            }}
+                        >
+                            Đã giao
+                        </Typography>
+                    )}
+                    {item.isDelivery === false && item.isCancelled === false && (
+                        <Typography
+                            sx={{
+                                width: "100%",
+                                textAlign: "center",
+                                fontSize: "1.6rem",
+                                fontWeight: "600",
+                                margin: "0 5px",
+                            }}
+                        >
+                            Chưa giao
+                        </Typography>
+                    )}
+                    {item.isCancelled === true && (
+                        <Typography
+                            sx={{
+                                width: "100%",
+                                textAlign: "center",
+                                fontSize: "1.6rem",
+                                fontWeight: "600",
+                                margin: "0 5px",
+                            }}
+                        >
+                            Đã hủy
+                        </Typography>
+                    )}
+                </Box>
+
+                <Button
+                    onClick={() => {
+                        handleCancel(item._id);
+                    }}
+                    disabled={item.isDelivery || item.isCancelled}
+                    sx={{ width: "16%" }}
+                    variant="contained"
+                >
+                    Hủy
+                </Button>
             </div>
         );
     });
@@ -92,21 +186,71 @@ function OrderPage() {
                             marginBottom: "6px",
                         }}
                     >
-                        <Typography sx={{ width: "20%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600" }}>
+                        <Typography
+                            sx={{
+                                width: "20%",
+                                textAlign: "center",
+                                fontSize: "1.6rem",
+                                fontWeight: "600",
+                                margin: "0 5px",
+                            }}
+                        >
                             Thông tin sản phẩm
                         </Typography>
-                        <Typography sx={{ width: "20%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600" }}>
+                        <Typography
+                            sx={{
+                                width: "16%",
+                                textAlign: "center",
+                                fontSize: "1.6rem",
+                                fontWeight: "600",
+                                margin: "0 5px",
+                                display: { xs: "none", ms: "none", md: "block" },
+                            }}
+                        >
                             Đơn giá
                         </Typography>
-                        <Typography sx={{ width: "20%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600" }}>
+                        <Typography
+                            sx={{
+                                width: "16%",
+                                textAlign: "center",
+                                fontSize: "1.6rem",
+                                fontWeight: "600",
+                                margin: "0 5px",
+                            }}
+                        >
                             Số lượng
                         </Typography>
-                        <Typography sx={{ width: "20%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600" }}>
+                        <Typography
+                            sx={{
+                                width: "16%",
+                                textAlign: "center",
+                                fontSize: "1.6rem",
+                                fontWeight: "600",
+                                margin: "0 5px",
+                            }}
+                        >
                             Thành tiền
                         </Typography>
-                        <Typography sx={{ width: "20%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600" }}>
+                        <Typography
+                            sx={{
+                                width: "16%",
+                                textAlign: "center",
+                                fontSize: "1.6rem",
+                                fontWeight: "600",
+                                margin: "0 5px",
+                            }}
+                        >
                             Trạng thái
                         </Typography>
+                        <Typography
+                            sx={{
+                                width: "16%",
+                                textAlign: "center",
+                                fontSize: "1.6rem",
+                                fontWeight: "600",
+                                margin: "0 5px",
+                            }}
+                        ></Typography>
                     </div>
                     <Divider variant="fullWidth" sx={{ width: "100%" }} orientation="horizontal" />
                     {orderList}

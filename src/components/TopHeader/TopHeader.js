@@ -11,7 +11,7 @@ import { logOutSuccess } from "../../redux/slices/authSlice";
 function TopHeader() {
     const navigate = useNavigate();
     const isLogined = useSelector((state) => state.auth.isLogined);
-    console.log(isLogined);
+    
     const StyledAppBar = styled(AppBar)({
         backgroundColor: "var(--primary-color)",
         color: "var(--white)",
@@ -104,13 +104,17 @@ function TopHeader() {
                         </>
                     )}
 
-                    <Link to={"/order"}>
-                        <NavItem sx={{ display: { xs: "none", sm: "none", md: "flex" } }}>
-                            <ShoppingCartIcon style={{ fontSize: "20px", marginRight: "6px" }} />
-                            Order
-                        </NavItem>
-                    </Link>
-                    <Separate sx={{ display: { xs: "none", sm: "none", md: "block" } }} />
+                    {isLogined && (
+                        <>
+                            <Link to={"/order"}>
+                                <NavItem sx={{ display: { xs: "none", sm: "none", md: "flex" } }}>
+                                    <ShoppingCartIcon style={{ fontSize: "20px", marginRight: "6px" }} />
+                                    Order
+                                </NavItem>
+                            </Link>
+                            <Separate sx={{ display: { xs: "none", sm: "none", md: "block" } }} />
+                        </>
+                    )}
                     <NavItem>
                         <SearchIcon style={{ fontSize: "20px", marginRight: "6px" }} />
                         Tìm kiếm

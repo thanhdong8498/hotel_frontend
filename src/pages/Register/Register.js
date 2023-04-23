@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { HotelState } from "../../components/MyContext/MyContext";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 const StyledBox = styled(Box)({
     boxShadow: "0px 1px 69.16px 6.84px rgba(20,64,51,0.05)",
     width: "100%",
@@ -82,6 +84,7 @@ const Button = styled("button")`
     height: 45px;
 `;
 function Register() {
+    const [showPassword, setShowPassword] = useState(false);
     const [lastName, setLastName] = useState("");
     const [firstName, setFirstName] = useState("");
     const [email, setEmail] = useState("");
@@ -153,6 +156,7 @@ function Register() {
                                 </Link>
                             </span>
                             <StyledTextField
+                                required
                                 id="last-name"
                                 name="last-name"
                                 placeholder="Họ"
@@ -161,6 +165,7 @@ function Register() {
                                 autoComplete="false"
                             />
                             <StyledTextField
+                                required
                                 id="first-name"
                                 name="first-name"
                                 placeholder="Tên"
@@ -169,6 +174,7 @@ function Register() {
                                 onChange={handleChangeFirstName}
                             />
                             <StyledTextField
+                                required
                                 id="email"
                                 name="email"
                                 placeholder="Email"
@@ -178,6 +184,7 @@ function Register() {
                                 onChange={handleChangeEmail}
                             />
                             <StyledTextField
+                                required
                                 id="phone"
                                 name="phone"
                                 placeholder="Số điện thoại"
@@ -185,16 +192,43 @@ function Register() {
                                 onChange={handleChangePhone}
                                 autoComplete="false"
                             />
-                            <StyledTextField
-                                id="password"
-                                name="password"
-                                autoComplete="current-password"
-                                placeholder="Mật khẩu"
-                                type="password"
-                                value={password}
-                                onChange={handleChangePassword}
-                            />
-                            {/* <StyledTextField id="password-retype" placeholder="Nhập lại mật khẩu" type="password" /> */}
+                            <div style={{ width: "100%", position: "relative" }}>
+                                <StyledTextField
+                                    id="password"
+                                    name="password"
+                                    autoComplete="current-password"
+                                    placeholder="Mật khẩu"
+                                    type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    onChange={handleChangePassword}
+                                />
+                                {!showPassword && (
+                                    <VisibilityIcon
+                                        onClick={() => setShowPassword(true)}
+                                        sx={{
+                                            position: "absolute",
+                                            right: 0,
+                                            top: "calc(50% - 7px)",
+                                            transform: "translateY(-50%)",
+                                            marginRight: "12px",
+                                            cursor: "pointer",
+                                        }}
+                                    />
+                                )}
+                                {showPassword && (
+                                    <VisibilityOffIcon
+                                        onClick={() => setShowPassword(false)}
+                                        sx={{
+                                            position: "absolute",
+                                            right: 0,
+                                            top: "calc(50% - 7px)",
+                                            transform: "translateY(-50%)",
+                                            marginRight: "12px",
+                                            cursor: "pointer",
+                                        }}
+                                    />
+                                )}
+                            </div>
                             <Button type="submit">Đăng ký</Button>
                         </StyledBox>
                     </Grid>
