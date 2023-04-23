@@ -82,6 +82,7 @@ const Button = styled("button")`
     line-height: 42px;
     width: 100%;
     height: 45px;
+    cursor: pointer;
 `;
 function Register() {
     const [showPassword, setShowPassword] = useState(false);

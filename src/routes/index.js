@@ -5,11 +5,13 @@ import AdminContactPage from "../pages/AdminPage/AdminContactPage";
 import AdminCuisineDetail from "../pages/AdminPage/AdminCuisineDetail";
 import AdminCuisineEdit from "../pages/AdminPage/AdminCuisineEdit";
 import AdminCuisinePage from "../pages/AdminPage/AdminCuisinePage";
+import AdminGalleryPage from "../pages/AdminPage/AdminGalleryPage";
 import AdminOrderPage from "../pages/AdminPage/AdminOrderpage";
 import AdminPage from "../pages/AdminPage/AdminPage";
 import AdminRoomDetail from "../pages/AdminPage/AdminRoomDetail";
 import AdminRoomEdit from "../pages/AdminPage/AdminRoomEdit";
 import AdminRoomPage from "../pages/AdminPage/AdminRoomPage";
+import AdminUploadImage from "../pages/AdminPage/AdminUploadImage";
 import AdminUserPage from "../pages/AdminPage/AdminUserPage";
 import CreateRoom from "../pages/AdminPage/CreateRoom";
 import CuisineCreate from "../pages/AdminPage/CuisineCreate";
@@ -159,6 +161,14 @@ export const routes = [
     {
         path: "admin/contact",
         page: AdminContactPage,
+    },
+    {
+        path: "admin/gallery",
+        page: AdminGalleryPage,
+    },
+    {
+        path: "admin/gallery/upload",
+        page: AdminUploadImage,
     },
     {
         path: "/order",

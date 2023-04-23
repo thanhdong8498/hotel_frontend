@@ -86,6 +86,7 @@ const Button = styled("button")`
     line-height: 42px;
     width: 100%;
     height: 45px;
+    cursor: pointer;
 `;
 
 const StyledSpan = styled("span")({

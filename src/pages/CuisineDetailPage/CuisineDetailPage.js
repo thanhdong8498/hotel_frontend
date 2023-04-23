@@ -67,7 +67,7 @@ function CuisineDetailPage() {
         }
         getDetail();
     }, [cuisineId]);
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(1);
     const [detail, setDetail] = useState();
 
     const caroselItem =
@@ -251,6 +251,7 @@ function CuisineDetailPage() {
                                 <StyledTextField
                                     type="number"
                                     value={quantity}
+                                    min="1"
                                     onChange={(event) => {
                                         setQuantity(event.target.value);
                                     }}
@@ -261,7 +262,6 @@ function CuisineDetailPage() {
                                     color="error"
                                     size="large"
                                     sx={{ marginLeft: "20px" }}
-                                    disabled={quantity <= 0}
                                 >
                                     đặt hàng
                                 </Button>

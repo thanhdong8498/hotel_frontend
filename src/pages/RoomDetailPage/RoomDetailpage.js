@@ -198,6 +198,8 @@ function RoomDetailpage() {
                         <BookButton
                             onClick={() => {
                                 navigate(`/room/${item._id}`);
+                                window.scrollTo(0, 0);
+                                setSeletedRoom([]);
                             }}
                         >
                             ĐẶT PHÒNG
