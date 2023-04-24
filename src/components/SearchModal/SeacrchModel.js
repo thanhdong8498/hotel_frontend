@@ -79,7 +79,7 @@ function SimpleDialog(props) {
     const [isSearched, setIsSearched] = useState(false);
     const [search, setSearch] = useState("");
     const handleSearch = async () => {
-        const response = await axios.get(`http://localhost:3001/search?query=${search}`);
+        const response = await axios.get(`/search?query=${search}`);
         setResult(response.data);
         setIsSearched(true);
     };
