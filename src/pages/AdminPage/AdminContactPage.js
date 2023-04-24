@@ -15,7 +15,7 @@ function AdminContactPage() {
         }
         getListContacts();
     }, []);
-    console.log(contacts);
+    
     const columns = [
         {
             field: "id",

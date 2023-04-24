@@ -58,7 +58,7 @@ function CuisineDetailPage() {
     const cuisineId = params.id;
     const { setAlert } = HotelState();
     const [cuisineType, setCuisineType] = useState("");
-    console.log(cuisineType);
+    
     useEffect(() => {
         async function getDetail() {
             const detail = await axios.get(`api/cuisine/detail/${cuisineId}`);
@@ -97,7 +97,7 @@ function CuisineDetailPage() {
     const similarCuisineArr = simlarCuisine.filter((item) => {
         return item._id !== cuisineId;
     });
-    console.log(similarCuisineArr);
+    
     const items = similarCuisineArr.map((item, index) => {
         return (
             <Card

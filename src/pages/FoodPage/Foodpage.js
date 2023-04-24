@@ -20,7 +20,7 @@ function Food() {
     }, [sortBy]);
     const [page, setPage] = useState(1);
     const [food, setFood] = useState();
-    console.log(sortBy);
+    
     const handleChange = (event) => {
         setSortBy(event.target.value);
         search.set("sort", sortBy);

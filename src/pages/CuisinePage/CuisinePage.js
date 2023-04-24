@@ -20,7 +20,7 @@ function Drink() {
     }, [sortBy]);
     const [page, setPage] = useState(1);
     const [cuisine, setCuisine] = useState();
-    console.log(sortBy);
+    
     const handleChange = (event) => {
         setSortBy(event.target.value);
         search.set("sort", sortBy);

@@ -13,7 +13,7 @@ function OrderPage() {
         }
         getUserOrder();
     }, [clickCancel]);
-    console.log(userOrder);
+    
     const handleCancel = async (id) => {
         const response = await axios.put(`api/order/cancelled/${id}`);
         if (response.status === 200) {

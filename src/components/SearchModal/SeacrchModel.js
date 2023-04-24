@@ -70,7 +70,7 @@ const Button = styled("button")({
 function SimpleDialog(props) {
     const { onClose, selectedValue, open } = props;
     const [result, setResult] = useState(null);
-    console.log(result);
+    
     const handleClose = () => {
         onClose(selectedValue);
         setIsSearched(false);

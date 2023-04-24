@@ -20,7 +20,7 @@ function DoubleRoom() {
     }, [sortBy]);
     const [page, setPage] = useState(1);
     const [rooms, setRooms] = useState();
-    console.log(sortBy);
+    
     const handleChange = (event) => {
         setSortBy(event.target.value);
         search.set("sort", sortBy);

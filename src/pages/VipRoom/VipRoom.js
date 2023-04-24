@@ -20,13 +20,13 @@ function VipRoom() {
     }, [sortBy]);
     const [page, setPage] = useState(1);
     const [rooms, setRooms] = useState();
-    console.log(sortBy);
+    
     const handleChange = (event) => {
         setSortBy(event.target.value);
         search.set("sort", sortBy);
         setSearch(search);
     };
-    rooms && console.log(Number((rooms.length / 4).toFixed(0)));
+   
 
     const [search, setSearch] = useSearchParams();
     return (

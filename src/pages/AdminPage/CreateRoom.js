@@ -161,7 +161,7 @@ function CreateRoom() {
         formData.append("description", value);
 
         const response = await axios.post("api/room/create", formData);
-        console.log(response);
+        
         if (response.status === 200) {
             setAlert({
                 open: true,

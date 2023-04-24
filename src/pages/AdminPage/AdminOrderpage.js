@@ -160,7 +160,7 @@ function AdminOrderpage() {
         isAccept: item.isAccept === true ? "Đã xác nhận" : "Chưa xác nhận",
         isDelivery: item.isDelivery === true ? "Đã giao hàng" : "Chưa giao hàng",
     }));
-    console.log(rows);
+    
 
     return (
         <DefaultAdminLayout>

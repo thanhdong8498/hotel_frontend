@@ -98,7 +98,7 @@ function RoomDetailpage() {
         getVipRoom();
     }, [bookSuccess, roomType, roomId]);
     const [vipRooms, setVipRooms] = useState();
-    console.log(vipRooms);
+    
     const bestRooms =
         vipRooms &&
         vipRooms.slice(0, 4).map((item, index) => {

@@ -24,7 +24,7 @@ function AdminBillPage() {
         }
         getDetails();
     }, []);
-    console.log(detail);
+    
     const handlePrint = useReactToPrint({
         content: () => componetRef.current,
         documentTitle: "Hóa đơn-" + id,

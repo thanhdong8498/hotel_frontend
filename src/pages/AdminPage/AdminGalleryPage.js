@@ -27,7 +27,7 @@ function AdminGalleryPage() {
         }
         getImagesList();
     }, [reload]);
-    console.log(images);
+    
 
     const handleDelete = async (path) => {
         let confirm = window.confirm("Xác nhận xóa!!!??");
