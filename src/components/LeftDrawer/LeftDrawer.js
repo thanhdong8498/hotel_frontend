@@ -32,7 +32,7 @@ export default function LeftDrawer() {
                             fill: "black",
                             width: "26px",
                             height: "24px",
-                            marginLeft: "24px",
+                            marginLeft: "12px",
                         }}
                     />
                     <SwipeableDrawer

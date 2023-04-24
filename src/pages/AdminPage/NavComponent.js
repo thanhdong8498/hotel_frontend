@@ -18,7 +18,7 @@ import { toggleSidenav } from "../../redux/slices/AdminPageSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Typography } from "@mui/material";
 import axios from "axios";
-import { loginSuccess } from "../../redux/slices/authSlice";
+import { loginSuccess, logOutSuccess } from "../../redux/slices/authSlice";
 import { HotelState } from "../../components/MyContext/MyContext";
 
 const AppBar = styled(MuiAppBar, {
@@ -75,6 +75,7 @@ export default function NavComponent() {
 
     const handleLogout = () => {
         localStorage.removeItem("accessToken");
+        dispatch(logOutSuccess());
         navigate("/login");
         setAlert({
             open: true,

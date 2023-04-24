@@ -282,13 +282,15 @@ function RoomDetailpage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (isLogined) {
+        const confirm = window.confirm("Xác nhận đặt phòng?");
+        if (isLogined && confirm) {
             const response = await axios.post("/api/booking/create", {
                 fullname: fullname,
                 receiveDate: receiveDate,
                 checkoutDate: checkoutDate,
                 roomQuantity: seletedRoom.length,
                 roomNo: seletedRoom,
+                roomPrice: detail.price,
                 summaryPrice: Number(
                     seletedRoom.length * (get_day_of_time(receiveDate.$d, checkoutDate.$d) + 1) * detail.price
                 ),
@@ -301,6 +303,7 @@ function RoomDetailpage() {
                     message: "Đã đặt phòng thành công!",
                     type: "success",
                 });
+                navigate("/booking");
                 setbookSuccess(!bookSuccess);
                 setSeletedRoom([]);
                 setCheckoutDate(null);

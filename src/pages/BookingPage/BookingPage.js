@@ -2,24 +2,38 @@ import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
+import { HotelState } from "../../components/MyContext/MyContext";
 
 function OrderPage() {
+    const get_day_of_time = (d1, d2) => {
+        let ms1 = new Date(d1).getTime();
+        let ms2 = new Date(d2).getTime();
+        return Math.ceil((ms2 - ms1) / (24 * 60 * 60 * 1000));
+    };
     const [clickCancel, setClickCancel] = useState(false);
     const [userOrder, setUserOrder] = useState([]);
     useEffect(() => {
         async function getUserOrder() {
-            const orders = await axios.get("/api/order/user");
+            const orders = await axios.get("/api/booking/user");
             setUserOrder(orders.data);
         }
         getUserOrder();
     }, [clickCancel]);
-    console.log(userOrder);
+    const { setAlert } = HotelState();
+
     const handleCancel = async (id) => {
-        const response = await axios.put(`api/order/cancelled/${id}`);
-        if (response.status === 200) {
-            alert("hủy thành công");
+        const confirm = window.confirm("Xác nhận hủy?");
+        if (confirm) {
+            const response = await axios.put(`api/booking/cancelled/${id}`);
+            if (response.status === 200) {
+                setAlert({
+                    open: true,
+                    message: "Đã thực hủy đặt phòng thành công!",
+                    type: "success",
+                });
+            }
+            setClickCancel(!clickCancel);
         }
-        setClickCancel(!clickCancel);
     };
     const orderList = userOrder.map((item, index) => {
         return (
@@ -39,11 +53,11 @@ function OrderPage() {
                     }}
                 >
                     <img
-                        src={`${process.env.REACT_APP_HOST_URL}${item.cover}`}
+                        src={`${process.env.REACT_APP_HOST_URL}${item.roomCoverImage}`}
                         alt=""
                         style={{ width: "100%", userSelect: "none", marginBottom: "6px" }}
                     />
-                    <h2>{item.cuisineName}</h2>
+                    <h2>{item.roomTitle}</h2>
                 </div>
                 <Typography
                     sx={{
@@ -55,20 +69,39 @@ function OrderPage() {
                         display: { xs: "none", ms: "none", md: "block" },
                     }}
                 >
-                    {item.promotionalPrice.toLocaleString()}đ
+                    {item.roomPrice.toLocaleString()}đ
                 </Typography>
+                <div style={{ width: "16%" }}>
+                    <Typography
+                        sx={{
+                            width: "100%",
+                            textAlign: "center",
+                            fontSize: "1.6rem",
+                            fontWeight: "600",
+                            margin: "0 5px",
+                        }}
+                    >
+                        {item.roomNo.length} Phòng
+                    </Typography>
+                    <Typography
+                        sx={{
+                            width: "100%",
+                            textAlign: "center",
+                            fontSize: "1.6rem",
+                            fontWeight: "600",
+                            margin: "0 5px",
+                        }}
+                    >
+                        {get_day_of_time(item.receiveDate, item.checkoutDate) + 1} Đêm
+                    </Typography>
+                </div>
                 <Typography
                     sx={{ width: "16%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600", margin: "0 5px" }}
                 >
-                    {item.quantity}
-                </Typography>
-                <Typography
-                    sx={{ width: "16%", textAlign: "center", fontSize: "1.6rem", fontWeight: "600", margin: "0 5px" }}
-                >
-                    {item.totalPrice.toLocaleString()}đ
+                    {item.summaryPrice.toLocaleString()}đ
                 </Typography>
                 <Box sx={{ width: "16%", display: "flex", flexDirection: "column" }}>
-                    {item.isAccept === true && item.isCancelled === false && (
+                    {item.isReceived === true && item.isCancelled === false && (
                         <Typography
                             sx={{
                                 width: "100%",
@@ -78,10 +111,10 @@ function OrderPage() {
                                 margin: "0 5px",
                             }}
                         >
-                            Đã xác nhận
+                            Đã nhận
                         </Typography>
                     )}
-                    {item.isAccept === false && item.isCancelled === false && (
+                    {item.isReceived === false && item.isCancelled === false && (
                         <Typography
                             sx={{
                                 width: "100%",
@@ -91,10 +124,10 @@ function OrderPage() {
                                 margin: "0 5px",
                             }}
                         >
-                            Chưa xác nhận
+                            Chưa nhận
                         </Typography>
                     )}
-                    {item.isDelivery === true && item.isCancelled === false && (
+                    {item.isCheckedOut === true && item.isCancelled === false && (
                         <Typography
                             sx={{
                                 width: "100%",
@@ -104,10 +137,10 @@ function OrderPage() {
                                 margin: "0 5px",
                             }}
                         >
-                            Đã giao
+                            Đã trả
                         </Typography>
                     )}
-                    {item.isDelivery === false && item.isCancelled === false && (
+                    {item.isCheckedOut === false && item.isCancelled === false && (
                         <Typography
                             sx={{
                                 width: "100%",
@@ -117,7 +150,7 @@ function OrderPage() {
                                 margin: "0 5px",
                             }}
                         >
-                            Chưa giao
+                            Chưa trả
                         </Typography>
                     )}
                     {item.isCancelled === true && (
@@ -139,7 +172,7 @@ function OrderPage() {
                     onClick={() => {
                         handleCancel(item._id);
                     }}
-                    disabled={item.isDelivery || item.isCancelled}
+                    disabled={item.isReceived || item.isCancelled}
                     sx={{ width: "16%" }}
                     variant="contained"
                 >
@@ -162,9 +195,7 @@ function OrderPage() {
                         alignItems: "center",
                     }}
                 >
-                    <h2 style={{ textTransform: "uppercase", fontSize: "1.8rem" }}>
-                        Danh sách gọi món ăn, đồ uống của bạn
-                    </h2>
+                    <h2 style={{ textTransform: "uppercase", fontSize: "1.8rem" }}>Danh sách đặt phòng của bạn</h2>
                 </Paper>
             </Box>
             <Box sx={{ padding: "0 30px", backgroundColor: "transparent" }}>
@@ -194,7 +225,7 @@ function OrderPage() {
                                 margin: "0 5px",
                             }}
                         >
-                            Thông tin sản phẩm
+                            Thông tin phòng
                         </Typography>
                         <Typography
                             sx={{

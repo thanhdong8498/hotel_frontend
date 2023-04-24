@@ -31,7 +31,9 @@
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
+    "react-to-print": "^2.14.12",
     "styled-components": "^5.3.9",
+    "vn-num2words": "^1.0.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

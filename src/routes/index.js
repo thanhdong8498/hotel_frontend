@@ -1,5 +1,6 @@
 import AboutPage from "../pages/AboutPage/AboutPage";
 import AccountPage from "../pages/AccountPage/AccountPage";
+import AdminBillPage from "../pages/AdminPage/AdminBillPage";
 import AdminBookingPage from "../pages/AdminPage/AdminBookingPage";
 import AdminContactPage from "../pages/AdminPage/AdminContactPage";
 import AdminCuisineDetail from "../pages/AdminPage/AdminCuisineDetail";
@@ -15,6 +16,7 @@ import AdminUploadImage from "../pages/AdminPage/AdminUploadImage";
 import AdminUserPage from "../pages/AdminPage/AdminUserPage";
 import CreateRoom from "../pages/AdminPage/CreateRoom";
 import CuisineCreate from "../pages/AdminPage/CuisineCreate";
+import BookingPage from "../pages/BookingPage/BookingPage";
 import ContactPage from "../pages/ContactPage/ContactPage";
 import CuisineDetailPage from "../pages/CuisineDetailPage/CuisineDetailPage";
 import CuisinePage from "../pages/CuisinePage/CuisinePage";
@@ -171,6 +173,10 @@ export const routes = [
         page: AdminUploadImage,
     },
     {
+        path: "admin/bill/:id",
+        page: AdminBillPage,
+    },
+    {
         path: "/order",
         page: OrderPage,
         isShowHeader: true,
@@ -178,6 +184,11 @@ export const routes = [
     {
         path: "/account",
         page: AccountPage,
+        isShowHeader: true,
+    },
+    {
+        path: "/booking",
+        page: BookingPage,
         isShowHeader: true,
     },
     {

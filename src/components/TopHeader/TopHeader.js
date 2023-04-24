@@ -1,17 +1,18 @@
 import { AppBar, Button, styled, Toolbar, Typography } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import SearchIcon from "@mui/icons-material/Search";
 import ContainerComponent from "../ContainerComponent/ContainerComponent";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { HotelState } from "../MyContext/MyContext";
 import { logOutSuccess } from "../../redux/slices/authSlice";
+import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
+import SeacrchModel from "../SearchModal/SeacrchModel";
 
 function TopHeader() {
     const navigate = useNavigate();
     const isLogined = useSelector((state) => state.auth.isLogined);
-    
+
     const StyledAppBar = styled(AppBar)({
         backgroundColor: "var(--primary-color)",
         color: "var(--white)",
@@ -24,6 +25,8 @@ function TopHeader() {
         textTransform: "unset",
         display: "inline-flex",
         alignItems: "center",
+        cursor: "pointer",
+        userSelect: "none",
     });
     const Separate = styled("div")({
         borderLeft: "1px solid #fff",
@@ -115,10 +118,18 @@ function TopHeader() {
                             <Separate sx={{ display: { xs: "none", sm: "none", md: "block" } }} />
                         </>
                     )}
-                    <NavItem>
-                        <SearchIcon style={{ fontSize: "20px", marginRight: "6px" }} />
-                        Tìm kiếm
-                    </NavItem>
+                    {isLogined && (
+                        <>
+                            <Link to={"/booking"}>
+                                <NavItem sx={{ display: { xs: "none", sm: "none", md: "flex" } }}>
+                                    <MeetingRoomIcon style={{ fontSize: "20px", marginRight: "6px" }} />
+                                    Phòng đã đặt
+                                </NavItem>
+                            </Link>
+                            <Separate sx={{ display: { xs: "none", sm: "none", md: "block" } }} />
+                        </>
+                    )}
+                    <SeacrchModel />
                     <BookingButton
                         variant="contained"
                         size="large"

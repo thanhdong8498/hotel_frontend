@@ -1,13 +1,15 @@
 import DefaultAdminLayout from "./DefaultAdminLayout";
 import { Box, Button, Divider, Paper, Typography } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridCheckCircleIcon, GridCloseIcon } from "@mui/x-data-grid";
 import moment from "moment";
-
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { HotelState } from "../../components/MyContext/MyContext";
+import { blue, grey } from "@mui/material/colors";
+import { useNavigate } from "react-router-dom";
 
 function AdminBookingPage() {
+    const navigate = useNavigate();
     const [flag, setFlag] = useState(false);
     const [booking, setBooking] = useState([]);
     useEffect(() => {
@@ -18,19 +20,48 @@ function AdminBookingPage() {
         getBookingList();
     }, [flag]);
     const { setAlert } = HotelState();
-
-    const handleCheckout = async (id) => {
-        const response = await axios.put(`api/booking/checkout/${id}`);
-        if (response.status === 200) {
-            setAlert({
-                open: true,
-                message: "Đã thực hiện trả phòng thành công!",
-                type: "success",
-            });
+    const handleCancel = async (id) => {
+        const confirm = window.confirm("Xác nhận hủy?");
+        if (confirm) {
+            const response = await axios.put(`api/booking/cancelled/${id}`);
+            if (response.status === 200) {
+                setAlert({
+                    open: true,
+                    message: "Đã thực hủy đặt phòng thành công!",
+                    type: "success",
+                });
+            }
             setFlag(!flag);
         }
     };
-    console.log("rerender");
+    const handleCheckout = async (id) => {
+        const confirm = window.confirm("Xác nhận trả phòng?");
+        if (confirm) {
+            const response = await axios.put(`api/booking/checkout/${id}`);
+            if (response.status === 200) {
+                setAlert({
+                    open: true,
+                    message: "Đã thực hiện trả phòng thành công!",
+                    type: "success",
+                });
+                setFlag(!flag);
+            }
+        }
+    };
+    const handleDelivery = async (id) => {
+        const confirm = window.confirm("Xác nhận trả phòng?");
+        if (confirm) {
+            const response = await axios.put(`api/booking/delivery/${id}`);
+            if (response.status === 200) {
+                setAlert({
+                    open: true,
+                    message: "Đã thực hiện giao phòng thành công!",
+                    type: "success",
+                });
+                setFlag(!flag);
+            }
+        }
+    };
     const columns = [
         {
             field: "id",
@@ -58,10 +89,21 @@ function AdminBookingPage() {
             width: 200,
         },
         {
+            field: "roomQuantity",
+            headerName: "Số lượng",
+            width: 150,
+        },
+        {
+            field: "roomPrice",
+            headerName: "Giá phòng",
+            width: 200,
+        },
+        {
             field: "roomNo",
             headerName: "Phòng số",
             width: 300,
         },
+
         {
             field: "createAt",
             headerName: "Ngày đặt",
@@ -73,9 +115,70 @@ function AdminBookingPage() {
             width: 250,
         },
         {
+            field: "isReceived",
+            headerName: "Đã nhận phòng",
+            type: "boolean",
+            width: 140,
+            editable: true,
+            renderCell: (params) => {
+                return params.value ? (
+                    <GridCheckCircleIcon
+                        style={{
+                            color: blue[500],
+                        }}
+                    />
+                ) : (
+                    <GridCloseIcon
+                        style={{
+                            color: grey[500],
+                        }}
+                    />
+                );
+            },
+        },
+        {
             field: "isCheckedOut",
-            headerName: "Trạng thái",
-            width: 250,
+            headerName: "Đã trả phòng",
+            type: "boolean",
+            width: 140,
+            editable: true,
+            renderCell: (params) => {
+                return params.value ? (
+                    <GridCheckCircleIcon
+                        style={{
+                            color: blue[500],
+                        }}
+                    />
+                ) : (
+                    <GridCloseIcon
+                        style={{
+                            color: grey[500],
+                        }}
+                    />
+                );
+            },
+        },
+        {
+            field: "isCancelled",
+            headerName: "Đã hủy",
+            type: "boolean",
+            width: 140,
+            editable: true,
+            renderCell: (params) => {
+                return params.value ? (
+                    <GridCheckCircleIcon
+                        style={{
+                            color: blue[500],
+                        }}
+                    />
+                ) : (
+                    <GridCloseIcon
+                        style={{
+                            color: grey[500],
+                        }}
+                    />
+                );
+            },
         },
         {
             field: "actions",
@@ -83,18 +186,51 @@ function AdminBookingPage() {
             type: "action",
             renderCell: (params) => {
                 return (
-                    <Button
-                        onClick={() => {
-                            handleCheckout(params.id);
-                        }}
-                        variant="contained"
-                        disabled={params.row.isCheckedOut === "Đã trả phòng"}
-                    >
-                        Trả phòng
-                    </Button>
+                    <div>
+                        <Button
+                            sx={{ marginRight: "12px" }}
+                            onClick={() => {
+                                handleDelivery(params.id);
+                            }}
+                            variant="contained"
+                            disabled={params.row.isCheckedOut || params.row.isCancelled || params.row.isReceived}
+                        >
+                            Giao phòng
+                        </Button>
+                        <Button
+                            sx={{ marginRight: "12px" }}
+                            onClick={() => {
+                                handleCheckout(params.id);
+                            }}
+                            variant="contained"
+                            disabled={params.row.isCheckedOut || params.row.isCancelled || !params.row.isReceived}
+                        >
+                            Trả phòng
+                        </Button>
+                        <Button
+                            sx={{ marginRight: "12px" }}
+                            onClick={() => {
+                                handleCancel(params.id);
+                            }}
+                            variant="contained"
+                            disabled={params.row.isCheckedOut || params.row.isReceived || params.row.isCancelled}
+                        >
+                            hủy
+                        </Button>
+                        <Button
+                            sx={{ marginRight: "12px" }}
+                            onClick={() => {
+                                navigate(`/admin/bill/${params.row.id}`);
+                            }}
+                            variant="contained"
+                            disabled={!params.row.isCheckedOut || params.row.isCancelled || params.row.isCancelled}
+                        >
+                            in hóa đơn
+                        </Button>
+                    </div>
                 );
             },
-            width: 250,
+            width: 550,
         },
     ];
     const rows = booking.map((item) => ({
@@ -106,7 +242,11 @@ function AdminBookingPage() {
         roomNo: item.roomNo,
         summaryPrice: item.summaryPrice.toLocaleString() + "đ",
         createAt: moment(item.createAt).format("DD/MM/YYYY"),
-        isCheckedOut: item.isCheckedOut === false ? "Chưa trả phòng" : "Đã trả phòng",
+        isReceived: item.isReceived,
+        isCheckedOut: item.isCheckedOut,
+        isCancelled: item.isCancelled,
+        roomQuantity: item.roomNo.length,
+        roomPrice: item.roomPrice.toLocaleString() + "đ",
     }));
     return (
         <DefaultAdminLayout>

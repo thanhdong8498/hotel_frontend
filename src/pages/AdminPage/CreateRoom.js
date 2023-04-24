@@ -161,6 +161,7 @@ function CreateRoom() {
         formData.append("description", value);
 
         const response = await axios.post("api/room/create", formData);
+        console.log(response);
         if (response.status === 200) {
             setAlert({
                 open: true,
@@ -168,6 +169,12 @@ function CreateRoom() {
                 type: "success",
             });
             navigate("/admin/room");
+        } else if (response.status === 201) {
+            setAlert({
+                open: true,
+                message: response.data,
+                type: "error",
+            });
         }
     };
 

@@ -6,6 +6,7 @@ import ContainerComponent from "../ContainerComponent/ContainerComponent";
 import RoomMenuComponent from "../RoomMenuComponent/RoomMenuComponent";
 import CuisineMenuComponent from "../CuisineMenuComponent/CuisineMenuComponent";
 import LeftDrawer from "../LeftDrawer/LeftDrawer";
+import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 function MainHeader() {
     const getColor = (curr) => {
         if (window.location.pathname === curr) {
@@ -148,6 +149,17 @@ function MainHeader() {
                                     fill: "black",
                                     width: "26px",
                                     height: "24px",
+                                    margin: "6px",
+                                }}
+                            />
+                        </Link>
+                        <Link to={"/booking"}>
+                            <MeetingRoomIcon
+                                sx={{
+                                    fill: "black",
+                                    width: "26px",
+                                    height: "24px",
+                                    margin: "6px",
                                 }}
                             />
                         </Link>
