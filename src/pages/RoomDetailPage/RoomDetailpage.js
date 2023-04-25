@@ -98,7 +98,7 @@ function RoomDetailpage() {
         getVipRoom();
     }, [bookSuccess, roomType, roomId]);
     const [vipRooms, setVipRooms] = useState();
-    
+
     const bestRooms =
         vipRooms &&
         vipRooms.slice(0, 4).map((item, index) => {
@@ -456,7 +456,16 @@ function RoomDetailpage() {
                                         sx={{ backgroundColor: "var(--primary-color)" }}
                                     />
                                     <Grid container spacing={2}>
-                                        <Grid sx={{ marginTop: "12px" }} item lg={6}>
+                                        <Grid
+                                            sx={{ marginTop: "12px" }}
+                                            item
+                                            lg={6}
+                                            md2={6}
+                                            md={6}
+                                            sm={6}
+                                            xs={12}
+                                            ms={12}
+                                        >
                                             <span style={{ fontSize: "1.4rem" }}>Họ và tên*</span>
                                             <StyledTextField
                                                 onChange={(e) => setFullname(e.target.value)}
@@ -464,19 +473,29 @@ function RoomDetailpage() {
                                                 required
                                             />
                                         </Grid>
-                                        <Grid sx={{ marginTop: "12px" }} item lg={6}>
+                                        <Grid
+                                            sx={{ marginTop: "12px" }}
+                                            item
+                                            lg={6}
+                                            md2={6}
+                                            md={6}
+                                            sm={6}
+                                            xs={12}
+                                            ms={12}
+                                        >
                                             <span style={{ fontSize: "1.4rem" }}>Số điện thoại*</span>
                                             <StyledTextField
                                                 onChange={(e) => setPhoneNumber(e.target.value)}
                                                 value={phoneNumber}
                                             />
                                         </Grid>
-                                        <Grid item lg={6}>
+                                        <Grid item lg={6} md2={6} md={6} sm={6} xs={12} ms={12}>
                                             <div style={{ marginBottom: "6px" }}>
                                                 <span style={{ fontSize: "1.4rem" }}>Ngày nhận</span>
                                             </div>
                                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DatePicker
+                                                    sx={{ width: "100%" }}
                                                     value={receiveDate}
                                                     onChange={(value) => setReceiveDate(value)}
                                                     disablePast
@@ -484,12 +503,13 @@ function RoomDetailpage() {
                                                 />
                                             </LocalizationProvider>
                                         </Grid>
-                                        <Grid item lg={6}>
+                                        <Grid item lg={6} md2={6} md={6} sm={6} xs={12} ms={12}>
                                             <div style={{ marginBottom: "6px" }}>
                                                 <span style={{ fontSize: "1.4rem" }}>Ngày trả</span>
                                             </div>
                                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                                 <DatePicker
+                                                    sx={{ width: "100%" }}
                                                     value={checkoutDate}
                                                     onChange={(value) => setCheckoutDate(value)}
                                                     disablePast
@@ -498,11 +518,29 @@ function RoomDetailpage() {
                                                 />
                                             </LocalizationProvider>
                                         </Grid>
-                                        <Grid sx={{ marginTop: "12px" }} item lg={6}>
+                                        <Grid
+                                            sx={{ marginTop: "12px" }}
+                                            item
+                                            lg={6}
+                                            md2={6}
+                                            md={6}
+                                            sm={6}
+                                            xs={12}
+                                            ms={12}
+                                        >
                                             <span style={{ fontSize: "1.4rem" }}>Số lượng phòng</span>
                                             <StyledTextField disabled value={seletedRoom.length} />
                                         </Grid>
-                                        <Grid sx={{ marginTop: "12px" }} item lg={6}>
+                                        <Grid
+                                            sx={{ marginTop: "12px" }}
+                                            item
+                                            lg={6}
+                                            md2={6}
+                                            md={6}
+                                            sm={6}
+                                            xs={12}
+                                            ms={12}
+                                        >
                                             <span style={{ fontSize: "1.4rem" }}>Phòng số</span>
                                             <StyledTextField disabled value={seletedRoom.toString()} />
                                         </Grid>

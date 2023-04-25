@@ -58,7 +58,7 @@ function CuisineDetailPage() {
     const cuisineId = params.id;
     const { setAlert } = HotelState();
     const [cuisineType, setCuisineType] = useState("");
-    
+
     useEffect(() => {
         async function getDetail() {
             const detail = await axios.get(`api/cuisine/detail/${cuisineId}`);
@@ -97,7 +97,7 @@ function CuisineDetailPage() {
     const similarCuisineArr = simlarCuisine.filter((item) => {
         return item._id !== cuisineId;
     });
-    
+
     const items = similarCuisineArr.map((item, index) => {
         return (
             <Card
@@ -200,10 +200,10 @@ function CuisineDetailPage() {
                     }}
                     spacing={2}
                 >
-                    <Grid item lg={6}>
+                    <Grid item lg={6} md={12} xs={12}>
                         <Carousel>{caroselItem}</Carousel>
                     </Grid>
-                    <Grid item lg={6}>
+                    <Grid item lg={6} md={12} xs={12}>
                         <Typography variant="h2">{detail && detail.title}</Typography>
                         <div style={{ marginTop: "20px", paddingLeft: "10px" }}>
                             <span
@@ -292,7 +292,7 @@ function CuisineDetailPage() {
                         </div>
                     </Grid>
 
-                    <Grid item lg={12}>
+                    <Grid item lg={12} md={12} xs={12}>
                         <div
                             style={{
                                 color: "white",
@@ -328,7 +328,7 @@ function CuisineDetailPage() {
                             </div>
                         </div>
                     </Grid>
-                    <Grid item lg={12}>
+                    <Grid item lg={12} md={12} xs={12}>
                         <div
                             onClick={() => {
                                 navigate(`/${cuisineType}`);
@@ -379,9 +379,19 @@ function CuisineDetailPage() {
                                         0: {
                                             items: 1,
                                         },
+                                        393: {
+                                            items: 1,
+                                        },
+                                        767: {
+                                            items: 2,
+                                        },
+
                                         992: {
                                             items: 4,
                                         },
+                                        1025: { items: 4 },
+                                        1199: { items: 4 },
+                                        1536: { items: 4 },
                                     }}
                                 />
                             </div>
