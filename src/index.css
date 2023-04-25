@@ -36,7 +36,7 @@ a {
   fill: rgb(12, 12, 12) !important;
 }
 
-@media only screen and (max-width: 393px) {
+@media only screen and (max-width: 1025px) {
   .MuiGrid-root {
     padding-right: 0 !important;
   }
