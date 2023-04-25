@@ -70,11 +70,11 @@ function ContactPage() {
     return (
         <ContainerComponent>
             <Grid container>
-                <Grid item lg={1}></Grid>
-                <Grid item lg={10}>
+                <Grid item lg={1} xs={0}></Grid>
+                <Grid item lg={10} xs={12}>
                     <Box
                         sx={{
-                            padding: "70px 0px 40px 100px",
+                            padding: { lg: "70px 0px 40px 100px", xs: "10px" },
                             margin: "20px 0px 50px",
                             boxShadow: "10px 0px 40px 0px #b4b4b4",
                         }}
@@ -195,8 +195,8 @@ function ContactPage() {
                         </Grid>
                     </Box>
                 </Grid>
-                <Grid item lg={1}></Grid>
-                <Grid item lg={12} sx={{ margin: "20px 0" }}>
+                <Grid item lg={1} xs={0}></Grid>
+                <Grid item lg={12} xs={12} sx={{ margin: "20px 0" }}>
                     <Box sx={{ width: "100%" }}>
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.217475812755!2d106.71729528496013!3d10.794648831427116!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x317528a9eaf5a43b%3A0x1ecf860d2e567770!2zNzcyIMSQLiDEkGnhu4duIEJpw6puIFBo4bunLCBQaMaw4budbmcgMSwgQsOsbmggVGjhuqFuaCwgVGjDoG5oIHBo4buRIEjhu5MgQ2jDrSBNaW5oIDcwMDAwLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2sus!4v1682163352441!5m2!1svi!2sus"

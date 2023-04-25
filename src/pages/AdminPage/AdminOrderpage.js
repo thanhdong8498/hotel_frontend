@@ -22,25 +22,31 @@ function AdminOrderpage() {
     const { setAlert } = HotelState();
 
     const handleAccept = async (id) => {
-        const response = await axios.put(`api/order/accept/${id}`);
-        if (response.status === 200) {
-            setAlert({
-                open: true,
-                message: "Đã chấp nhận thành công!",
-                type: "success",
-            });
-            setFlag(!flag);
+        const confirm = window.confirm("Chấp nhận gọi món?");
+        if (confirm) {
+            const response = await axios.put(`api/order/accept/${id}`);
+            if (response.status === 200) {
+                setAlert({
+                    open: true,
+                    message: "Đã chấp nhận thành công!",
+                    type: "success",
+                });
+                setFlag(!flag);
+            }
         }
     };
     const handleDeliveried = async (id) => {
-        const response = await axios.put(`api/order/deliveried/${id}`);
-        if (response.status === 200) {
-            setAlert({
-                open: true,
-                message: "Đã xác nhận hoàn tất giao hàng!",
-                type: "success",
-            });
-            setFlag(!flag);
+        const confirm = window.confirm("Hoàn tất giao hàng?");
+        if (confirm) {
+            const response = await axios.put(`api/order/deliveried/${id}`);
+            if (response.status === 200) {
+                setAlert({
+                    open: true,
+                    message: "Đã xác nhận hoàn tất giao hàng!",
+                    type: "success",
+                });
+                setFlag(!flag);
+            }
         }
     };
     const columns = [
@@ -160,7 +166,6 @@ function AdminOrderpage() {
         isAccept: item.isAccept === true ? "Đã xác nhận" : "Chưa xác nhận",
         isDelivery: item.isDelivery === true ? "Đã giao hàng" : "Chưa giao hàng",
     }));
-    
 
     return (
         <DefaultAdminLayout>

@@ -46,7 +46,7 @@ function VipRoomList({ vipRooms }) {
             {vipRooms &&
                 vipRooms.map((item, index) => {
                     return (
-                        <Grid key={index} item lg={3}>
+                        <Grid key={index} item lg={3} md={6} sm={12} xs={12}>
                             <Card>
                                 <CardMedia
                                     onClick={() => {

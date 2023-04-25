@@ -182,7 +182,7 @@ function HomePage() {
                 />
             </div>
             <ContainerComponent>
-                <Grid sx={{ marginBottom: "20px", paddingRight: "16px" }} container spacing={2}>
+                <Grid sx={{ marginBottom: "20px", paddingRight: "16px" }} container spacing={0}>
                     <Grid item lg={6}>
                         <img
                             src="/images/about.webp"

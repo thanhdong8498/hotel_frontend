@@ -49,7 +49,7 @@ function AdminBookingPage() {
         }
     };
     const handleDelivery = async (id) => {
-        const confirm = window.confirm("Xác nhận trả phòng?");
+        const confirm = window.confirm("Xác nhận giao phòng?");
         if (confirm) {
             const response = await axios.put(`api/booking/delivery/${id}`);
             if (response.status === 200) {

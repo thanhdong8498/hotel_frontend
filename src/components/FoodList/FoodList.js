@@ -8,7 +8,7 @@ function FoodList({ food }) {
             {food &&
                 food.map((item, index) => {
                     return (
-                        <Grid key={index} item lg={3}>
+                        <Grid key={index} item lg={3}  md={6} sm={12} xs={12}>
                             <Card
                                 sx={{
                                     "& .MuiCardContent-root:last-child": {
