@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/slices/authSlice";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 
 function DefaultComponent({ children }) {
+    const changeInfo = useSelector((state) => state.user.isChangeInfo);
     const dispatch = useDispatch();
     useEffect(() => {
         async function getUserLogin() {
@@ -18,7 +19,7 @@ function DefaultComponent({ children }) {
             }
         }
         getUserLogin();
-    }, []);
+    }, [changeInfo]);
     return (
         <div>
             <Header />
