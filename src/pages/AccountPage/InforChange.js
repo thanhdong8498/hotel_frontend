@@ -27,7 +27,7 @@ function InfoChange() {
             if (response.status === 200) {
                 setAlert({
                     open: true,
-                    message: "Đã thay đổi thôn tin tài khoản thành công!",
+                    message: "Đã thay đổi thông tin tài khoản thành công!",
                     type: "success",
                 });
                 navigate("/account");
