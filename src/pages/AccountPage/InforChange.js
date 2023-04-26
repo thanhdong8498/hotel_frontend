@@ -19,7 +19,7 @@ function InfoChange() {
         e.preventDefault();
         const confirm = window.confirm("Xác nhận thay đổi thông tin?");
         if (confirm) {
-            const response = axios.put("auth/admin/user/update", {
+            const response = await axios.put("auth/admin/user/update", {
                 firstName: firstname,
                 lastName: lastname,
                 phone: phoneNo,
