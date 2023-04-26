@@ -1,15 +1,39 @@
-import { Divider, Grid, Typography } from "@mui/material";
+import { Button, Divider, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import axios from "axios";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
+import { HotelState } from "../../components/MyContext/MyContext";
 
-function AccountPage() {
+function InfoChange() {
     const firstName = useSelector((state) => state.auth.user.firstName);
     const lastName = useSelector((state) => state.auth.user.lastName);
-    const phone = useSelector((state) => state.auth.user.phone);
-    const email = useSelector((state) => state.auth.user.email);
+    const { setAlert } = HotelState();
     const navigate = useNavigate();
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
+    const [phoneNo, setPhoneNo] = useState("");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const confirm = window.confirm("Xác nhận thay đổi thông tin?");
+        if (confirm) {
+            const response = axios.put("auth/admin/user/update", {
+                firstName: firstname,
+                lastName: lastname,
+                phone: phoneNo,
+            });
+            if (response.status === 200) {
+                setAlert({
+                    open: true,
+                    message: "Đã thay đổi thôn tin tài khoản thành công!",
+                    type: "success",
+                });
+                navigate("/account");
+            }
+        }
+    };
     return (
         <ContainerComponent>
             <Box sx={{ margin: "100px 0" }}>
@@ -76,21 +100,52 @@ function AccountPage() {
                     </Grid>
                     <Grid item lg={9} sm={12} xs={12}>
                         <Typography variant="h4" sx={{ fontSize: "2rem", marginBottom: "30px" }}>
-                            Thông tin tài khoản
+                            Thay đổi thông tin tài khoản
                         </Typography>
                         <Divider />
-                        <Typography variant="h4" sx={{ fontSize: "1.8rem", margin: "30px 0" }}>
-                            <strong>Họ và tên: </strong>
-                            {lastName + " " + firstName}
-                        </Typography>
-                        <Typography variant="h4" sx={{ fontSize: "1.8rem", margin: "30px 0" }}>
-                            <strong>Email: </strong>
-                            {email}
-                        </Typography>
-                        <Typography variant="h4" sx={{ fontSize: "1.8rem", margin: "30px 0" }}>
-                            <strong>Số điện thoại: </strong>
-                            {phone}
-                        </Typography>
+                        <Box
+                            onSubmit={handleSubmit}
+                            component="form"
+                            sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+                        >
+                            <TextField
+                                sx={{ margin: "12px 0", width: "100%" }}
+                                id="lastName"
+                                label="Họ"
+                                variant="outlined"
+                                required
+                                value={lastname}
+                                onChange={(e) => {
+                                    setLastname(e.target.value);
+                                }}
+                            />
+                            <TextField
+                                sx={{ margin: "12px 0", width: "100%" }}
+                                id="firstName"
+                                label="Tên đệm và tên"
+                                variant="outlined"
+                                required
+                                value={firstname}
+                                onChange={(e) => {
+                                    setFirstname(e.target.value);
+                                }}
+                            />
+                            <TextField
+                                sx={{ margin: "12px 0", width: "100%" }}
+                                id="phone"
+                                label="Số điện thoại"
+                                type="tel"
+                                variant="outlined"
+                                required
+                                value={phoneNo}
+                                onChange={(e) => {
+                                    setPhoneNo(e.target.value);
+                                }}
+                            />
+                            <Button type="submit" variant="contained">
+                                cập nhật
+                            </Button>
+                        </Box>
                     </Grid>
                 </Grid>
             </Box>
@@ -98,4 +153,4 @@ function AccountPage() {
     );
 }
 
-export default AccountPage;
+export default InfoChange;

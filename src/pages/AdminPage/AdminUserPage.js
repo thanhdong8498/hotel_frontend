@@ -15,8 +15,6 @@ function AdminUserPage() {
     const dispatch = useDispatch();
     const [rowId, setRowId] = React.useState("");
 
-    
-
     const handleDelete = async (idUser) => {
         if (window.confirm("Xác nhận xóa người dùng???") === true) {
             const res = await axios.delete(`/auth/admin/user/delete/${idUser}`);
@@ -30,21 +28,25 @@ function AdminUserPage() {
             }
         }
     };
-    const handleUpdate = async (id, firstName, lastName, email, phone, role) => {
-        const res = await axios.put(`/auth/admin/user/update/${id}`, {
-            firstName,
-            lastName,
-            email,
-            phone,
-            role,
-        });
-        if (res.status === 200) {
-            setRowId("");
-            setAlert({
-                open: true,
-                message: "Đã cập nhật tài khoản thành công!",
-                type: "success",
+    const handleUpdate = async (id, firstName, lastName, email, phone, role, password) => {
+        const confirm = window.confirm("Xác nhận thay đổi thông tin?");
+        if (confirm) {
+            const res = await axios.put(`/auth/admin/user/update/${id}`, {
+                firstName,
+                lastName,
+                email,
+                phone,
+                role,
+                password,
             });
+            if (res.status === 200) {
+                setRowId("");
+                setAlert({
+                    open: true,
+                    message: "Đã cập nhật tài khoản thành công!",
+                    type: "success",
+                });
+            }
         }
     };
 
@@ -68,6 +70,7 @@ function AdminUserPage() {
         email: user.email,
         phone: user.phone,
         role: user.role,
+        password: user.password,
     }));
     const columns = [
         { field: "id", headerName: "ID", width: 300 },
@@ -91,6 +94,12 @@ function AdminUserPage() {
         {
             field: "phone",
             headerName: "Số điện thoại",
+            width: 150,
+            editable: "true",
+        },
+        {
+            field: "password",
+            headerName: "Mật khẩu",
             width: 150,
             editable: "true",
         },
@@ -126,7 +135,8 @@ function AdminUserPage() {
                                     params.row.lastName,
                                     params.row.email,
                                     params.row.phone,
-                                    params.row.role
+                                    params.row.role,
+                                    params.row.password
                                 )
                             }
                             sx={{ fontSize: "1.5rem" }}

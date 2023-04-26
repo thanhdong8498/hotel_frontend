@@ -24,7 +24,7 @@ function AdminBillPage() {
         }
         getDetails();
     }, []);
-    
+
     const handlePrint = useReactToPrint({
         content: () => componetRef.current,
         documentTitle: "Hóa đơn-" + id,
@@ -312,7 +312,8 @@ function AdminBillPage() {
                                                     padding: "6px",
                                                 }}
                                             >
-                                                {detail && detail.roomTitle}
+                                                {detail && detail.roomTitle}(Phòng số:{" "}
+                                                {detail && detail.roomNo.toString()})
                                             </td>
                                             <td
                                                 style={{

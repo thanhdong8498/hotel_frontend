@@ -1,5 +1,7 @@
 import AboutPage from "../pages/AboutPage/AboutPage";
 import AccountPage from "../pages/AccountPage/AccountPage";
+import InfoChange from "../pages/AccountPage/InforChange";
+import PasswordChange from "../pages/AccountPage/passwordChange";
 import AdminBillPage from "../pages/AdminPage/AdminBillPage";
 import AdminBookingPage from "../pages/AdminPage/AdminBookingPage";
 import AdminContactPage from "../pages/AdminPage/AdminContactPage";
@@ -184,6 +186,16 @@ export const routes = [
     {
         path: "/account",
         page: AccountPage,
+        isShowHeader: true,
+    },
+    {
+        path: "/account/infochange",
+        page: InfoChange,
+        isShowHeader: true,
+    },
+    {
+        path: "/account/passwordchange",
+        page: PasswordChange,
         isShowHeader: true,
     },
     {
