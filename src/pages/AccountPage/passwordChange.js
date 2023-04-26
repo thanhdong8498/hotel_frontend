@@ -95,7 +95,7 @@ function PasswordChange() {
                                 },
                             }}
                             onClick={() => {
-                                navigate("/account/PasswordChange");
+                                navigate("/account/infochange");
                             }}
                         >
                             Cập nhật thông tin
