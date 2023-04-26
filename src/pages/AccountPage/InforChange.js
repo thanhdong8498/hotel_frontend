@@ -2,12 +2,14 @@ import { Button, Divider, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { HotelState } from "../../components/MyContext/MyContext";
+import { changeInfo, isChangeInfo } from "../../redux/slices/userSlice";
 
 function InfoChange() {
+    const dispatch = useDispatch();
     const firstName = useSelector((state) => state.auth.user.firstName);
     const lastName = useSelector((state) => state.auth.user.lastName);
     const { setAlert } = HotelState();
@@ -25,6 +27,7 @@ function InfoChange() {
                 phone: phoneNo,
             });
             if (response.status === 200) {
+                dispatch(changeInfo());
                 setAlert({
                     open: true,
                     message: "Đã thay đổi thông tin tài khoản thành công!",
