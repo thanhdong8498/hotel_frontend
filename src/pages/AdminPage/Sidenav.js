@@ -97,7 +97,7 @@ export default function Sidenav() {
                                 px: 2.5,
                             }}
                             onClick={() => {
-                                navigate("/admin/user");
+                                navigate("/admin/user");window.scrollTo(0, 0);
                             }}
                         >
                             <ListItemIcon
@@ -124,7 +124,7 @@ export default function Sidenav() {
                                 px: 2.5,
                             }}
                             onClick={() => {
-                                navigate("/admin/room");
+                                navigate("/admin/room");window.scrollTo(0, 0);
                             }}
                         >
                             <ListItemIcon
@@ -151,7 +151,7 @@ export default function Sidenav() {
                                 px: 2.5,
                             }}
                             onClick={() => {
-                                navigate("/admin/cuisine");
+                                navigate("/admin/cuisine");window.scrollTo(0, 0);
                             }}
                         >
                             <ListItemIcon
@@ -178,7 +178,7 @@ export default function Sidenav() {
                                 px: 2.5,
                             }}
                             onClick={() => {
-                                navigate("/admin/booking");
+                                navigate("/admin/booking");window.scrollTo(0, 0);
                             }}
                         >
                             <ListItemIcon
@@ -205,7 +205,7 @@ export default function Sidenav() {
                                 px: 2.5,
                             }}
                             onClick={() => {
-                                navigate("/admin/order");
+                                navigate("/admin/order");window.scrollTo(0, 0);
                             }}
                         >
                             <ListItemIcon
@@ -232,7 +232,7 @@ export default function Sidenav() {
                                 px: 2.5,
                             }}
                             onClick={() => {
-                                navigate("/admin/contact");
+                                navigate("/admin/contact");window.scrollTo(0, 0);
                             }}
                         >
                             <ListItemIcon
@@ -259,7 +259,7 @@ export default function Sidenav() {
                                 px: 2.5,
                             }}
                             onClick={() => {
-                                navigate("/admin/gallery");
+                                navigate("/admin/gallery");window.scrollTo(0, 0);
                             }}
                         >
                             <ListItemIcon

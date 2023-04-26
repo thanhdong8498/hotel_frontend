@@ -68,7 +68,7 @@ function RoomPage() {
     }, [sortBy]);
     const [page, setPage] = useState(1);
     const [rooms, setRooms] = useState();
-    
+
     const handleChange = (event) => {
         setSortBy(event.target.value);
         search.set("sort", sortBy);
@@ -138,6 +138,7 @@ function RoomPage() {
                                                     }}
                                                     onClick={() => {
                                                         navigate(`/room/${item._id}`);
+                                                        window.scrollTo(0, 0);
                                                     }}
                                                 >
                                                     {item.title}
@@ -200,6 +201,7 @@ function RoomPage() {
                                                     <Button
                                                         onClick={() => {
                                                             navigate(`/room/${item._id}`);
+                                                            window.scrollTo(0, 0);
                                                         }}
                                                     >
                                                         ĐẶT PHÒNG

@@ -94,6 +94,7 @@ function SimpleDialog(props) {
                         <CardMedia
                             onClick={() => {
                                 navigate(`/room/${item._id}`);
+                                window.scrollTo(0, 0);
                             }}
                             sx={{ height: "165px", cursor: "pointer" }}
                             image={`${process.env.REACT_APP_HOST_URL}${item.cover}`}
@@ -113,6 +114,7 @@ function SimpleDialog(props) {
                                 }}
                                 onClick={() => {
                                     navigate(`/room/${item._id}`);
+                                    window.scrollTo(0, 0);
                                 }}
                             >
                                 {item.title}
@@ -148,7 +150,7 @@ function SimpleDialog(props) {
                                 </span>
                                 <Button
                                     onClick={() => {
-                                        navigate(`/room/${item._id}`);
+                                        navigate(`/room/${item._id}`);window.scrollTo(0, 0);
                                     }}
                                 >
                                     ĐẶT PHÒNG
@@ -176,7 +178,7 @@ function SimpleDialog(props) {
                             sx={{ height: "225px", cursor: "pointer" }}
                             image={`${process.env.REACT_APP_HOST_URL}${item.images[0]}`}
                             onClick={() => {
-                                navigate(`/cuisine/${item._id}`);
+                                navigate(`/cuisine/${item._id}`);window.scrollTo(0, 0);
                             }}
                         />
                         <CardContent>
@@ -193,7 +195,7 @@ function SimpleDialog(props) {
                                     },
                                 }}
                                 onClick={() => {
-                                    navigate(`/cuisine/${item._id}`);
+                                    navigate(`/cuisine/${item._id}`);window.scrollTo(0, 0);
                                 }}
                             >
                                 {item.title}

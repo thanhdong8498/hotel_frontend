@@ -81,7 +81,7 @@ function AdminCuisineDetail() {
 
                 const response = await axios.get("/api/cuisine/list");
                 dispatch(getListCuisine([...response.data]));
-                navigate("/admin/cuisine");
+                navigate("/admin/cuisine");window.scrollTo(0, 0);
             }
         }
     };
@@ -173,7 +173,7 @@ function AdminCuisineDetail() {
                     <Grid sx={{ textAlign: "center" }} item lg={12}>
                         <Button
                             onClick={() => {
-                                navigate(`/admin/cuisine/edit/${cuisineId}`);
+                                navigate(`/admin/cuisine/edit/${cuisineId}`);window.scrollTo(0, 0);
                             }}
                             variant="contained"
                         >

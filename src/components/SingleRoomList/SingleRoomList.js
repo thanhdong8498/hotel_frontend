@@ -49,7 +49,7 @@ function SingleRoomList({ singleRooms }) {
                             <Card>
                                 <CardMedia
                                     onClick={() => {
-                                        navigate(`/room/${item._id}`);
+                                        navigate(`/room/${item._id}`);window.scrollTo(0, 0);
                                     }}
                                     sx={{ height: "165px", cursor: "pointer" }}
                                     image={`${process.env.REACT_APP_HOST_URL}${item.cover}`}
@@ -68,7 +68,7 @@ function SingleRoomList({ singleRooms }) {
                                             },
                                         }}
                                         onClick={() => {
-                                            navigate(`/room/${item._id}`);
+                                            navigate(`/room/${item._id}`);window.scrollTo(0, 0);
                                         }}
                                     >
                                         {item.title}
@@ -116,7 +116,7 @@ function SingleRoomList({ singleRooms }) {
                                         </span>
                                         <Button
                                             onClick={() => {
-                                                navigate(`/room/${item._id}`);
+                                                navigate(`/room/${item._id}`);window.scrollTo(0, 0);
                                             }}
                                         >
                                             ĐẶT PHÒNG

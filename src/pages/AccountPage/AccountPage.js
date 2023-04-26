@@ -51,7 +51,7 @@ function AccountPage() {
                                 },
                             }}
                             onClick={() => {
-                                navigate("/account");
+                                navigate("/account");window.scrollTo(0, 0);
                             }}
                         >
                             Thông tin tài khoản
@@ -66,7 +66,7 @@ function AccountPage() {
                                 },
                             }}
                             onClick={() => {
-                                navigate("/account/infochange");
+                                navigate("/account/infochange");window.scrollTo(0, 0);
                             }}
                         >
                             Cập nhật thông tin
@@ -81,7 +81,7 @@ function AccountPage() {
                                 },
                             }}
                             onClick={() => {
-                                navigate("/account/passwordchange");
+                                navigate("/account/passwordchange");window.scrollTo(0, 0);
                             }}
                         >
                             Thay đổi mật khẩu

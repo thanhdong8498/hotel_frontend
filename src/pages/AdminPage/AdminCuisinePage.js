@@ -23,7 +23,7 @@ function AdminCuisinePage() {
     }, []);
 
     const handleShowDetail = (id) => {
-        navigate(`detail/${id}`);
+        navigate(`detail/${id}`);window.scrollTo(0, 0);
     };
 
     const handleDelete = async (id) => {
@@ -35,7 +35,7 @@ function AdminCuisinePage() {
         }
     };
     const handleEdit = (id) => {
-        navigate("edit/" + id);
+        navigate("edit/" + id);window.scrollTo(0, 0);
     };
 
     const columns = [
@@ -133,7 +133,7 @@ function AdminCuisinePage() {
                         variant="contained"
                         sx={{ marginRight: "20px", fontSize: "1.5rem" }}
                         onClick={() => {
-                            navigate("/admin/cuisine/create");
+                            navigate("/admin/cuisine/create");window.scrollTo(0, 0);
                         }}
                         endIcon={<AddIcon />}
                     >

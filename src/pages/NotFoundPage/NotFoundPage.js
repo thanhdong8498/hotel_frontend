@@ -20,7 +20,7 @@ function NotFoundPage() {
                         <Button
                             variant="contained"
                             onClick={() => {
-                                navigate("/");
+                                navigate("/");window.scrollTo(0, 0);
                             }}
                         >
                             Back Home

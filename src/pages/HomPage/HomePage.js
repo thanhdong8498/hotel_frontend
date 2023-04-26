@@ -226,7 +226,7 @@ function HomePage() {
                                 </p>
                                 <ButtonShowMore
                                     onClick={() => {
-                                        navigate("/about");
+                                        navigate("/about");window.scrollTo(0, 0);
                                     }}
                                 >
                                     Xem thêm
@@ -244,7 +244,7 @@ function HomePage() {
                         <Titles>
                             <TitlesSpan
                                 onClick={() => {
-                                    navigate("/room");
+                                    navigate("/room");window.scrollTo(0, 0);
                                 }}
                             >
                                 Phòng
@@ -262,7 +262,7 @@ function HomePage() {
                         <Titles>
                             <TitlesSpan
                                 onClick={() => {
-                                    navigate("/double-room");
+                                    navigate("/double-room");window.scrollTo(0, 0);
                                 }}
                             >
                                 Phòng đôi
@@ -280,7 +280,7 @@ function HomePage() {
                         <Titles>
                             <TitlesSpan
                                 onClick={() => {
-                                    navigate("/vip-room");
+                                    navigate("/vip-room");window.scrollTo(0, 0);
                                 }}
                             >
                                 Phòng vip
@@ -298,7 +298,7 @@ function HomePage() {
                         <Titles>
                             <TitlesSpan
                                 onClick={() => {
-                                    navigate("/cuisine");
+                                    navigate("/cuisine");window.scrollTo(0, 0);
                                 }}
                             >
                                 Ẩm thực

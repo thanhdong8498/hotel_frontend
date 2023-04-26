@@ -124,7 +124,7 @@ function CuisineCreate() {
                 message: "Đã thêm thành công!",
                 type: "success",
             });
-            navigate("/admin/cuisine");
+            navigate("/admin/cuisine");window.scrollTo(0, 0);
         }
     };
 

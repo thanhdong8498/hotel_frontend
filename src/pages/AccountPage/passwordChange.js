@@ -34,7 +34,7 @@ function PasswordChange() {
                         message: "Đã thay đổi mật khẩu thành công!",
                         type: "success",
                     });
-                    navigate("/account");
+                    navigate("/account");window.scrollTo(0, 0);
                 }
                 if (response.status === 201) {
                     setAlert({
@@ -80,7 +80,7 @@ function PasswordChange() {
                                 },
                             }}
                             onClick={() => {
-                                navigate("/account");
+                                navigate("/account");window.scrollTo(0, 0);
                             }}
                         >
                             Thông tin tài khoản
@@ -95,7 +95,7 @@ function PasswordChange() {
                                 },
                             }}
                             onClick={() => {
-                                navigate("/account/infochange");
+                                navigate("/account/infochange");window.scrollTo(0, 0);
                             }}
                         >
                             Cập nhật thông tin
@@ -110,7 +110,7 @@ function PasswordChange() {
                                 },
                             }}
                             onClick={() => {
-                                navigate("/account/passwordchange");
+                                navigate("/account/passwordchange");window.scrollTo(0, 0);
                             }}
                         >
                             Thay đổi mật khẩu

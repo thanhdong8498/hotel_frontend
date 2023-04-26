@@ -109,7 +109,7 @@ function RoomDetailpage() {
                         alt=""
                         style={{ width: "35%", userSelect: "none", cursor: "pointer" }}
                         onClick={() => {
-                            navigate(`/room/${item._id}`);
+                            navigate(`/room/${item._id}`);window.scrollTo(0, 0);
                         }}
                     />
                     <div style={{ marginLeft: "12px" }}>
@@ -124,7 +124,7 @@ function RoomDetailpage() {
                                 },
                             }}
                             onClick={() => {
-                                navigate(`/room/${item._id}`);
+                                navigate(`/room/${item._id}`);window.scrollTo(0, 0);
                                 window.scrollTo(0, 0);
                             }}
                         >
@@ -160,7 +160,7 @@ function RoomDetailpage() {
                             },
                         }}
                         onClick={() => {
-                            navigate(`/room/${item._id}`);
+                            navigate(`/room/${item._id}`);window.scrollTo(0, 0);
                             window.scrollTo(0, 0);
                         }}
                     >
@@ -303,7 +303,7 @@ function RoomDetailpage() {
                     message: "Đã đặt phòng thành công!",
                     type: "success",
                 });
-                navigate("/booking");
+                navigate("/booking");window.scrollTo(0, 0);
                 setbookSuccess(!bookSuccess);
                 setSeletedRoom([]);
                 setCheckoutDate(null);
@@ -312,7 +312,7 @@ function RoomDetailpage() {
         } else {
             let confirm = window.confirm("Bạn cần đăng nhập để đặt phòng");
             if (confirm) {
-                navigate("/login");
+                navigate("/login");window.scrollTo(0, 0);
             }
         }
     };
@@ -733,7 +733,7 @@ function RoomDetailpage() {
                         <Grid item lg={8} md={12} xs={12} sm={12} ms={12}>
                             <div
                                 onClick={() => {
-                                    navigate(`/${roomType}-room`);
+                                    navigate(`/${roomType}-room`);window.scrollTo(0, 0);
                                 }}
                                 style={{
                                     color: "white",
@@ -796,7 +796,7 @@ function RoomDetailpage() {
                         <Grid item lg={4}>
                             <div
                                 onClick={() => {
-                                    navigate(`/${roomType}-room`);
+                                    navigate(`/${roomType}-room`);window.scrollTo(0, 0);
                                 }}
                                 style={{
                                     color: "white",

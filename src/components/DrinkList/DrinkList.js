@@ -21,6 +21,7 @@ function DrinkList({ drink }) {
                                     image={`${process.env.REACT_APP_HOST_URL}${item.images[0]}`}
                                     onClick={() => {
                                         navigate(`/cuisine/${item._id}`);
+                                        window.scrollTo(0, 0);
                                     }}
                                 />
                                 <CardContent>
@@ -38,6 +39,7 @@ function DrinkList({ drink }) {
                                         }}
                                         onClick={() => {
                                             navigate(`/cuisine/${item._id}`);
+                                            window.scrollTo(0, 0);
                                         }}
                                     >
                                         {item.title}

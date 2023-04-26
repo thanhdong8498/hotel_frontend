@@ -27,10 +27,10 @@ function AdminRoomPage() {
     }, []);
 
     const handleShowDetail = (id) => {
-        navigate(`${id}`);
+        navigate(`${id}`);window.scrollTo(0, 0);
     };
     const handleEdit = async (id) => {
-        navigate(`edit/${id}`);
+        navigate(`edit/${id}`);window.scrollTo(0, 0);
     };
     const handleDelete = async (id) => {
         let confirm = window.confirm("Xác nhận xóa!!!??");
@@ -140,7 +140,7 @@ function AdminRoomPage() {
                         variant="contained"
                         sx={{ marginRight: "20px", fontSize: "1.5rem" }}
                         onClick={() => {
-                            navigate("/admin/room/create");
+                            navigate("/admin/room/create");window.scrollTo(0, 0);
                         }}
                     >
                         Thêm phòng

@@ -113,7 +113,7 @@ function CuisineDetailPage() {
                     sx={{ height: "225px", cursor: "pointer" }}
                     image={`${process.env.REACT_APP_HOST_URL}${item.images[0]}`}
                     onClick={() => {
-                        navigate(`/cuisine/${item._id}`);
+                        navigate(`/cuisine/${item._id}`);window.scrollTo(0, 0);
                         window.scrollTo(0, 0);
                     }}
                 />
@@ -131,7 +131,7 @@ function CuisineDetailPage() {
                             },
                         }}
                         onClick={() => {
-                            navigate(`/cuisine/${item._id}`);
+                            navigate(`/cuisine/${item._id}`);window.scrollTo(0, 0);
                             window.scrollTo(0, 0);
                         }}
                     >
@@ -181,11 +181,11 @@ function CuisineDetailPage() {
                         type: "success",
                     });
                 }
-                navigate("/order");
+                navigate("/order");window.scrollTo(0, 0);
             }
         } else {
             if (window.confirm("Bạn cần đăng nhập để gọi đồ ăn! Quay về trang đăng nhập?")) {
-                navigate("/login");
+                navigate("/login");window.scrollTo(0, 0);
             }
         }
     };
@@ -331,7 +331,7 @@ function CuisineDetailPage() {
                     <Grid item lg={12} md={12} xs={12}>
                         <div
                             onClick={() => {
-                                navigate(`/${cuisineType}`);
+                                navigate(`/${cuisineType}`);window.scrollTo(0, 0);
                             }}
                             style={{
                                 color: "white",

@@ -149,7 +149,7 @@ function AdminCuisineEdit() {
                 message: "Cập nhật thành công!",
                 type: "success",
             });
-            navigate(`/admin/cuisine/detail/${cuisineId}`);
+            navigate(`/admin/cuisine/detail/${cuisineId}`);window.scrollTo(0, 0);
         }
     };
 

@@ -220,7 +220,7 @@ function AdminBookingPage() {
                         <Button
                             sx={{ marginRight: "12px" }}
                             onClick={() => {
-                                navigate(`/admin/bill/${params.row.id}`);
+                                navigate(`/admin/bill/${params.row.id}`);window.scrollTo(0, 0);
                             }}
                             variant="contained"
                             disabled={!params.row.isCheckedOut || params.row.isCancelled || params.row.isCancelled}

@@ -168,7 +168,7 @@ function CreateRoom() {
                 message: "Đã thêm phòng thành công!",
                 type: "success",
             });
-            navigate("/admin/room");
+            navigate("/admin/room");window.scrollTo(0, 0);
         } else if (response.status === 201) {
             setAlert({
                 open: true,

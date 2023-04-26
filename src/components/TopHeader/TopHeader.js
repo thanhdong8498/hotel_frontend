@@ -62,6 +62,7 @@ function TopHeader() {
         localStorage.removeItem("accessToken");
         dispatch(logOutSuccess());
         navigate("/login");
+        window.scrollTo(0, 0);
         setAlert({
             open: true,
             message: "Đã đăng xuất tài khoản thành công!",

@@ -105,8 +105,10 @@ function Login() {
     const role = useSelector((state) => state.auth.user.role);
     if (isLogined === true && role === "regular") {
         navigate("/");
+        window.scrollTo(0, 0);
     } else if (isLogined === true && (role === "subadmin" || role === "admin")) {
         navigate("/admin");
+        window.scrollTo(0, 0);
     }
     const dispatch = useDispatch();
     const [email, setEmail] = useState("");
@@ -151,7 +153,9 @@ function Login() {
             // navigate to admin or homepage
             if (userLogin.role === "admin" || userLogin.role === "subadmin") {
                 navigate("/admin");
+                window.scrollTo(0, 0);
             } else navigate("/");
+            window.scrollTo(0, 0);
         } else if (response.status === 201) {
             setAlert({
                 open: true,

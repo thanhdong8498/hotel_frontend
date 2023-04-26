@@ -51,6 +51,7 @@ function DoubleRoomList({ doubleRooms }) {
                                 <CardMedia
                                     onClick={() => {
                                         navigate(`/room/${item._id}`);
+                                        window.scrollTo(0, 0);
                                     }}
                                     sx={{ height: "165px", cursor: "pointer" }}
                                     image={`${process.env.REACT_APP_HOST_URL}${item.cover}`}
@@ -70,6 +71,7 @@ function DoubleRoomList({ doubleRooms }) {
                                         }}
                                         onClick={() => {
                                             navigate(`/room/${item._id}`);
+                                            window.scrollTo(0, 0);
                                         }}
                                     >
                                         {item.title}
@@ -118,6 +120,7 @@ function DoubleRoomList({ doubleRooms }) {
                                         <Button
                                             onClick={() => {
                                                 navigate(`/room/${item._id}`);
+                                                window.scrollTo(0, 0);
                                             }}
                                         >
                                             ĐẶT PHÒNG

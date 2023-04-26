@@ -127,7 +127,7 @@ function Register() {
                 message: "Đăng ký thành công!",
                 type: "success",
             });
-            navigate("/login");
+            navigate("/login");window.scrollTo(0, 0);
         } else if (response.status === 201) {
             setAlert({
                 open: true,

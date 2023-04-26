@@ -192,6 +192,7 @@ function AdminRoomEdit() {
                 type: "success",
             });
             navigate("/admin/room/" + roomId);
+            window.scrollTo(0, 0);
         }
     };
 

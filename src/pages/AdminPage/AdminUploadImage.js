@@ -46,7 +46,7 @@ function AdminUploadImage() {
                 message: "Đã thêm hình ảnh thành công!",
                 type: "success",
             });
-            navigate("/admin/gallery");
+            navigate("/admin/gallery");window.scrollTo(0, 0);
         }
     };
     return (

@@ -112,7 +112,7 @@ function AdminGalleryPage() {
                         variant="contained"
                         sx={{ marginRight: "20px", fontSize: "1.5rem" }}
                         onClick={() => {
-                            navigate("/admin/gallery/upload");
+                            navigate("/admin/gallery/upload");window.scrollTo(0, 0);
                         }}
                     >
                         Thêm ảnh
