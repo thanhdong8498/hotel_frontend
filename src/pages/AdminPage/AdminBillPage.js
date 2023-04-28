@@ -5,7 +5,7 @@ import { Button, Divider, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import moment from "moment";
+import moment from "moment-timezone";
 import VNnum2words from "vn-num2words";
 
 function AdminBillPage() {
@@ -220,7 +220,7 @@ function AdminBillPage() {
                                             wordWrap: "break-word",
                                         }}
                                     >
-                                        Thời gian: {detail && moment(detail.checkoutDate).format("DD/MM/YYYY")}
+                                        Thời gian: {detail && moment(detail.checkoutDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}
                                     </Typography>
                                 </div>
                             </Grid>

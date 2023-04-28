@@ -1,7 +1,7 @@
 import DefaultAdminLayout from "./DefaultAdminLayout";
 import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import { DataGrid, GridCheckCircleIcon, GridCloseIcon } from "@mui/x-data-grid";
-import moment from "moment";
+import moment from "moment-timezone";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { HotelState } from "../../components/MyContext/MyContext";
@@ -220,7 +220,8 @@ function AdminBookingPage() {
                         <Button
                             sx={{ marginRight: "12px" }}
                             onClick={() => {
-                                navigate(`/admin/bill/${params.row.id}`);window.scrollTo(0, 0);
+                                navigate(`/admin/bill/${params.row.id}`);
+                                window.scrollTo(0, 0);
                             }}
                             variant="contained"
                             disabled={!params.row.isCheckedOut || params.row.isCancelled || params.row.isCancelled}
@@ -237,11 +238,11 @@ function AdminBookingPage() {
         id: item._id,
         fullname: item.fullname,
         phone: item.phone,
-        receiveDate: moment(item.receiveDate).format("DD/MM/YYYY"),
-        checkoutDate: moment(item.checkoutDate).format("DD/MM/YYYY"),
+        receiveDate: moment(item.receiveDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY"),
+        checkoutDate: moment(item.checkoutDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY"),
         roomNo: item.roomNo,
         summaryPrice: item.summaryPrice.toLocaleString() + "đ",
-        createAt: moment(item.createAt).format("DD/MM/YYYY"),
+        createAt: moment(item.createAt).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY"),
         isReceived: item.isReceived,
         isCheckedOut: item.isCheckedOut,
         isCancelled: item.isCancelled,

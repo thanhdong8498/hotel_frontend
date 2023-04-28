@@ -1,7 +1,7 @@
 import { Box, Divider, Paper, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
-import moment from "moment";
+import moment from "moment-timezone";
 import { useEffect, useState } from "react";
 import DefaultAdminLayout from "./DefaultAdminLayout";
 
@@ -64,7 +64,7 @@ function AdminContactPage() {
         fullname: item.fullname,
         email: item.email,
         message: item.message,
-        createAt: moment(item.createAt).format("HH:MM DD/MM/YYYY"),
+        createAt: moment(item.createAt).tz("Asia/Ho_Chi_Minh").format("HH:MM DD/MM/YYYY"),
     }));
     return (
         <DefaultAdminLayout>

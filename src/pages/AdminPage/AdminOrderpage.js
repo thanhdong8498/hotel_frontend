@@ -1,7 +1,7 @@
 import DefaultAdminLayout from "./DefaultAdminLayout";
 import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import { DataGrid, GridCloseIcon } from "@mui/x-data-grid";
-import moment from "moment";
+import moment from "moment-timezone";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { useEffect, useState } from "react";
@@ -158,7 +158,7 @@ function AdminOrderpage() {
         id: item._id,
         userName: item.userName,
         phone: item.phone,
-        createAt: moment(item.createAt).format("HH:MM DD/MM/YYYY"),
+        createAt: moment(item.createdAt).tz("Asia/Ho_Chi_Minh").format("HH:MM DD/MM/YYYY"),
         cuisineName: item.cuisineName,
         quantity: item.quantity,
         totalPrice: item.totalPrice.toLocaleString() + "đ",
