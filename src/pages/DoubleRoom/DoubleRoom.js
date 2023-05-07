@@ -4,15 +4,14 @@ import SortIcon from "@mui/icons-material/Sort";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
 import { useSearchParams } from "react-router-dom";
-import DoubleRoomList from "../../components/DoubleRoomList/DoubleRoomList";
+import RoomList from "../../components/RoomList/RoomList";
 function DoubleRoom() {
-    const [sortBy, setSortBy] = useState("price,asc");
-
+    const [search, setSearch] = useSearchParams();
+    const [sortBy, setSortBy] = useState(search.get("sort") || "price,asc");
     useEffect(() => {
         async function getRoom() {
-            const room = await axios.get(`api/room/double?sort=${sortBy}`);
+            const room = await axios.get(`api/room/double?sort=${search.get("sort")}`);
             setRooms(room.data);
         }
 
@@ -20,14 +19,13 @@ function DoubleRoom() {
     }, [sortBy]);
     const [page, setPage] = useState(1);
     const [rooms, setRooms] = useState();
-    
+
     const handleChange = (event) => {
         setSortBy(event.target.value);
-        search.set("sort", sortBy);
+        search.set("sort", event.target.value);
         setSearch(search);
     };
 
-    const [search, setSearch] = useSearchParams();
     return (
         <>
             <ContainerComponent>
@@ -64,29 +62,35 @@ function DoubleRoom() {
                 </Box>
                 <Box sx={{ padding: "0 30px", marginBottom: "20px" }}>
                     <Grid container spacing={2}>
-                        {rooms && <DoubleRoomList doubleRooms={rooms.slice((page - 1) * 8, (page - 1) * 8 + 8)} />}
+                        {rooms && <RoomList rooms={rooms.slice((page - 1) * 4, (page - 1) * 4 + 4)} />}
                     </Grid>
                 </Box>
-                {rooms && Math.floor(Number(rooms?.length / 4)) + 1 > 1 && (
-                    <Pagination
-                        sx={{
-                            paddimg: 20,
-                            width: "100%",
-                            display: "flex",
-                            justifyContent: "center",
-                            marginBottom: "20px",
-                            "& .MuiPaginationItem-root": {
-                                color: "var(--primary-color)",
-                            },
-                        }}
-                        variant="outlined"
-                        onChange={(_, value) => {
-                            setPage(value);
-                        }}
-                        shape="rounded"
-                        count={Math.floor(Number(rooms?.length / 4)) + 1}
-                    />
-                )}
+                {rooms && Number(rooms?.length % 8) === 0
+                    ? Number(rooms?.length / 8)
+                    : Math.floor(Number(rooms?.length / 8)) + 1 > 1 && (
+                          <Pagination
+                              sx={{
+                                  paddimg: 20,
+                                  width: "100%",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  marginBottom: "20px",
+                                  "& .MuiPaginationItem-root": {
+                                      color: "var(--primary-color)",
+                                  },
+                              }}
+                              variant="outlined"
+                              onChange={(_, value) => {
+                                  setPage(value);
+                              }}
+                              shape="rounded"
+                              count={
+                                  Number(rooms?.length % 8) === 0
+                                      ? Number(rooms?.length / 8)
+                                      : Math.floor(Number(rooms?.length / 8)) + 1
+                              }
+                          />
+                      )}
             </ContainerComponent>
         </>
     );

@@ -6,7 +6,8 @@ import MicrowaveIcon from "@mui/icons-material/Microwave";
 import BathtubIcon from "@mui/icons-material/Bathtub";
 import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
 import { useNavigate } from "react-router-dom";
-function SingleRoomList({ singleRooms }) {
+
+function RoomList({ rooms }) {
     const navigate = useNavigate();
     const TagReview = styled("div")({
         marginBottom: "10px",
@@ -42,14 +43,15 @@ function SingleRoomList({ singleRooms }) {
 
     return (
         <>
-            {singleRooms &&
-                singleRooms.map((item, index) => {
+            {rooms &&
+                rooms.map((item, index) => {
                     return (
                         <Grid key={index} item lg={3} md={6} sm={12} xs={12}>
                             <Card>
                                 <CardMedia
                                     onClick={() => {
-                                        navigate(`/room/${item._id}`);window.scrollTo(0, 0);
+                                        navigate(`/room/${item._id}`);
+                                        window.scrollTo(0, 0);
                                     }}
                                     sx={{ height: "165px", cursor: "pointer" }}
                                     image={`${process.env.REACT_APP_HOST_URL}${item.cover}`}
@@ -68,7 +70,8 @@ function SingleRoomList({ singleRooms }) {
                                             },
                                         }}
                                         onClick={() => {
-                                            navigate(`/room/${item._id}`);window.scrollTo(0, 0);
+                                            navigate(`/room/${item._id}`);
+                                            window.scrollTo(0, 0);
                                         }}
                                     >
                                         {item.title}
@@ -116,7 +119,8 @@ function SingleRoomList({ singleRooms }) {
                                         </span>
                                         <Button
                                             onClick={() => {
-                                                navigate(`/room/${item._id}`);window.scrollTo(0, 0);
+                                                navigate(`/room/${item._id}`);
+                                                window.scrollTo(0, 0);
                                             }}
                                         >
                                             ĐẶT PHÒNG
@@ -131,4 +135,4 @@ function SingleRoomList({ singleRooms }) {
     );
 }
 
-export default SingleRoomList;
+export default RoomList;

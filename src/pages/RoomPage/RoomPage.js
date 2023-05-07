@@ -56,11 +56,12 @@ function RoomPage() {
             border: "1px solid #c40025",
         },
     });
-    const [sortBy, setSortBy] = useState("price,asc");
+    const [search, setSearch] = useSearchParams();
+    const [sortBy, setSortBy] = useState(search.get("sort") || "price,asc");
 
     useEffect(() => {
         async function getRoom() {
-            const room = await axios.get(`api/room/list?sort=${sortBy}`);
+            const room = await axios.get(`api/room/list?sort=${search.get("sort")}`);
             setRooms(room.data);
         }
 
@@ -71,13 +72,12 @@ function RoomPage() {
 
     const handleChange = (event) => {
         setSortBy(event.target.value);
-        search.set("sort", sortBy);
+        search.set("sort", event.target.value);
         setSearch(search);
     };
     const count =
         Number(rooms?.length % 8) === 0 ? Number(rooms?.length / 8) : Math.floor(Number(rooms?.length / 8)) + 1;
 
-    const [search, setSearch] = useSearchParams();
     return (
         <>
             <ContainerComponent>

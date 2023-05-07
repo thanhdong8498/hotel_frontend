@@ -6,13 +6,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import { useSearchParams } from "react-router-dom";
-import VipRoomList from "../../components/VipRoomList/VipRoomList";
+import RoomList from "../../components/RoomList/RoomList";
 function VipRoom() {
-    const [sortBy, setSortBy] = useState("price,asc");
+    const [search, setSearch] = useSearchParams();
+    const [sortBy, setSortBy] = useState(search.get("sort") || "price,asc");
 
     useEffect(() => {
         async function getRoom() {
-            const room = await axios.get(`api/room/vip?sort=${sortBy}`);
+            const room = await axios.get(`api/room/vip?sort=${search.get("sort")}`);
             setRooms(room.data);
         }
 
@@ -20,15 +21,13 @@ function VipRoom() {
     }, [sortBy]);
     const [page, setPage] = useState(1);
     const [rooms, setRooms] = useState();
-    
+
     const handleChange = (event) => {
         setSortBy(event.target.value);
-        search.set("sort", sortBy);
+        search.set("sort", event.target.value);
         setSearch(search);
     };
-   
 
-    const [search, setSearch] = useSearchParams();
     return (
         <>
             <ContainerComponent>
@@ -65,7 +64,7 @@ function VipRoom() {
                 </Box>
                 <Box sx={{ padding: "0 30px", marginBottom: "20px" }}>
                     <Grid container spacing={2}>
-                        {rooms && <VipRoomList vipRooms={rooms.slice((page - 1) * 4, (page - 1) * 4 + 4)} />}
+                        {rooms && <RoomList rooms={rooms.slice((page - 1) * 4, (page - 1) * 4 + 4)} />}
                     </Grid>
                 </Box>
                 {rooms && Math.floor(Number(rooms?.length / 4)) + 1 > 1 && (

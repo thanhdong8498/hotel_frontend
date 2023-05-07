@@ -1,12 +1,12 @@
 import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-function DrinkList({ drink }) {
+function CuisineList({ cuisine }) {
     const navigate = useNavigate();
     return (
         <>
-            {drink &&
-                drink.map((item, index) => {
+            {cuisine &&
+                cuisine.map((item, index) => {
                     return (
                         <Grid key={index} item lg={3} md={6} sm={12} xs={12}>
                             <Card
@@ -74,4 +74,4 @@ function DrinkList({ drink }) {
     );
 }
 
-export default DrinkList;
+export default CuisineList;

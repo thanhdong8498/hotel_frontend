@@ -6,13 +6,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import { useSearchParams } from "react-router-dom";
-import FoodList from "../../components/FoodList/FoodList";
+import CuisineList from "../../components/CuisineList/CuisineList";
 function Food() {
-    const [sortBy, setSortBy] = useState("promotionalPrice,asc");
+    const [search, setSearch] = useSearchParams();
+    const [sortBy, setSortBy] = useState(search.get("sort") || "promotionalPrice,asc");
 
     useEffect(() => {
         async function getRoom() {
-            const food = await axios.get(`api/cuisine/food?sort=${sortBy}`);
+            const food = await axios.get(`api/cuisine/food?sort=${search.get("sort")}`);
             setFood(food.data);
         }
 
@@ -20,14 +21,13 @@ function Food() {
     }, [sortBy]);
     const [page, setPage] = useState(1);
     const [food, setFood] = useState();
-    
+
     const handleChange = (event) => {
         setSortBy(event.target.value);
-        search.set("sort", sortBy);
+        search.set("sort", event.target.value);
         setSearch(search);
     };
     const count = Number(food?.length % 8) === 0 ? Number(food?.length / 8) : Math.floor(Number(food?.length / 8)) + 1;
-    const [search, setSearch] = useSearchParams();
     return (
         <>
             <ContainerComponent>
@@ -64,7 +64,7 @@ function Food() {
                 </Box>
                 <Box sx={{ padding: "0 30px", marginBottom: "20px" }}>
                     <Grid container spacing={2}>
-                        {food && <FoodList food={food.slice((page - 1) * 8, (page - 1) * 8 + 8)} />}
+                        {food && <CuisineList cuisine={food.slice((page - 1) * 8, (page - 1) * 8 + 8)} />}
                     </Grid>
                 </Box>
                 {food && count > 1 && (

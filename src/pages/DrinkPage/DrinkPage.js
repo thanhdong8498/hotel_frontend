@@ -6,13 +6,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import { useSearchParams } from "react-router-dom";
-import DrinkList from "../../components/DrinkList/DrinkList";
+import CuisineList from "../../components/CuisineList/CuisineList";
 function Drink() {
-    const [sortBy, setSortBy] = useState("promotionalPrice,asc");
+    const [search, setSearch] = useSearchParams();
+    const [sortBy, setSortBy] = useState(search.get("sort") || "promotionalPrice,asc");
 
     useEffect(() => {
         async function getRoom() {
-            const drink = await axios.get(`api/cuisine/drink?sort=${sortBy}`);
+            const drink = await axios.get(`api/cuisine/drink?sort=${search.get("sort")}`);
             setDrink(drink.data);
         }
 
@@ -20,15 +21,14 @@ function Drink() {
     }, [sortBy]);
     const [page, setPage] = useState(1);
     const [drink, setDrink] = useState();
-    
+
     const handleChange = (event) => {
         setSortBy(event.target.value);
-        search.set("sort", sortBy);
+        search.set("sort", event.target.value);
         setSearch(search);
     };
     const count =
         Number(drink?.length % 8) === 0 ? Number(drink?.length / 8) : Math.floor(Number(drink?.length / 8)) + 1;
-    const [search, setSearch] = useSearchParams();
     return (
         <>
             <ContainerComponent>
@@ -65,7 +65,7 @@ function Drink() {
                 </Box>
                 <Box sx={{ padding: "0 30px", marginBottom: "20px" }}>
                     <Grid container spacing={2}>
-                        {drink && <DrinkList drink={drink.slice((page - 1) * 8, (page - 1) * 8 + 8)} />}
+                        {drink && <CuisineList cuisine={drink.slice((page - 1) * 8, (page - 1) * 8 + 8)} />}
                     </Grid>
                 </Box>
                 {Drink && count > 1 && (

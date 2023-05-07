@@ -158,7 +158,7 @@ function AdminOrderpage() {
         id: item._id,
         userName: item.userName,
         phone: item.phone,
-        createAt: moment(item.createdAt).tz("Asia/Ho_Chi_Minh").format("hh:mm A DD/MM/YYYY"),
+        createAt: moment(item.createdAt).tz("Asia/Ho_Chi_Minh").format("hh:mm Aqw DD/MM/YYYY"),
         cuisineName: item.cuisineName,
         quantity: item.quantity,
         totalPrice: item.totalPrice.toLocaleString() + "đ",

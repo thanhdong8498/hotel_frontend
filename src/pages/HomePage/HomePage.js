@@ -9,12 +9,10 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import SingleRoomList from "../../components/SingleRoomList/SingleRoomList";
-import DoubleRoomList from "../../components/DoubleRoomList/DoubleRoomList";
-import VipRoomList from "../../components/VipRoomList/VipRoomList";
-import FoodList from "../../components/FoodList/FoodList";
-import DrinkList from "../../components/DrinkList/DrinkList";
+
 import axios from "axios";
+import RoomList from "../../components/RoomList/RoomList";
+import CuisineList from "../../components/CuisineList/CuisineList";
 
 function HomePage() {
     const ContentIntroduce = styled("div")({
@@ -226,7 +224,8 @@ function HomePage() {
                                 </p>
                                 <ButtonShowMore
                                     onClick={() => {
-                                        navigate("/about");window.scrollTo(0, 0);
+                                        navigate("/about");
+                                        window.scrollTo(0, 0);
                                     }}
                                 >
                                     Xem thêm
@@ -244,14 +243,15 @@ function HomePage() {
                         <Titles>
                             <TitlesSpan
                                 onClick={() => {
-                                    navigate("/room");window.scrollTo(0, 0);
+                                    navigate("/room");
+                                    window.scrollTo(0, 0);
                                 }}
                             >
                                 Phòng
                             </TitlesSpan>
                         </Titles>
                     </div>
-                    <SingleRoomList singleRooms={singleRooms} />
+                    <RoomList rooms={singleRooms} />
                 </Grid>
                 <Grid
                     sx={{ backgroundColor: "#fff", paddingRight: "16px", paddingBottom: "48px" }}
@@ -262,14 +262,15 @@ function HomePage() {
                         <Titles>
                             <TitlesSpan
                                 onClick={() => {
-                                    navigate("/double-room");window.scrollTo(0, 0);
+                                    navigate("/double-room");
+                                    window.scrollTo(0, 0);
                                 }}
                             >
                                 Phòng đôi
                             </TitlesSpan>
                         </Titles>
                     </div>
-                    <DoubleRoomList doubleRooms={doubleRooms} />
+                    <RoomList rooms={doubleRooms} />
                 </Grid>
                 <Grid
                     sx={{ backgroundColor: "#f3f3f3", paddingRight: "16px", paddingBottom: "48px" }}
@@ -280,14 +281,15 @@ function HomePage() {
                         <Titles>
                             <TitlesSpan
                                 onClick={() => {
-                                    navigate("/vip-room");window.scrollTo(0, 0);
+                                    navigate("/vip-room");
+                                    window.scrollTo(0, 0);
                                 }}
                             >
                                 Phòng vip
                             </TitlesSpan>
                         </Titles>
                     </div>
-                    <VipRoomList vipRooms={vipRooms} />
+                    <RoomList rooms={vipRooms} />
                 </Grid>
                 <Grid
                     sx={{ backgroundColor: "#fff", paddingRight: "16px", paddingBottom: "48px" }}
@@ -298,7 +300,8 @@ function HomePage() {
                         <Titles>
                             <TitlesSpan
                                 onClick={() => {
-                                    navigate("/cuisine");window.scrollTo(0, 0);
+                                    navigate("/cuisine");
+                                    window.scrollTo(0, 0);
                                 }}
                             >
                                 Ẩm thực
@@ -339,12 +342,12 @@ function HomePage() {
                             </Box>
                             <TabPanel value="1">
                                 <Grid container spacing={2}>
-                                    <FoodList food={food} />
+                                    <CuisineList cuisine={food} />
                                 </Grid>
                             </TabPanel>
                             <TabPanel value="2">
                                 <Grid container spacing={2}>
-                                    <DrinkList drink={drinks} />
+                                    <CuisineList cuisine={drinks} />
                                 </Grid>
                             </TabPanel>
                         </TabContext>

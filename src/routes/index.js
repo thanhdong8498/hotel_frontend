@@ -26,7 +26,7 @@ import DoubleRoom from "../pages/DoubleRoom/DoubleRoom";
 import DrinkPage from "../pages/DrinkPage/DrinkPage";
 import FoodPage from "../pages/FoodPage/Foodpage";
 import GalleryPage from "../pages/GalleryPage/GalleryPage";
-import HomePage from "../pages/HomPage/HomePage";
+import HomePage from "../pages/HomePage/HomePage";
 import Login from "../pages/Login/Login";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import OrderPage from "../pages/OrderPage/OrderPage";
