@@ -117,7 +117,7 @@ function RoomPage() {
                         {rooms &&
                             rooms.slice((page - 1) * 8, (page - 1) * 8 + 8).map((item, index) => {
                                 return (
-                                    <Grid key={index} item lg={3} md={6} sm={6} ms={6} xs={12}>
+                                    <Grid key={index} item lg={3} md={6} sm={6} ms={12} xs={12}>
                                         <Card>
                                             <CardMedia
                                                 sx={{ height: "165px" }}
