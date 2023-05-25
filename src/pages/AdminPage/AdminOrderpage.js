@@ -10,7 +10,7 @@ import { HotelState } from "../../components/MyContext/MyContext";
 import { blue, grey } from "@mui/material/colors";
 import io from "socket.io-client";
 
-const ENDPOINT = process.env.REACT_APP_SOCKET_IO_ENDPOINT;
+const ENDPOINT = 'https://ntd-backend-hotel.onrender.com/';
 var socket;
 function AdminOrderpage() {
     const [newOrder, setnewOrder] = useState(false);

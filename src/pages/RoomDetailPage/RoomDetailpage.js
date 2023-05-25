@@ -23,8 +23,7 @@ import { HotelState } from "../../components/MyContext/MyContext";
 import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
 import io from "socket.io-client";
 
-const ENDPOINT = process.env.REACT_APP_SOCKET_IO_ENDPOINT;
-console.log(ENDPOINT);
+const ENDPOINT = "https://ntd-backend-hotel.onrender.com/";
 var socket;
 const StyledTextField = styled("input")`
     height: 35px;
