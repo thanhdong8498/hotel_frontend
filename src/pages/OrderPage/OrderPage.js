@@ -5,7 +5,7 @@ import ContainerComponent from "../../components/ContainerComponent/ContainerCom
 import { HotelState } from "../../components/MyContext/MyContext";
 import io from "socket.io-client";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = process.env.REACT_APP_SOCKET_IO_ENDPOINT;
 var socket;
 function OrderPage() {
     const [newStatus, setNewStatus] = useState(false);

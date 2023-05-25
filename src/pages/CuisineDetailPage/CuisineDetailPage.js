@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import AliceCarousel from "react-alice-carousel";
 import io from "socket.io-client";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = process.env.REACT_APP_SOCKET_IO_ENDPOINT;
 var socket;
 const TagItem = styled("li")({
     display: "inline-block",

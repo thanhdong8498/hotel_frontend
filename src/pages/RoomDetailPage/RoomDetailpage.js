@@ -23,7 +23,8 @@ import { HotelState } from "../../components/MyContext/MyContext";
 import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
 import io from "socket.io-client";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = process.env.REACT_APP_SOCKET_IO_ENDPOINT;
+console.log(ENDPOINT);
 var socket;
 const StyledTextField = styled("input")`
     height: 35px;
@@ -104,7 +105,7 @@ function RoomDetailpage() {
         getDetail();
         getSimilarRoom();
         getVipRoom();
-    }, [bookSuccess, roomType, roomId,newStatus]);
+    }, [bookSuccess, roomType, roomId, newStatus]);
     const [vipRooms, setVipRooms] = useState();
 
     const bestRooms =
@@ -117,7 +118,8 @@ function RoomDetailpage() {
                         alt=""
                         style={{ width: "35%", userSelect: "none", cursor: "pointer" }}
                         onClick={() => {
-                            navigate(`/room/${item._id}`);window.scrollTo(0, 0);
+                            navigate(`/room/${item._id}`);
+                            window.scrollTo(0, 0);
                         }}
                     />
                     <div style={{ marginLeft: "12px" }}>
@@ -132,7 +134,8 @@ function RoomDetailpage() {
                                 },
                             }}
                             onClick={() => {
-                                navigate(`/room/${item._id}`);window.scrollTo(0, 0);
+                                navigate(`/room/${item._id}`);
+                                window.scrollTo(0, 0);
                                 window.scrollTo(0, 0);
                             }}
                         >
@@ -168,7 +171,8 @@ function RoomDetailpage() {
                             },
                         }}
                         onClick={() => {
-                            navigate(`/room/${item._id}`);window.scrollTo(0, 0);
+                            navigate(`/room/${item._id}`);
+                            window.scrollTo(0, 0);
                             window.scrollTo(0, 0);
                         }}
                     >
@@ -306,13 +310,14 @@ function RoomDetailpage() {
                 phone: phoneNumber,
             });
             if (response.status === 200) {
-                socket.emit('booked')
+                socket.emit("booked");
                 setAlert({
                     open: true,
                     message: "Đã đặt phòng thành công!",
                     type: "success",
                 });
-                navigate("/booking");window.scrollTo(0, 0);
+                navigate("/booking");
+                window.scrollTo(0, 0);
                 setbookSuccess(!bookSuccess);
                 setSeletedRoom([]);
                 setCheckoutDate(null);
@@ -321,7 +326,8 @@ function RoomDetailpage() {
         } else {
             let confirm = window.confirm("Bạn cần đăng nhập để đặt phòng");
             if (confirm) {
-                navigate("/login");window.scrollTo(0, 0);
+                navigate("/login");
+                window.scrollTo(0, 0);
             }
         }
     };
@@ -742,7 +748,8 @@ function RoomDetailpage() {
                         <Grid item lg={8} md={12} xs={12} sm={12} ms={12}>
                             <div
                                 onClick={() => {
-                                    navigate(`/${roomType}-room`);window.scrollTo(0, 0);
+                                    navigate(`/${roomType}-room`);
+                                    window.scrollTo(0, 0);
                                 }}
                                 style={{
                                     color: "white",
@@ -805,7 +812,8 @@ function RoomDetailpage() {
                         <Grid item lg={4}>
                             <div
                                 onClick={() => {
-                                    navigate(`/${roomType}-room`);window.scrollTo(0, 0);
+                                    navigate(`/${roomType}-room`);
+                                    window.scrollTo(0, 0);
                                 }}
                                 style={{
                                     color: "white",
