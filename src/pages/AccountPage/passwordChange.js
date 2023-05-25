@@ -27,7 +27,6 @@ function PasswordChange() {
                     oldPass,
                     newPass,
                 });
-                console.log(response);
                 if (response.status === 200) {
                     setAlert({
                         open: true,

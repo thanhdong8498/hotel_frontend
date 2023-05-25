@@ -183,6 +183,7 @@ function Login() {
                                 placeholder="Email"
                                 type="email"
                                 value={email}
+                                required
                                 autoComplete="false"
                                 onChange={handleChangeEmail}
                             />
@@ -195,6 +196,7 @@ function Login() {
                                     placeholder="Mật khẩu"
                                     type={showPassword ? "text" : "password"}
                                     value={password}
+                                    required
                                     onChange={handleChangePassword}
                                 />
                                 {!showPassword && (

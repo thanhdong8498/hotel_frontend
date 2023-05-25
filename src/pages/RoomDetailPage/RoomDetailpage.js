@@ -21,7 +21,10 @@ import ContainerComponent from "../../components/ContainerComponent/ContainerCom
 import { useSelector } from "react-redux";
 import { HotelState } from "../../components/MyContext/MyContext";
 import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
+import io from "socket.io-client";
 
+const ENDPOINT = "http://localhost:5000";
+var socket;
 const StyledTextField = styled("input")`
     height: 35px;
     padding: 0 12px;
@@ -68,6 +71,7 @@ const BookButton = styled("button")({
     },
 });
 function RoomDetailpage() {
+    const [newStatus, setNewStatus] = useState(false);
     const [detail, setDetail] = useState();
     const params = useParams();
     const roomId = params.id;
@@ -75,6 +79,10 @@ function RoomDetailpage() {
     const [bookSuccess, setbookSuccess] = useState(false);
     const [roomType, setRoomType] = useState("");
     useEffect(() => {
+        socket = io(ENDPOINT);
+        socket.on("updatedetail", () => {
+            setNewStatus(!newStatus);
+        });
         async function getDetail() {
             const detail = await axios.get(`api/room/${roomId}`);
             setDetail(detail.data);
@@ -96,7 +104,7 @@ function RoomDetailpage() {
         getDetail();
         getSimilarRoom();
         getVipRoom();
-    }, [bookSuccess, roomType, roomId]);
+    }, [bookSuccess, roomType, roomId,newStatus]);
     const [vipRooms, setVipRooms] = useState();
 
     const bestRooms =
@@ -298,6 +306,7 @@ function RoomDetailpage() {
                 phone: phoneNumber,
             });
             if (response.status === 200) {
+                socket.emit('booked')
                 setAlert({
                     open: true,
                     message: "Đã đặt phòng thành công!",

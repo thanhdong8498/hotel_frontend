@@ -3,8 +3,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { HotelState } from "../../components/MyContext/MyContext";
+import io from "socket.io-client";
 
+const ENDPOINT = "http://localhost:5000";
+var socket;
 function OrderPage() {
+    const [newStatus, setNewStatus] = useState(false);
     const get_day_of_time = (d1, d2) => {
         let ms1 = new Date(d1).getTime();
         let ms2 = new Date(d2).getTime();
@@ -13,12 +17,16 @@ function OrderPage() {
     const [clickCancel, setClickCancel] = useState(false);
     const [userOrder, setUserOrder] = useState([]);
     useEffect(() => {
+        socket = io(ENDPOINT);
+        socket.on("updateuserbooking", () => {
+            setNewStatus(!newStatus);
+        });
         async function getUserOrder() {
             const orders = await axios.get("/api/booking/user");
             setUserOrder(orders.data);
         }
         getUserOrder();
-    }, [clickCancel]);
+    }, [clickCancel, newStatus]);
     const { setAlert } = HotelState();
 
     const handleCancel = async (id) => {
@@ -26,6 +34,7 @@ function OrderPage() {
         if (confirm) {
             const response = await axios.put(`api/booking/cancelled/${id}`);
             if (response.status === 200) {
+                socket.emit('userbookingcancelled')
                 setAlert({
                     open: true,
                     message: "Đã thực hủy đặt phòng thành công!",

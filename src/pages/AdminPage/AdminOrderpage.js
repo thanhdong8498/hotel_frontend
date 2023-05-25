@@ -8,24 +8,33 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { HotelState } from "../../components/MyContext/MyContext";
 import { blue, grey } from "@mui/material/colors";
+import io from "socket.io-client";
 
+const ENDPOINT = "http://localhost:5000";
+var socket;
 function AdminOrderpage() {
+    const [newOrder, setnewOrder] = useState(false);
     const [flag, setFlag] = useState(false);
     const [order, setOrder] = useState([]);
+
     useEffect(() => {
+        socket = io(ENDPOINT);
+        socket.on("updateadminorder", () => {
+            setnewOrder(!newOrder);
+        });
         async function getBookingList() {
             const response = await axios.get("api/order/list");
             setOrder(response.data);
         }
         getBookingList();
-    }, [flag]);
+    }, [flag, newOrder]);
     const { setAlert } = HotelState();
-
     const handleAccept = async (id) => {
         const confirm = window.confirm("Chấp nhận gọi món?");
         if (confirm) {
             const response = await axios.put(`api/order/accept/${id}`);
             if (response.status === 200) {
+                socket.emit("accept");
                 setAlert({
                     open: true,
                     message: "Đã chấp nhận thành công!",
@@ -40,6 +49,7 @@ function AdminOrderpage() {
         if (confirm) {
             const response = await axios.put(`api/order/deliveried/${id}`);
             if (response.status === 200) {
+                socket.emit("deliveried");
                 setAlert({
                     open: true,
                     message: "Đã xác nhận hoàn tất giao hàng!",

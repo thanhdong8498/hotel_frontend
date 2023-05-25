@@ -9,7 +9,10 @@ import { HotelState } from "../../components/MyContext/MyContext";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import AliceCarousel from "react-alice-carousel";
+import io from "socket.io-client";
 
+const ENDPOINT = "http://localhost:5000";
+var socket;
 const TagItem = styled("li")({
     display: "inline-block",
     listStyleType: "none",
@@ -59,6 +62,9 @@ function CuisineDetailPage() {
     const { setAlert } = HotelState();
     const [cuisineType, setCuisineType] = useState("");
 
+    useEffect(() => {
+        socket = io(ENDPOINT);
+    }, []);
     useEffect(() => {
         async function getDetail() {
             const detail = await axios.get(`api/cuisine/detail/${cuisineId}`);
@@ -113,7 +119,8 @@ function CuisineDetailPage() {
                     sx={{ height: "225px", cursor: "pointer" }}
                     image={`${process.env.REACT_APP_HOST_URL}${item.images[0]}`}
                     onClick={() => {
-                        navigate(`/cuisine/${item._id}`);window.scrollTo(0, 0);
+                        navigate(`/cuisine/${item._id}`);
+                        window.scrollTo(0, 0);
                         window.scrollTo(0, 0);
                     }}
                 />
@@ -131,7 +138,8 @@ function CuisineDetailPage() {
                             },
                         }}
                         onClick={() => {
-                            navigate(`/cuisine/${item._id}`);window.scrollTo(0, 0);
+                            navigate(`/cuisine/${item._id}`);
+                            window.scrollTo(0, 0);
                             window.scrollTo(0, 0);
                         }}
                     >
@@ -175,17 +183,20 @@ function CuisineDetailPage() {
                     cuisineId: cuisineId,
                 });
                 if (response.status === 200) {
+                    socket.emit("ordered");
                     setAlert({
                         open: true,
                         message: "Đã đặt đồ ăn thành công!",
                         type: "success",
                     });
                 }
-                navigate("/order");window.scrollTo(0, 0);
+                navigate("/order");
+                window.scrollTo(0, 0);
             }
         } else {
             if (window.confirm("Bạn cần đăng nhập để gọi đồ ăn! Quay về trang đăng nhập?")) {
-                navigate("/login");window.scrollTo(0, 0);
+                navigate("/login");
+                window.scrollTo(0, 0);
             }
         }
     };
@@ -331,7 +342,8 @@ function CuisineDetailPage() {
                     <Grid item lg={12} md={12} xs={12}>
                         <div
                             onClick={() => {
-                                navigate(`/${cuisineType}`);window.scrollTo(0, 0);
+                                navigate(`/${cuisineType}`);
+                                window.scrollTo(0, 0);
                             }}
                             style={{
                                 color: "white",

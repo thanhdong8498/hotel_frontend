@@ -198,9 +198,10 @@ function AdminPage() {
                                             <CircularProgressbar
                                                 value={
                                                     dashboard &&
+                                                    dashboard.todayRevenue > 0 &&
                                                     (dashboard.todayBookingRevenue / dashboard.todayRevenue) * 100
                                                 }
-                                                text={`${(dashboard
+                                                text={`${(dashboard && dashboard.todayRevenue > 0
                                                     ? (dashboard.todayBookingRevenue / dashboard.todayRevenue) * 100
                                                     : 0
                                                 ).toFixed(2)}%`}
@@ -247,10 +248,12 @@ function AdminPage() {
                                             <CircularProgressbar
                                                 value={
                                                     dashboard &&
+                                                    dashboard.todayRevenue > 0 &&
                                                     (dashboard.todayOrderRevenue / dashboard.todayRevenue) * 100
                                                 }
                                                 text={`${(dashboard
-                                                    ? (dashboard.todayOrderRevenue / dashboard.todayRevenue) * 100
+                                                    ? (dashboard.todayOrderRevenue &&
+                                                          dashboard.todayRevenue > 0 / dashboard.todayRevenue) * 100
                                                     : 0
                                                 ).toFixed(2)}%`}
                                                 background={false}

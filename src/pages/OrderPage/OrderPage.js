@@ -2,24 +2,42 @@ import { Box, Button, Divider, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
+import { HotelState } from "../../components/MyContext/MyContext";
+import io from "socket.io-client";
 
+const ENDPOINT = "http://localhost:5000";
+var socket;
 function OrderPage() {
+    const [newStatus, setNewStatus] = useState(false);
     const [clickCancel, setClickCancel] = useState(false);
     const [userOrder, setUserOrder] = useState([]);
     useEffect(() => {
+        socket = io(ENDPOINT);
+        socket.on("updateuserorder", () => {
+            setNewStatus(!newStatus);
+        });
         async function getUserOrder() {
             const orders = await axios.get("/api/order/user");
             setUserOrder(orders.data);
         }
         getUserOrder();
-    }, [clickCancel]);
-    
+    }, [clickCancel, newStatus]);
+    const { setAlert } = HotelState();
+
     const handleCancel = async (id) => {
-        const response = await axios.put(`api/order/cancelled/${id}`);
-        if (response.status === 200) {
-            alert("hủy thành công");
+        const confirm = window.confirm("Xác nhận hủy???");
+        if (confirm) {
+            const response = await axios.put(`api/order/cancelled/${id}`);
+            if (response.status === 200) {
+                socket.emit("usercancelledorder");
+                setAlert({
+                    open: true,
+                    message: "Đã xác nhận hủy thành công!",
+                    type: "success",
+                });
+            }
+            setClickCancel(!clickCancel);
         }
-        setClickCancel(!clickCancel);
     };
     const orderList = userOrder.map((item, index) => {
         return (
@@ -139,7 +157,7 @@ function OrderPage() {
                     onClick={() => {
                         handleCancel(item._id);
                     }}
-                    disabled={item.isDelivery || item.isCancelled}
+                    disabled={item.isDelivery || item.isCancelled || item.isAccept}
                     sx={{ width: "16%" }}
                     variant="contained"
                 >

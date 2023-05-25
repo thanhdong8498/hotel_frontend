@@ -7,24 +7,33 @@ import axios from "axios";
 import { HotelState } from "../../components/MyContext/MyContext";
 import { blue, grey } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
 
+const ENDPOINT = "http://localhost:5000";
+var socket;
 function AdminBookingPage() {
+    const [newStatus, setNewStatus] = useState(false);
     const navigate = useNavigate();
     const [flag, setFlag] = useState(false);
     const [booking, setBooking] = useState([]);
     useEffect(() => {
+        socket = io(ENDPOINT);
+        socket.on("updatedetail", () => {
+            setNewStatus(!newStatus);
+        });
         async function getBookingList() {
             const response = await axios.get("api/booking/list");
             setBooking(response.data);
         }
         getBookingList();
-    }, [flag]);
+    }, [flag, newStatus]);
     const { setAlert } = HotelState();
     const handleCancel = async (id) => {
         const confirm = window.confirm("Xác nhận hủy?");
         if (confirm) {
             const response = await axios.put(`api/booking/cancelled/${id}`);
             if (response.status === 200) {
+                socket.emit("adminbookingcanceled");
                 setAlert({
                     open: true,
                     message: "Đã thực hủy đặt phòng thành công!",
@@ -39,6 +48,7 @@ function AdminBookingPage() {
         if (confirm) {
             const response = await axios.put(`api/booking/checkout/${id}`);
             if (response.status === 200) {
+                socket.emit("checkedout");
                 setAlert({
                     open: true,
                     message: "Đã thực hiện trả phòng thành công!",
@@ -53,6 +63,7 @@ function AdminBookingPage() {
         if (confirm) {
             const response = await axios.put(`api/booking/delivery/${id}`);
             if (response.status === 200) {
+                socket.emit("roomdeliveried");
                 setAlert({
                     open: true,
                     message: "Đã thực hiện giao phòng thành công!",
