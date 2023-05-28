@@ -5,7 +5,7 @@ import ContainerComponent from "../../components/ContainerComponent/ContainerCom
 import { HotelState } from "../../components/MyContext/MyContext";
 import io from "socket.io-client";
 
-const ENDPOINT = 'https://ntd-backend-hotel.onrender.com/';
+const ENDPOINT = "https://ntd-backend-hotel.onrender.com/";
 var socket;
 function OrderPage() {
     const [newStatus, setNewStatus] = useState(false);

@@ -9,11 +9,11 @@ import { useSearchParams } from "react-router-dom";
 import CuisineList from "../../components/CuisineList/CuisineList";
 function Drink() {
     const [search, setSearch] = useSearchParams();
-    const [sortBy, setSortBy] = useState(search.get("sort") || "promotionalPrice,asc");
+    const [sortBy, setSortBy] = useState(search.get("sort") ? search.get("sort") :  "orderCount,desc");
 
     useEffect(() => {
         async function getCuisine() {
-            const drink = await axios.get(`api/cuisine/list?sort=${search.get("sort")}`);
+            const drink = await axios.get(`api/cuisine/list?sort=${sortBy}`);
             setCuisine(drink.data);
         }
 
@@ -54,7 +54,8 @@ function Drink() {
                                     value={sortBy}
                                     onChange={handleChange}
                                 >
-                                    <MenuItem value={"title,Asc"}>Tên A → Z</MenuItem>
+                                    <MenuItem value={"orderCount,desc"}>Xu hướng</MenuItem>
+                                    <MenuItem value={"title,asc"}>Tên A → Z</MenuItem>
                                     <MenuItem value={"title,desc"}>Tên Z → A</MenuItem>
                                     <MenuItem value={"promotionalPrice,asc"}>Giá tăng dần</MenuItem>
                                     <MenuItem value={"promotionalPrice,desc"}>Giá giảm dần</MenuItem>

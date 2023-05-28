@@ -8,10 +8,10 @@ import { useSearchParams } from "react-router-dom";
 import RoomList from "../../components/RoomList/RoomList";
 function DoubleRoom() {
     const [search, setSearch] = useSearchParams();
-    const [sortBy, setSortBy] = useState(search.get("sort") || "price,asc");
+    const [sortBy, setSortBy] = useState(search.get("sort") ? search.get("sort") : "bookingCount,desc");
     useEffect(() => {
         async function getRoom() {
-            const room = await axios.get(`api/room/double?sort=${search.get("sort")}`);
+            const room = await axios.get(`api/room/double?sort=${sortBy}`);
             setRooms(room.data);
         }
 
@@ -51,6 +51,7 @@ function DoubleRoom() {
                                     value={sortBy}
                                     onChange={handleChange}
                                 >
+                                    <MenuItem value={"bookingCount,desc"}>Xu hướng</MenuItem>
                                     <MenuItem value={"title,Asc"}>Tên A → Z</MenuItem>
                                     <MenuItem value={"title,desc"}>Tên Z → A</MenuItem>
                                     <MenuItem value={"price,asc"}>Giá tăng dần</MenuItem>

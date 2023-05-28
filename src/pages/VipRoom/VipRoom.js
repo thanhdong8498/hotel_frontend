@@ -9,11 +9,11 @@ import { useSearchParams } from "react-router-dom";
 import RoomList from "../../components/RoomList/RoomList";
 function VipRoom() {
     const [search, setSearch] = useSearchParams();
-    const [sortBy, setSortBy] = useState(search.get("sort") || "price,asc");
+    const [sortBy, setSortBy] = useState(search.get("sort") ? search.get("sort") : "bookingCount,desc");
 
     useEffect(() => {
         async function getRoom() {
-            const room = await axios.get(`api/room/vip?sort=${search.get("sort")}`);
+            const room = await axios.get(`api/room/vip?sort=${sortBy}`);
             setRooms(room.data);
         }
 
@@ -53,7 +53,8 @@ function VipRoom() {
                                     value={sortBy}
                                     onChange={handleChange}
                                 >
-                                    <MenuItem value={"title,Asc"}>Tên A → Z</MenuItem>
+                                    <MenuItem value={"bookingCount,desc"}>Xu hướng</MenuItem>
+                                    <MenuItem value={"title,asc"}>Tên A → Z</MenuItem>
                                     <MenuItem value={"title,desc"}>Tên Z → A</MenuItem>
                                     <MenuItem value={"price,asc"}>Giá tăng dần</MenuItem>
                                     <MenuItem value={"price,desc"}>Giá giảm dần</MenuItem>

@@ -23,7 +23,8 @@ function AdminCuisinePage() {
     }, []);
 
     const handleShowDetail = (id) => {
-        navigate(`detail/${id}`);window.scrollTo(0, 0);
+        navigate(`detail/${id}`);
+        window.scrollTo(0, 0);
     };
 
     const handleDelete = async (id) => {
@@ -35,7 +36,8 @@ function AdminCuisinePage() {
         }
     };
     const handleEdit = (id) => {
-        navigate("edit/" + id);window.scrollTo(0, 0);
+        navigate("edit/" + id);
+        window.scrollTo(0, 0);
     };
 
     const columns = [
@@ -66,7 +68,11 @@ function AdminCuisinePage() {
             headerName: "Giá bán ra",
             width: 150,
         },
-
+        {
+            field: "orderCount",
+            headerName: "Số lần đặt",
+            width: 150,
+        },
         {
             field: "actions",
             headerName: "Actions",
@@ -120,6 +126,7 @@ function AdminCuisinePage() {
         title: cuisine.title,
         listedPrice: cuisine.listedPrice && cuisine.listedPrice.toLocaleString() + "₫",
         promotionalPrice: cuisine.promotionalPrice.toLocaleString() + "₫",
+        orderCount: cuisine.orderCount,
     }));
 
     return (
@@ -133,7 +140,8 @@ function AdminCuisinePage() {
                         variant="contained"
                         sx={{ marginRight: "20px", fontSize: "1.5rem" }}
                         onClick={() => {
-                            navigate("/admin/cuisine/create");window.scrollTo(0, 0);
+                            navigate("/admin/cuisine/create");
+                            window.scrollTo(0, 0);
                         }}
                         endIcon={<AddIcon />}
                     >

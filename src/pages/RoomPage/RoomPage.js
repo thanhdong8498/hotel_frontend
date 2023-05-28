@@ -57,11 +57,11 @@ function RoomPage() {
         },
     });
     const [search, setSearch] = useSearchParams();
-    const [sortBy, setSortBy] = useState(search.get("sort") || "price,asc");
-
+    const [sortBy, setSortBy] = useState(search.get("sort") != null ? search.get("sort") : "bookingCount,desc");
+    console.log(sortBy);
     useEffect(() => {
         async function getRoom() {
-            const room = await axios.get(`api/room/list?sort=${search.get("sort")}`);
+            const room = await axios.get(`api/room/list?sort=${sortBy}`);
             setRooms(room.data);
         }
 
@@ -103,7 +103,8 @@ function RoomPage() {
                                     value={sortBy}
                                     onChange={handleChange}
                                 >
-                                    <MenuItem value={"title,Asc"}>Tên A → Z</MenuItem>
+                                    <MenuItem value={"bookingCount,desc"}>Xu hướng</MenuItem>
+                                    <MenuItem value={"title,asc"}>Tên A → Z</MenuItem>
                                     <MenuItem value={"title,desc"}>Tên Z → A</MenuItem>
                                     <MenuItem value={"price,asc"}>Giá tăng dần</MenuItem>
                                     <MenuItem value={"price,desc"}>Giá giảm dần</MenuItem>

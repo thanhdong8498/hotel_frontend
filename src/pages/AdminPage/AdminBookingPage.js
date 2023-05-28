@@ -9,7 +9,7 @@ import { blue, grey } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 
-const ENDPOINT = 'https://ntd-backend-hotel.onrender.com/';
+const ENDPOINT = "https://ntd-backend-hotel.onrender.com/";
 var socket;
 function AdminBookingPage() {
     const [newStatus, setNewStatus] = useState(false);

@@ -27,10 +27,12 @@ function AdminRoomPage() {
     }, []);
 
     const handleShowDetail = (id) => {
-        navigate(`${id}`);window.scrollTo(0, 0);
+        navigate(`${id}`);
+        window.scrollTo(0, 0);
     };
     const handleEdit = async (id) => {
-        navigate(`edit/${id}`);window.scrollTo(0, 0);
+        navigate(`edit/${id}`);
+        window.scrollTo(0, 0);
     };
     const handleDelete = async (id) => {
         let confirm = window.confirm("Xác nhận xóa!!!??");
@@ -70,6 +72,11 @@ function AdminRoomPage() {
         {
             field: "price",
             headerName: "Giá",
+            width: 150,
+        },
+        {
+            field: "bookingCount",
+            headerName: "Số lần đặt",
             width: 150,
         },
 
@@ -127,6 +134,7 @@ function AdminRoomPage() {
         roomType: room.roomType,
         title: room.title,
         price: `${room.price.toLocaleString()}₫`,
+        bookingCount: room.bookingCount,
     }));
 
     return (
@@ -140,7 +148,8 @@ function AdminRoomPage() {
                         variant="contained"
                         sx={{ marginRight: "20px", fontSize: "1.5rem" }}
                         onClick={() => {
-                            navigate("/admin/room/create");window.scrollTo(0, 0);
+                            navigate("/admin/room/create");
+                            window.scrollTo(0, 0);
                         }}
                     >
                         Thêm phòng

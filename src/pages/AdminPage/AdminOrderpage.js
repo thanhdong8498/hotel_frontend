@@ -10,7 +10,7 @@ import { HotelState } from "../../components/MyContext/MyContext";
 import { blue, grey } from "@mui/material/colors";
 import io from "socket.io-client";
 
-const ENDPOINT = 'https://ntd-backend-hotel.onrender.com/';
+const ENDPOINT = "https://ntd-backend-hotel.onrender.com/";
 var socket;
 function AdminOrderpage() {
     const [newOrder, setnewOrder] = useState(false);
@@ -34,7 +34,7 @@ function AdminOrderpage() {
         if (confirm) {
             const response = await axios.put(`api/order/accept/${id}`);
             if (response.status === 200) {
-                socket.emit("accept");
+                socket.emit("accept")
                 setAlert({
                     open: true,
                     message: "Đã chấp nhận thành công!",
@@ -49,7 +49,7 @@ function AdminOrderpage() {
         if (confirm) {
             const response = await axios.put(`api/order/deliveried/${id}`);
             if (response.status === 200) {
-                socket.emit("deliveried");
+                socket.emit('deliveried')
                 setAlert({
                     open: true,
                     message: "Đã xác nhận hoàn tất giao hàng!",
