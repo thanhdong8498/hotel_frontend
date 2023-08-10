@@ -8,12 +8,15 @@ import { HotelState } from "../MyContext/MyContext";
 import { logOutSuccess } from "../../redux/slices/authSlice";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import SeacrchModel from "../SearchModal/SeacrchModel";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import NotificationTable from "../NotificationTable/NotificationTable";
+import { socket } from "../../App";
 
 function TopHeader() {
-    
     const navigate = useNavigate();
     const isLogined = useSelector((state) => state.auth.isLogined);
-
+    console.log(socket.id);
     const StyledAppBar = styled(AppBar)({
         backgroundColor: "var(--primary-color)",
         color: "var(--white)",
@@ -56,8 +59,40 @@ function TopHeader() {
         },
     });
     const { setAlert } = HotelState();
+    const [unread, setUnread] = useState(0);
+    const [unreadNotifications, setUnreadNotifications] = useState([]);
+    const [notifications, setNotifications] = useState([]);
     const dispatch = useDispatch();
+    const [refreshNotifications, setRefreshNotifications] = useState(false);
 
+    useEffect(() => {
+        async function getUnreadNotifications() {
+            const unreadNotifcations = await axios.get("api/userNotification/unread");
+            setUnread(unreadNotifcations.data.length);
+            setUnreadNotifications(unreadNotifcations.data);
+        }
+
+        async function getAllNotifications() {
+            const allNotifications = await axios.get("api/userNotification/list");
+            setNotifications(allNotifications.data);
+        }
+        if (isLogined) {
+            getUnreadNotifications();
+            getAllNotifications();
+        }
+    }, [isLogined, refreshNotifications]);
+
+    useEffect(() => {
+        socket.on("notification", () => {
+            console.log("new notification");
+            setRefreshNotifications((prev) => !prev); // Toggle giá trị để trigger re-render
+        });
+
+        return () => {
+            // Đảm bảo remove event listener khi component bị unmount
+            socket.off("notification");
+        };
+    }, []);
     const handleLogout = () => {
         localStorage.removeItem("accessToken");
         dispatch(logOutSuccess());
@@ -67,6 +102,7 @@ function TopHeader() {
             open: true,
             message: "Đã đăng xuất tài khoản thành công!",
             type: "success",
+            origin: { vertical: "bottom", horizontal: "center" },
         });
     };
     return (
@@ -105,6 +141,18 @@ function TopHeader() {
                             <Link to={"/account"}>
                                 <NavItem>Tài khoản</NavItem>
                             </Link>
+                            <Separate />
+                            <NavItem
+                                sx={{
+                                    cursor: "pointer",
+                                }}
+                            >
+                                <NotificationTable
+                                    unreadAmount={unread}
+                                    unreadNotifications={unreadNotifications}
+                                    notifications={notifications}
+                                />
+                            </NavItem>
                             <Separate />
                         </>
                     )}

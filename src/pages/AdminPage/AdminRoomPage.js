@@ -45,6 +45,7 @@ function AdminRoomPage() {
                     open: true,
                     message: "Đã xóa thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
                 });
             }
         }

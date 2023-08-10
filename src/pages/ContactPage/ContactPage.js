@@ -62,6 +62,7 @@ function ContactPage() {
                 open: true,
                 message: "Gửi thông tin liên hệ thành công!",
                 type: "success",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
             setMessage("");
         }

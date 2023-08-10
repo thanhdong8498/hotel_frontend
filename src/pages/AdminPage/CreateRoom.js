@@ -161,19 +161,22 @@ function CreateRoom() {
         formData.append("description", value);
 
         const response = await axios.post("api/room/create", formData);
-        
+
         if (response.status === 200) {
             setAlert({
                 open: true,
                 message: "Đã thêm phòng thành công!",
                 type: "success",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
-            navigate("/admin/room");window.scrollTo(0, 0);
+            navigate("/admin/room");
+            window.scrollTo(0, 0);
         } else if (response.status === 201) {
             setAlert({
                 open: true,
                 message: response.data,
                 type: "error",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
         }
     };

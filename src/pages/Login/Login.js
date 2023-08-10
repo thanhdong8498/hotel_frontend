@@ -10,6 +10,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/slices/authSlice";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import io from "socket.io-client";
+
+const socket = io(process.env.REACT_APP_HOST_URL);
 
 const StyledBox = styled(Box)({
     boxShadow: "0px 1px 69.16px 6.84px rgba(20,64,51,0.05)",
@@ -136,6 +139,8 @@ function Login() {
             const accessToken = response.data.accessToken;
             const userLogin = jwtdecode(accessToken);
 
+            socket.emit("login", userLogin._id);
+
             dispatch(
                 loginSuccess({
                     ...userLogin,
@@ -147,8 +152,9 @@ function Login() {
             //set alert when login success
             setAlert({
                 open: true,
-                message: "Đăng nhập công!",
+                message: "Đăng nhập thành công!",
                 type: "success",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
             // navigate to admin or homepage
             if (userLogin.role === "admin" || userLogin.role === "subadmin") {
@@ -161,6 +167,14 @@ function Login() {
                 open: true,
                 message: response.data,
                 type: "error",
+                origin: { vertical: "bottom", horizontal: "center" },
+            });
+        } else if (response.status === 202) {
+            setAlert({
+                open: true,
+                message: response.data.message,
+                type: "error",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
         }
     };
@@ -226,7 +240,17 @@ function Login() {
                                     />
                                 )}
                             </div>
-                            <div style={{ marginBottom: "20px", width: "100%" }}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    marginBottom: "20px",
+                                    justifyContent: "space-between",
+                                    width: "100%",
+                                }}
+                            >
+                                <StyledSpan sx={{ paddingLeft: "6px" }}>
+                                    <Link to={"/forgot-password"}>Quên mật khẩu?</Link>
+                                </StyledSpan>
                                 <StyledSpan>
                                     <Link to={"/register"}>Đăng ký tại đây</Link>
                                 </StyledSpan>

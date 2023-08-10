@@ -45,8 +45,10 @@ function AdminUploadImage() {
                 open: true,
                 message: "Đã thêm hình ảnh thành công!",
                 type: "success",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
-            navigate("/admin/gallery");window.scrollTo(0, 0);
+            navigate("/admin/gallery");
+            window.scrollTo(0, 0);
         }
     };
     return (

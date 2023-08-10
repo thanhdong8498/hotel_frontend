@@ -74,8 +74,10 @@ function AdminRoomDetail() {
                     open: true,
                     message: "Đã xóa thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
                 });
-                navigate("/admin/room");window.scrollTo(0, 0);
+                navigate("/admin/room");
+                window.scrollTo(0, 0);
             }
         }
     };
@@ -312,7 +314,8 @@ function AdminRoomDetail() {
                     <Grid sx={{ textAlign: "center" }} item lg={12}>
                         <Button
                             onClick={() => {
-                                navigate(`/admin/room/edit/${roomId}`);window.scrollTo(0, 0);
+                                navigate(`/admin/room/edit/${roomId}`);
+                                window.scrollTo(0, 0);
                             }}
                             variant="contained"
                         >

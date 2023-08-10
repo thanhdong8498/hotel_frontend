@@ -21,10 +21,8 @@ import ContainerComponent from "../../components/ContainerComponent/ContainerCom
 import { useSelector } from "react-redux";
 import { HotelState } from "../../components/MyContext/MyContext";
 import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
-import io from "socket.io-client";
+import { socket } from "../../App";
 
-const ENDPOINT = "https://ntd-backend-hotel.onrender.com/";
-var socket;
 const StyledTextField = styled("input")`
     height: 35px;
     padding: 0 12px;
@@ -79,7 +77,6 @@ function RoomDetailpage() {
     const [bookSuccess, setbookSuccess] = useState(false);
     const [roomType, setRoomType] = useState("");
     useEffect(() => {
-        socket = io(ENDPOINT);
         socket.on("updatedetail", () => {
             setNewStatus(!newStatus);
         });
@@ -104,7 +101,7 @@ function RoomDetailpage() {
         getDetail();
         getSimilarRoom();
         getVipRoom();
-    }, [bookSuccess, roomType, roomId,newStatus]);
+    }, [bookSuccess, roomType, roomId, newStatus]);
     const [vipRooms, setVipRooms] = useState();
 
     const bestRooms =
@@ -117,7 +114,8 @@ function RoomDetailpage() {
                         alt=""
                         style={{ width: "35%", userSelect: "none", cursor: "pointer" }}
                         onClick={() => {
-                            navigate(`/room/${item._id}`);window.scrollTo(0, 0);
+                            navigate(`/room/${item._id}`);
+                            window.scrollTo(0, 0);
                         }}
                     />
                     <div style={{ marginLeft: "12px" }}>
@@ -132,7 +130,8 @@ function RoomDetailpage() {
                                 },
                             }}
                             onClick={() => {
-                                navigate(`/room/${item._id}`);window.scrollTo(0, 0);
+                                navigate(`/room/${item._id}`);
+                                window.scrollTo(0, 0);
                                 window.scrollTo(0, 0);
                             }}
                         >
@@ -168,7 +167,8 @@ function RoomDetailpage() {
                             },
                         }}
                         onClick={() => {
-                            navigate(`/room/${item._id}`);window.scrollTo(0, 0);
+                            navigate(`/room/${item._id}`);
+                            window.scrollTo(0, 0);
                             window.scrollTo(0, 0);
                         }}
                     >
@@ -207,7 +207,7 @@ function RoomDetailpage() {
                             onClick={() => {
                                 navigate(`/room/${item._id}`);
                                 window.scrollTo(0, 0);
-                                setSeletedRoom([]);
+                                setSelectedRoom([]);
                             }}
                         >
                             ĐẶT PHÒNG
@@ -218,7 +218,7 @@ function RoomDetailpage() {
         );
     });
 
-    const [seletedRoom, setSeletedRoom] = useState([]);
+    const [selectedRoom, setSelectedRoom] = useState([]);
     const [receiveDate, setReceiveDate] = useState(null);
     const [checkoutDate, setCheckoutDate] = useState(null);
     const get_day_of_time = (d1, d2) => {
@@ -227,10 +227,10 @@ function RoomDetailpage() {
         return Math.ceil((ms2 - ms1) / (24 * 60 * 60 * 1000));
     };
     const handleClickRoom = (event) => {
-        if (seletedRoom.includes(event.target.textContent)) {
-            setSeletedRoom(seletedRoom.filter((item) => item !== event.target.textContent));
+        if (selectedRoom.includes(event.target.textContent)) {
+            setSelectedRoom(selectedRoom.filter((item) => item !== event.target.textContent));
         } else {
-            setSeletedRoom([...seletedRoom, event.target.textContent]);
+            setSelectedRoom([...selectedRoom, event.target.textContent]);
         }
     };
     const firstName = useSelector((state) => state.auth.user.firstName);
@@ -250,26 +250,70 @@ function RoomDetailpage() {
         }
     }, [phone]);
 
+    // Chuyển đổi chuỗi ngày thành đối tượng ngày
+    const parseDate = (dateString) => {
+        const [day, month, year] = dateString.split("/");
+        return new Date(`${year}-${month}-${day}`);
+    };
+
+    // Hàm kiểm tra xem một phòng có được đặt trong khoảng ngày nhận và ngày trả đã chọn hay không
+    const isRoomBooked = (roomNo) => {
+        if (receiveDate && checkoutDate) {
+            const startDate = receiveDate.$d.getTime();
+            const endDate = checkoutDate.$d.getTime();
+
+            return detail.roomStatus.some((roomStatus) => {
+                // Kiểm tra nếu bookedDate là một mảng có các ngày đặt phòng, nếu không thì mặc định là mảng rỗng
+                const bookedDates = Array.isArray(roomStatus.bookedDate) ? roomStatus.bookedDate : [];
+
+                return (
+                    roomStatus.roomNo === roomNo &&
+                    bookedDates.some((bookedDate) => {
+                        const bookedDateObj = parseDate(bookedDate);
+                        const bookedDateStart = new Date(
+                            bookedDateObj.getFullYear(),
+                            bookedDateObj.getMonth(),
+                            bookedDateObj.getDate(),
+                            0,
+                            0,
+                            0
+                        ).getTime();
+                        const bookedDateEnd = new Date(
+                            bookedDateObj.getFullYear(),
+                            bookedDateObj.getMonth(),
+                            bookedDateObj.getDate(),
+                            23,
+                            59,
+                            59
+                        ).getTime();
+
+                        return startDate <= bookedDateEnd && endDate >= bookedDateStart;
+                    })
+                );
+            });
+        }
+
+        return true; // Nếu ngày nhận và ngày trả chưa được chọn, mặc định hiển thị tất cả phòng là có sẵn (không bị disable)
+    };
+
     const roomItem =
         detail &&
-        detail.roomStatus.map((item) => {
-            return (
-                <div key={item.roomNo} style={{ padding: "12px" }}>
-                    <Button
-                        disableRipple
-                        disableElevation
-                        disableFocusRipple
-                        disableTouchRipple
-                        variant="contained"
-                        disabled={item.isBooked}
-                        onClick={handleClickRoom}
-                        color={!seletedRoom.includes(item.roomNo) ? "primary" : "success"}
-                    >
-                        {item.roomNo}
-                    </Button>
-                </div>
-            );
-        });
+        detail.roomStatus.map((roomStatus) => (
+            <div key={roomStatus.roomNo} style={{ padding: "12px" }}>
+                <Button
+                    disableRipple
+                    disableElevation
+                    disableFocusRipple
+                    disableTouchRipple
+                    variant="contained"
+                    onClick={handleClickRoom}
+                    color={!selectedRoom.includes(roomStatus.roomNo) ? "primary" : "success"}
+                    disabled={!receiveDate || !checkoutDate || isRoomBooked(roomStatus.roomNo)}
+                >
+                    {roomStatus.roomNo}
+                </Button>
+            </div>
+        ));
 
     const caroselItem =
         detail &&
@@ -296,32 +340,35 @@ function RoomDetailpage() {
                 fullname: fullname,
                 receiveDate: receiveDate,
                 checkoutDate: checkoutDate,
-                roomQuantity: seletedRoom.length,
-                roomNo: seletedRoom,
+                roomQuantity: selectedRoom.length,
+                roomNo: selectedRoom,
                 roomPrice: detail.price,
                 summaryPrice: Number(
-                    seletedRoom.length * (get_day_of_time(receiveDate.$d, checkoutDate.$d) + 1) * detail.price
+                    selectedRoom.length * (get_day_of_time(receiveDate.$d, checkoutDate.$d) + 1) * detail.price
                 ),
                 roomId: roomId,
                 phone: phoneNumber,
             });
             if (response.status === 200) {
-                socket.emit('booked')
+                socket.emit("booked");
                 setAlert({
                     open: true,
                     message: "Đã đặt phòng thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
                 });
-                navigate("/booking");window.scrollTo(0, 0);
+                navigate("/booking");
+                window.scrollTo(0, 0);
                 setbookSuccess(!bookSuccess);
-                setSeletedRoom([]);
+                setSelectedRoom([]);
                 setCheckoutDate(null);
                 setReceiveDate(null);
             }
         } else {
             let confirm = window.confirm("Bạn cần đăng nhập để đặt phòng");
             if (confirm) {
-                navigate("/login");window.scrollTo(0, 0);
+                navigate("/login");
+                window.scrollTo(0, 0);
             }
         }
     };
@@ -506,7 +553,7 @@ function RoomDetailpage() {
                                                 <DatePicker
                                                     sx={{ width: "100%" }}
                                                     value={receiveDate}
-                                                    onChange={(value) => setReceiveDate(value)}
+                                                    onChange={(date) => setReceiveDate(date)}
                                                     disablePast
                                                     format="DD/MM/YYYY"
                                                 />
@@ -520,7 +567,7 @@ function RoomDetailpage() {
                                                 <DatePicker
                                                     sx={{ width: "100%" }}
                                                     value={checkoutDate}
-                                                    onChange={(value) => setCheckoutDate(value)}
+                                                    onChange={(date) => setCheckoutDate(date)}
                                                     disablePast
                                                     format="DD/MM/YYYY"
                                                     minDate={receiveDate}
@@ -538,7 +585,7 @@ function RoomDetailpage() {
                                             ms={12}
                                         >
                                             <span style={{ fontSize: "1.4rem" }}>Số lượng phòng</span>
-                                            <StyledTextField disabled value={seletedRoom.length} />
+                                            <StyledTextField disabled value={selectedRoom.length} />
                                         </Grid>
                                         <Grid
                                             sx={{ marginTop: "12px" }}
@@ -551,7 +598,7 @@ function RoomDetailpage() {
                                             ms={12}
                                         >
                                             <span style={{ fontSize: "1.4rem" }}>Phòng số</span>
-                                            <StyledTextField disabled value={seletedRoom.toString()} />
+                                            <StyledTextField disabled value={selectedRoom.toString()} />
                                         </Grid>
                                         <Grid item lg={12}>
                                             {receiveDate && checkoutDate && (
@@ -564,7 +611,7 @@ function RoomDetailpage() {
                                                         }}
                                                     >
                                                         <Typography>
-                                                            Giá niêm yết({seletedRoom.length}x
+                                                            Giá niêm yết({selectedRoom.length}x
                                                             {receiveDate &&
                                                                 checkoutDate &&
                                                                 get_day_of_time(receiveDate.$d, checkoutDate.$d) +
@@ -574,7 +621,7 @@ function RoomDetailpage() {
                                                         </Typography>
                                                         <span style={{ fontSize: "1.6rem", fontWeight: "600" }}>
                                                             {Number(
-                                                                seletedRoom.length *
+                                                                selectedRoom.length *
                                                                     (get_day_of_time(receiveDate.$d, checkoutDate.$d) +
                                                                         1) *
                                                                     detail.price
@@ -599,7 +646,7 @@ function RoomDetailpage() {
                                                         <Typography>Tổng tiền</Typography>
                                                         <span style={{ fontSize: "1.6rem", fontWeight: "600" }}>
                                                             {Number(
-                                                                seletedRoom.length *
+                                                                selectedRoom.length *
                                                                     (get_day_of_time(receiveDate.$d, checkoutDate.$d) +
                                                                         1) *
                                                                     detail.price
@@ -622,7 +669,7 @@ function RoomDetailpage() {
                                                     receiveDate &&
                                                     checkoutDate &&
                                                     Number(
-                                                        seletedRoom.length *
+                                                        selectedRoom.length *
                                                             (get_day_of_time(receiveDate.$d, checkoutDate.$d) + 1) *
                                                             detail.price
                                                     ) > 0
@@ -742,7 +789,8 @@ function RoomDetailpage() {
                         <Grid item lg={8} md={12} xs={12} sm={12} ms={12}>
                             <div
                                 onClick={() => {
-                                    navigate(`/${roomType}-room`);window.scrollTo(0, 0);
+                                    navigate(`/${roomType}-room`);
+                                    window.scrollTo(0, 0);
                                 }}
                                 style={{
                                     color: "white",
@@ -805,7 +853,8 @@ function RoomDetailpage() {
                         <Grid item lg={4}>
                             <div
                                 onClick={() => {
-                                    navigate(`/${roomType}-room`);window.scrollTo(0, 0);
+                                    navigate(`/${roomType}-room`);
+                                    window.scrollTo(0, 0);
                                 }}
                                 style={{
                                     color: "white",

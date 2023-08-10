@@ -4,8 +4,32 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AlertComponent from "./components/AlertComponent/AlertComponent";
 import DefaultComponent from "./components/DefaultComponent/DefaultComponent";
 import { routes } from "./routes";
-
+import io from "socket.io-client";
+import { useSelector } from "react-redux";
+import { HotelState } from "./components/MyContext/MyContext";
+const ENDPOINT = process.env.REACT_APP_HOST_URL;
+export const socket = io(ENDPOINT);
 function App() {
+    const notificationSound = new Audio(process.env.PUBLIC_URL + "/audio/notification.mp3");
+    const userId = useSelector((state) => state.auth.user._id);
+    socket.on("connect", () => {
+        console.log("Connected to server");
+        console.log("Socket ID:", socket.id);
+        if (userId) {
+            socket.emit("updateSocketId", userId);
+        }
+    });
+    const { setAlert } = HotelState();
+    socket.on("deliverySuccessfully", (message) => {
+        notificationSound.play();
+        setAlert({
+            open: true,
+            message: message,
+            type: "success",
+            origin: { vertical: "top", horizontal: "right" },
+        });
+    });
+
     const theme = createTheme({
         typography: {
             fontSize: 24,

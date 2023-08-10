@@ -23,6 +23,7 @@ function AdminUserPage() {
                     open: true,
                     message: "Đã xóa tài khoản thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
                 });
                 dispatch(removeUser(idUser));
             }
@@ -37,7 +38,6 @@ function AdminUserPage() {
                 email,
                 phone,
                 role,
-                password,
             });
             if (res.status === 200) {
                 setRowId("");
@@ -45,6 +45,7 @@ function AdminUserPage() {
                     open: true,
                     message: "Đã cập nhật tài khoản thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
                 });
             }
         }
@@ -70,7 +71,6 @@ function AdminUserPage() {
         email: user.email,
         phone: user.phone,
         role: user.role,
-        password: user.password,
     }));
     const columns = [
         { field: "id", headerName: "ID", width: 300 },
@@ -97,12 +97,7 @@ function AdminUserPage() {
             width: 150,
             editable: "true",
         },
-        {
-            field: "password",
-            headerName: "Mật khẩu",
-            width: 150,
-            editable: "true",
-        },
+
         {
             field: "role",
             headerName: "Phân quyền",
@@ -135,8 +130,7 @@ function AdminUserPage() {
                                     params.row.lastName,
                                     params.row.email,
                                     params.row.phone,
-                                    params.row.role,
-                                    params.row.password
+                                    params.row.role
                                 )
                             }
                             sx={{ fontSize: "1.5rem" }}

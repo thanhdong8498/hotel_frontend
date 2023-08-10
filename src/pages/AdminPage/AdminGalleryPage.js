@@ -27,7 +27,6 @@ function AdminGalleryPage() {
         }
         getImagesList();
     }, [reload]);
-    
 
     const handleDelete = async (path) => {
         let confirm = window.confirm("Xác nhận xóa!!!??");
@@ -40,6 +39,7 @@ function AdminGalleryPage() {
                     open: true,
                     message: "Đã xóa thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
                 });
             }
             setReload(true);
@@ -112,7 +112,8 @@ function AdminGalleryPage() {
                         variant="contained"
                         sx={{ marginRight: "20px", fontSize: "1.5rem" }}
                         onClick={() => {
-                            navigate("/admin/gallery/upload");window.scrollTo(0, 0);
+                            navigate("/admin/gallery/upload");
+                            window.scrollTo(0, 0);
                         }}
                     >
                         Thêm ảnh

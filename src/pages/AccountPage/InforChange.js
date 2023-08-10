@@ -32,6 +32,8 @@ function InfoChange() {
                     open: true,
                     message: "Đã thay đổi thông tin tài khoản thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
+                    origin: { vertical: "top", horizontal: "right" },
                 });
                 navigate("/account");
                 window.scrollTo(0, 0);
@@ -66,7 +68,8 @@ function InfoChange() {
                                 },
                             }}
                             onClick={() => {
-                                navigate("/account");window.scrollTo(0, 0);
+                                navigate("/account");
+                                window.scrollTo(0, 0);
                             }}
                         >
                             Thông tin tài khoản
@@ -81,7 +84,8 @@ function InfoChange() {
                                 },
                             }}
                             onClick={() => {
-                                navigate("/account/infochange");window.scrollTo(0, 0);
+                                navigate("/account/infochange");
+                                window.scrollTo(0, 0);
                             }}
                         >
                             Cập nhật thông tin
@@ -96,7 +100,8 @@ function InfoChange() {
                                 },
                             }}
                             onClick={() => {
-                                navigate("/account/passwordchange");window.scrollTo(0, 0);
+                                navigate("/account/passwordchange");
+                                window.scrollTo(0, 0);
                             }}
                         >
                             Thay đổi mật khẩu

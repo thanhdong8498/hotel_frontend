@@ -6,6 +6,7 @@ function MyContext({ children }) {
         open: false,
         message: "",
         type: "success",
+        origin: { vertical: "bottom", horizontal: "center" },
     });
 
     return <Hotel.Provider value={{ alert, setAlert }}>{children}</Hotel.Provider>;

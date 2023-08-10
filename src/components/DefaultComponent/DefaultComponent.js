@@ -18,6 +18,7 @@ function DefaultComponent({ children }) {
                 console.log(error);
             }
         }
+
         getUserLogin();
     }, [changeInfo]);
     return (

@@ -57,7 +57,7 @@ function AdminRoomEdit() {
     React.useEffect(() => {
         async function getDetail() {
             const detail = await axios.get(`api/room/${roomId}`);
-            
+
             setAdults(detail.data.adults);
             setServices(detail.data.services[0].split(","));
             setTitle(detail.data.title);
@@ -190,6 +190,7 @@ function AdminRoomEdit() {
                 open: true,
                 message: "Đã cập nhật thành công!",
                 type: "success",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
             navigate("/admin/room/" + roomId);
             window.scrollTo(0, 0);

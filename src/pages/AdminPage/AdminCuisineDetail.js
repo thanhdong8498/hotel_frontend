@@ -57,7 +57,7 @@ function AdminCuisineDetail() {
     const [detail, setDetail] = useState();
     const caroselItem =
         detail &&
-        detail.images.map((item,index) => {
+        detail.images.map((item, index) => {
             return (
                 <div key={index}>
                     <img
@@ -77,11 +77,13 @@ function AdminCuisineDetail() {
                     open: true,
                     message: "Đã xóa thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
                 });
 
                 const response = await axios.get("/api/cuisine/list");
                 dispatch(getListCuisine([...response.data]));
-                navigate("/admin/cuisine");window.scrollTo(0, 0);
+                navigate("/admin/cuisine");
+                window.scrollTo(0, 0);
             }
         }
     };
@@ -173,7 +175,8 @@ function AdminCuisineDetail() {
                     <Grid sx={{ textAlign: "center" }} item lg={12}>
                         <Button
                             onClick={() => {
-                                navigate(`/admin/cuisine/edit/${cuisineId}`);window.scrollTo(0, 0);
+                                navigate(`/admin/cuisine/edit/${cuisineId}`);
+                                window.scrollTo(0, 0);
                             }}
                             variant="contained"
                         >

@@ -7,17 +7,14 @@ import axios from "axios";
 import { HotelState } from "../../components/MyContext/MyContext";
 import { blue, grey } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
-import io from "socket.io-client";
+import { socket } from "../../App";
 
-const ENDPOINT = "https://ntd-backend-hotel.onrender.com/";
-var socket;
 function AdminBookingPage() {
     const [newStatus, setNewStatus] = useState(false);
     const navigate = useNavigate();
     const [flag, setFlag] = useState(false);
     const [booking, setBooking] = useState([]);
     useEffect(() => {
-        socket = io(ENDPOINT);
         socket.on("updatedetail", () => {
             setNewStatus(!newStatus);
         });
@@ -38,6 +35,7 @@ function AdminBookingPage() {
                     open: true,
                     message: "Đã thực hủy đặt phòng thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
                 });
             }
             setFlag(!flag);
@@ -53,6 +51,7 @@ function AdminBookingPage() {
                     open: true,
                     message: "Đã thực hiện trả phòng thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
                 });
                 setFlag(!flag);
             }
@@ -68,6 +67,7 @@ function AdminBookingPage() {
                     open: true,
                     message: "Đã thực hiện giao phòng thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
                 });
                 setFlag(!flag);
             }
@@ -260,6 +260,7 @@ function AdminBookingPage() {
         roomQuantity: item.roomNo.length,
         roomPrice: item.roomPrice.toLocaleString() + "đ",
     }));
+
     return (
         <DefaultAdminLayout>
             <Paper sx={{ width: "100%", overflow: "hidden" }}>

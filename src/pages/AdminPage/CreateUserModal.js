@@ -100,12 +100,14 @@ function SimpleDialog(props) {
                 open: true,
                 message: "Đã tạo tài khoản thành công!",
                 type: "success",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
         } else if (response.status === 201) {
             setAlert({
                 open: true,
                 message: response.data.title,
                 type: "error",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
         }
     };

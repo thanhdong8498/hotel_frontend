@@ -3,16 +3,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { HotelState } from "../../components/MyContext/MyContext";
-import io from "socket.io-client";
+import { socket } from "../../App";
 
-const ENDPOINT = "https://ntd-backend-hotel.onrender.com/";
-var socket;
 function OrderPage() {
     const [newStatus, setNewStatus] = useState(false);
     const [clickCancel, setClickCancel] = useState(false);
     const [userOrder, setUserOrder] = useState([]);
     useEffect(() => {
-        socket = io(ENDPOINT);
         socket.on("updateuserorder", () => {
             setNewStatus(!newStatus);
         });
@@ -34,6 +31,7 @@ function OrderPage() {
                     open: true,
                     message: "Đã xác nhận hủy thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
                 });
             }
             setClickCancel(!clickCancel);

@@ -9,10 +9,8 @@ import { HotelState } from "../../components/MyContext/MyContext";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import AliceCarousel from "react-alice-carousel";
-import io from "socket.io-client";
+import { socket } from "../../App";
 
-const ENDPOINT = "https://ntd-backend-hotel.onrender.com/";
-var socket;
 const TagItem = styled("li")({
     display: "inline-block",
     listStyleType: "none",
@@ -62,9 +60,6 @@ function CuisineDetailPage() {
     const { setAlert } = HotelState();
     const [cuisineType, setCuisineType] = useState("");
 
-    useEffect(() => {
-        socket = io(ENDPOINT);
-    }, []);
     useEffect(() => {
         async function getDetail() {
             const detail = await axios.get(`api/cuisine/detail/${cuisineId}`);
@@ -188,6 +183,7 @@ function CuisineDetailPage() {
                         open: true,
                         message: "Đã đặt đồ ăn thành công!",
                         type: "success",
+                        origin: { vertical: "bottom", horizontal: "center" },
                     });
                 }
                 navigate("/order");

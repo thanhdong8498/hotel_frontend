@@ -126,13 +126,23 @@ function Register() {
                 open: true,
                 message: "Đăng ký thành công!",
                 type: "success",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
-            navigate("/login");window.scrollTo(0, 0);
-        } else if (response.status === 201) {
+            navigate("/login");
+            window.scrollTo(0, 0);
+        } else if (response.status === 202) {
             setAlert({
                 open: true,
                 message: response.data.title,
                 type: "error",
+                origin: { vertical: "bottom", horizontal: "center" },
+            });
+        } else if (response.status === 201) {
+            setAlert({
+                open: true,
+                message: response.data.message,
+                type: "error",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
         }
     };

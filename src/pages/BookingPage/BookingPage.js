@@ -3,10 +3,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { HotelState } from "../../components/MyContext/MyContext";
-import io from "socket.io-client";
+import { socket } from "../../App";
 
-const ENDPOINT = "https://ntd-backend-hotel.onrender.com/";
-var socket;
 function OrderPage() {
     const [newStatus, setNewStatus] = useState(false);
     const get_day_of_time = (d1, d2) => {
@@ -17,7 +15,6 @@ function OrderPage() {
     const [clickCancel, setClickCancel] = useState(false);
     const [userOrder, setUserOrder] = useState([]);
     useEffect(() => {
-        socket = io(ENDPOINT);
         socket.on("updateuserbooking", () => {
             setNewStatus(!newStatus);
         });
@@ -34,11 +31,12 @@ function OrderPage() {
         if (confirm) {
             const response = await axios.put(`api/booking/cancelled/${id}`);
             if (response.status === 200) {
-                socket.emit('userbookingcancelled')
+                socket.emit("userbookingcancelled");
                 setAlert({
                     open: true,
                     message: "Đã thực hủy đặt phòng thành công!",
                     type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
                 });
             }
             setClickCancel(!clickCancel);

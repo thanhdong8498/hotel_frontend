@@ -142,14 +142,16 @@ function AdminCuisineEdit() {
         }
 
         const response = await axios.put(`api/cuisine/update/${cuisineId}`, formData);
-        
+
         if (response.status === 200) {
             setAlert({
                 open: true,
                 message: "Cập nhật thành công!",
                 type: "success",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
-            navigate(`/admin/cuisine/detail/${cuisineId}`);window.scrollTo(0, 0);
+            navigate(`/admin/cuisine/detail/${cuisineId}`);
+            window.scrollTo(0, 0);
         }
     };
 

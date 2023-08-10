@@ -46,7 +46,8 @@ export default function NavComponent() {
             } catch (error) {
                 console.log(error);
                 if (error.response.status === 401) {
-                    navigate("/login");window.scrollTo(0, 0);
+                    navigate("/login");
+                    window.scrollTo(0, 0);
                 }
             }
         }
@@ -76,11 +77,13 @@ export default function NavComponent() {
     const handleLogout = () => {
         localStorage.removeItem("accessToken");
         dispatch(logOutSuccess());
-        navigate("/login");window.scrollTo(0, 0);
+        navigate("/login");
+        window.scrollTo(0, 0);
         setAlert({
             open: true,
             message: "Đã đăng xuất tài khoản thành công!",
             type: "success",
+            origin: { vertical: "bottom", horizontal: "center" },
         });
     };
 

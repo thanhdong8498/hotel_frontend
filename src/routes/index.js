@@ -35,7 +35,9 @@ import RoomDetailPage from "../pages/RoomDetailPage/RoomDetailpage";
 import RoomPage from "../pages/RoomPage/RoomPage";
 import SingleRoom from "../pages/SingleRoom/SingleRoom";
 import VipRoom from "../pages/VipRoom/VipRoom";
-
+import EmailVerify from "../pages/EmailVerify/EmailVerify";
+import ForgotPassword from "../pages/ForgotPassword";
+import PasswordReset from "../pages/PasswordReset";
 export const routes = [
     {
         path: "/",
@@ -202,6 +204,21 @@ export const routes = [
         path: "/booking",
         page: BookingPage,
         isShowHeader: true,
+    },
+    {
+        path: "/users/:id/verify/:token",
+        page: EmailVerify,
+        isShowHeader: false,
+    },
+    {
+        path: "/forgot-password",
+        page: ForgotPassword,
+        isShowHeader: false,
+    },
+    {
+        path: "/password-reset/:id/:token",
+        page: PasswordReset,
+        isShowHeader: false,
     },
     {
         path: "*",

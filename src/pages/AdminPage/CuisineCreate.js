@@ -123,8 +123,10 @@ function CuisineCreate() {
                 open: true,
                 message: "Đã thêm thành công!",
                 type: "success",
+                origin: { vertical: "bottom", horizontal: "center" },
             });
-            navigate("/admin/cuisine");window.scrollTo(0, 0);
+            navigate("/admin/cuisine");
+            window.scrollTo(0, 0);
         }
     };
 
