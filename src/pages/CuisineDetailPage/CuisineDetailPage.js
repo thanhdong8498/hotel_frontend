@@ -9,7 +9,7 @@ import { HotelState } from "../../components/MyContext/MyContext";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import AliceCarousel from "react-alice-carousel";
-import { socket } from "../../App";
+import { getSocketInstance } from "../../socket";
 
 const TagItem = styled("li")({
     display: "inline-block",
@@ -53,6 +53,7 @@ const StyledTextField = styled("input")`
     font-size: 1.4rem;
 `;
 function CuisineDetailPage() {
+    const socket = getSocketInstance();
     const navigate = useNavigate();
     const isLogined = useSelector((state) => state.auth.isLogined);
     const params = useParams();

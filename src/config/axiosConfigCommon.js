@@ -1,6 +1,6 @@
 import axios from "axios";
 const axiosCommon = () => {
-    axios.defaults.baseURL = "https://ntd-backend-hotel.onrender.com";
+    axios.defaults.baseURL = process.env.REACT_APP_HOST_URL;
 
     // Add request interceptor
     axios.interceptors.request.use(

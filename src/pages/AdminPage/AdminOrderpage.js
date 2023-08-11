@@ -8,9 +8,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { HotelState } from "../../components/MyContext/MyContext";
 import { blue, grey } from "@mui/material/colors";
-import { socket } from "../../App";
+import { getSocketInstance } from "../../socket";
 
 function AdminOrderpage() {
+    const socket = getSocketInstance();
     const [newOrder, setnewOrder] = useState(false);
     const [flag, setFlag] = useState(false);
     const [order, setOrder] = useState([]);

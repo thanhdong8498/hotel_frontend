@@ -10,9 +10,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../../redux/slices/authSlice";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import io from "socket.io-client";
+import { getSocketInstance } from "../../socket";
 
-const socket = io(process.env.REACT_APP_HOST_URL);
+
 
 const StyledBox = styled(Box)({
     boxShadow: "0px 1px 69.16px 6.84px rgba(20,64,51,0.05)",
@@ -103,6 +103,7 @@ const StyledSpan = styled("span")({
 });
 
 function Login() {
+    const socket = getSocketInstance();
     const navigate = useNavigate();
     const isLogined = useSelector((state) => state.auth.isLogined);
     const role = useSelector((state) => state.auth.user.role);

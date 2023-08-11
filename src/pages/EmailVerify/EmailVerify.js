@@ -11,7 +11,7 @@ const EmailVerify = () => {
     useEffect(() => {
         const verifyEmailUrl = async () => {
             try {
-                const url = `https://ntd-backend-hotel.onrender.com/api/auth/${param.id}/verify/${param.token}`;
+                const url = `${process.env.REACT_APP_HOST_URL}/api/auth/${param.id}/verify/${param.token}`;
                 const { data } = await axios.get(url);
                 console.log(data);
                 setValidUrl(true);

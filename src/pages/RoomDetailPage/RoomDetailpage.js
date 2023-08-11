@@ -21,7 +21,7 @@ import ContainerComponent from "../../components/ContainerComponent/ContainerCom
 import { useSelector } from "react-redux";
 import { HotelState } from "../../components/MyContext/MyContext";
 import WifiOutlinedIcon from "@mui/icons-material/WifiOutlined";
-import { socket } from "../../App";
+import { getSocketInstance } from "../../socket";
 
 const StyledTextField = styled("input")`
     height: 35px;
@@ -69,6 +69,7 @@ const BookButton = styled("button")({
     },
 });
 function RoomDetailpage() {
+    const socket = getSocketInstance();
     const [newStatus, setNewStatus] = useState(false);
     const [detail, setDetail] = useState();
     const params = useParams();

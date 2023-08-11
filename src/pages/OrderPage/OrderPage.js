@@ -3,9 +3,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { HotelState } from "../../components/MyContext/MyContext";
-import { socket } from "../../App";
+import { getSocketInstance } from "../../socket";
 
 function OrderPage() {
+    const socket = getSocketInstance();
     const [newStatus, setNewStatus] = useState(false);
     const [clickCancel, setClickCancel] = useState(false);
     const [userOrder, setUserOrder] = useState([]);

@@ -11,12 +11,13 @@ import SeacrchModel from "../SearchModal/SeacrchModel";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import NotificationTable from "../NotificationTable/NotificationTable";
-import { socket } from "../../App";
+import { getSocketInstance } from "../../socket";
 
 function TopHeader() {
+    const socket = getSocketInstance();
     const navigate = useNavigate();
     const isLogined = useSelector((state) => state.auth.isLogined);
-    console.log(socket.id);
+    
     const StyledAppBar = styled(AppBar)({
         backgroundColor: "var(--primary-color)",
         color: "var(--white)",
@@ -92,7 +93,7 @@ function TopHeader() {
             // Đảm bảo remove event listener khi component bị unmount
             socket.off("notification");
         };
-    }, []);
+    }, [socket]);
     const handleLogout = () => {
         localStorage.removeItem("accessToken");
         dispatch(logOutSuccess());

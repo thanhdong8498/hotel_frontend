@@ -7,9 +7,10 @@ import axios from "axios";
 import { HotelState } from "../../components/MyContext/MyContext";
 import { blue, grey } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
-import { socket } from "../../App";
+import { getSocketInstance } from "../../socket";
 
 function AdminBookingPage() {
+    const socket = getSocketInstance();
     const [newStatus, setNewStatus] = useState(false);
     const navigate = useNavigate();
     const [flag, setFlag] = useState(false);
