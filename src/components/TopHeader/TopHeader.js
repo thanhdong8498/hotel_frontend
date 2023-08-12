@@ -10,14 +10,14 @@ import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import SeacrchModel from "../SearchModal/SeacrchModel";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import NotificationTable from "../NotificationTable/NotificationTable";
+
 import { getSocketInstance } from "../../socket";
 
 function TopHeader() {
     const socket = getSocketInstance();
     const navigate = useNavigate();
     const isLogined = useSelector((state) => state.auth.isLogined);
-    
+    const successSound = new Audio(process.env.PUBLIC_URL + "/audio/success.mp3");
     const StyledAppBar = styled(AppBar)({
         backgroundColor: "var(--primary-color)",
         color: "var(--white)",
@@ -61,8 +61,7 @@ function TopHeader() {
     });
     const { setAlert } = HotelState();
     const [unread, setUnread] = useState(0);
-    const [unreadNotifications, setUnreadNotifications] = useState([]);
-    const [notifications, setNotifications] = useState([]);
+
     const dispatch = useDispatch();
     const [refreshNotifications, setRefreshNotifications] = useState(false);
 
@@ -70,16 +69,10 @@ function TopHeader() {
         async function getUnreadNotifications() {
             const unreadNotifcations = await axios.get("api/userNotification/unread");
             setUnread(unreadNotifcations.data.length);
-            setUnreadNotifications(unreadNotifcations.data);
         }
 
-        async function getAllNotifications() {
-            const allNotifications = await axios.get("api/userNotification/list");
-            setNotifications(allNotifications.data);
-        }
         if (isLogined) {
             getUnreadNotifications();
-            getAllNotifications();
         }
     }, [isLogined, refreshNotifications]);
 
@@ -99,6 +92,7 @@ function TopHeader() {
         dispatch(logOutSuccess());
         navigate("/login");
         window.scrollTo(0, 0);
+        successSound.play();
         setAlert({
             open: true,
             message: "Đã đăng xuất tài khoản thành công!",
@@ -147,12 +141,11 @@ function TopHeader() {
                                 sx={{
                                     cursor: "pointer",
                                 }}
+                                onClick={() => {
+                                    navigate("/notification");
+                                }}
                             >
-                                <NotificationTable
-                                    unreadAmount={unread}
-                                    unreadNotifications={unreadNotifications}
-                                    notifications={notifications}
-                                />
+                                Thông báo ({unread})
                             </NavItem>
                             <Separate />
                         </>

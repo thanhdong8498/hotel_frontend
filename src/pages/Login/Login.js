@@ -12,8 +12,6 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { getSocketInstance } from "../../socket";
 
-
-
 const StyledBox = styled(Box)({
     boxShadow: "0px 1px 69.16px 6.84px rgba(20,64,51,0.05)",
     width: "100%",
@@ -103,6 +101,7 @@ const StyledSpan = styled("span")({
 });
 
 function Login() {
+    const successSound = new Audio(process.env.PUBLIC_URL + "/audio/success.mp3");
     const socket = getSocketInstance();
     const navigate = useNavigate();
     const isLogined = useSelector((state) => state.auth.isLogined);
@@ -157,6 +156,7 @@ function Login() {
                 type: "success",
                 origin: { vertical: "bottom", horizontal: "center" },
             });
+            successSound.play();
             // navigate to admin or homepage
             if (userLogin.role === "admin" || userLogin.role === "subadmin") {
                 navigate("/admin");

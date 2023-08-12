@@ -38,6 +38,7 @@ import VipRoom from "../pages/VipRoom/VipRoom";
 import EmailVerify from "../pages/EmailVerify/EmailVerify";
 import ForgotPassword from "../pages/ForgotPassword";
 import PasswordReset from "../pages/PasswordReset";
+import NotificationPage from "../pages/NotificationPage/NotificationPage";
 export const routes = [
     {
         path: "/",
@@ -203,6 +204,11 @@ export const routes = [
     {
         path: "/booking",
         page: BookingPage,
+        isShowHeader: true,
+    },
+    {
+        path: "/notification",
+        page: NotificationPage,
         isShowHeader: true,
     },
     {

@@ -49,8 +49,9 @@ function App() {
         return () => {
             // Đảm bảo remove event listener khi component bị unmount
             socket.off("deliverySuccessfully");
+            socket.off("checkoutSuccessfully");
         };
-    }, [userId]);
+    }, [userId, socket]);
 
     const theme = createTheme({
         typography: {
