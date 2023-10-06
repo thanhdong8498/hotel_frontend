@@ -15,7 +15,7 @@ function AlertComponent() {
     };
     console.log(alert.origin);
     return (
-        <Snackbar anchorOrigin={alert.origin} open={alert.open} autoHideDuration={6000} onClose={handleClose}>
+        <Snackbar anchorOrigin={alert.origin} open={alert.open} autoHideDuration={4000} onClose={handleClose}>
             <MuiAlert
                 elevation={6}
                 variant="filled"

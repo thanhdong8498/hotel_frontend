@@ -140,6 +140,7 @@ function TopHeader() {
                             <NavItem
                                 sx={{
                                     cursor: "pointer",
+                                    display: { xs: "none", sm: "none", md: "flex" },
                                 }}
                                 onClick={() => {
                                     navigate("/notification");
@@ -147,7 +148,7 @@ function TopHeader() {
                             >
                                 Thông báo ({unread})
                             </NavItem>
-                            <Separate />
+                            <Separate sx={{ display: { xs: "none", sm: "none", md: "block" } }} />
                         </>
                     )}
 

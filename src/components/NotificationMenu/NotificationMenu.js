@@ -9,7 +9,7 @@ import axios from "axios";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { HotelState } from "../MyContext/MyContext";
 
-export default function AccountMenu({ notificationId }) {
+export default function AccountMenu({ notificationId, notificationType }) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -18,7 +18,12 @@ export default function AccountMenu({ notificationId }) {
     const { setAlert } = HotelState();
     const handleClickMark = async () => {
         setAnchorEl(null);
-        const response = await axios.put(`/api/userNotification/mark-as-read/${notificationId}`);
+        let response;
+        if (notificationType === "user") {
+            response = await axios.put(`/api/userNotification/mark-as-read/${notificationId}`);
+        } else if (notificationType === "admin") {
+            response = await axios.put(`/api/adminNotification/mark-as-read/${notificationId}`);
+        }
         if (response.status === 200) {
             setAlert({
                 open: true,
@@ -29,8 +34,13 @@ export default function AccountMenu({ notificationId }) {
         }
     };
     const handleClickDelete = async () => {
+        let response;
         setAnchorEl(null);
-        const response = await axios.delete(`/api/userNotification/delete/${notificationId}`);
+        if (notificationType === "user") {
+            response = await axios.delete(`/api/userNotification/delete/${notificationId}`);
+        } else if (notificationType === "admin") {
+            response = await axios.delete(`/api/adminNotification/delete/${notificationId}`);
+        }
         if (response.status === 200) {
             setAlert({
                 open: true,

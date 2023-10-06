@@ -351,7 +351,6 @@ function RoomDetailpage() {
                 phone: phoneNumber,
             });
             if (response.status === 200) {
-                socket.emit("booked");
                 setAlert({
                     open: true,
                     message: "Đã đặt phòng thành công!",

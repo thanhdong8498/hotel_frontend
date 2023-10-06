@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, IconButton, Popover, Tab, Tooltip, Typography } from "@mui/material";
+import { Box, IconButton, Tab, Tooltip, Typography } from "@mui/material";
 import TabContext from "@mui/lab/TabContext/TabContext";
 import TabList from "@mui/lab/TabList/TabList";
 import TabPanel from "@mui/lab/TabPanel/TabPanel";
@@ -85,7 +85,7 @@ const NotificationPage = () => {
         if (response.status === 200) {
             setAlert({
                 open: true,
-                message: "Đã xáo thông báo thành công!",
+                message: "Đã xóa thông báo thành công!",
                 type: "success",
                 origin: { vertical: "bottom", horizontal: "center" },
             });
@@ -168,7 +168,7 @@ const NotificationPage = () => {
                                 const timeAgo = moment(item.createdAt).fromNow();
                                 return (
                                     <NotificationItem key={index}>
-                                        <div>
+                                        <div style={{ display: "flex", justifyContent: "space-between" }}>
                                             <img
                                                 style={{ width: "76px", height: "76px", borderRadius: "50%" }}
                                                 src={`${process.env.REACT_APP_HOST_URL}${item.image}`}
@@ -186,12 +186,12 @@ const NotificationPage = () => {
                                                 </span>
                                             </div>
                                         </div>
-                                        <NotificationMenu notificationId={item._id} />
+                                        <NotificationMenu notificationId={item._id} notificationType={"user"} />
                                     </NotificationItem>
                                 );
                             })}
                         {unreadNotifications.length === 0 && (
-                            <Typography sx={{ p: 2 }}>Bạn không có thông báo nào</Typography>
+                            <Typography sx={{ p: 2 }}>Bạn không có thông báo nào chưa đọc!</Typography>
                         )}
                     </TabPanel>
                     <TabPanel
@@ -225,7 +225,9 @@ const NotificationPage = () => {
                                                 </span>
                                             </div>
                                         </div>
-                                        {!item.isRead && <NotificationMenu notificationId={item._id} />}
+                                        {!item.isRead && (
+                                            <NotificationMenu notificationId={item._id} notificationType={"user"} />
+                                        )}
                                         {item.isRead && (
                                             <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
                                                 <Tooltip title="Xóa thông báo">

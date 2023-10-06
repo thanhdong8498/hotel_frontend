@@ -15,6 +15,7 @@ function AdminBillPage() {
         return Math.ceil((ms2 - ms1) / (24 * 60 * 60 * 1000));
     };
     const [detail, setDetail] = useState();
+    const [orders, setOrders] = useState();
     const params = useParams();
     const id = params.id;
     useEffect(() => {
@@ -22,9 +23,22 @@ function AdminBillPage() {
             const details = await axios.get(`api/booking/detail/${id}`);
             setDetail(details.data);
         }
+        async function getOrders() {
+            const orders = await axios.get(`api/order/viaBooking/${id}`);
+            setOrders(orders.data);
+        }
         getDetails();
+        getOrders();
     }, []);
+    console.log(orders);
+    let total = 0;
+    if (orders) {
+        total = orders.reduce((accumulator, order) => {
+            return accumulator + order.totalPrice;
+        }, 0);
+    }
 
+    console.log(total);
     const handlePrint = useReactToPrint({
         content: () => componetRef.current,
         documentTitle: "Hóa đơn-" + id,
@@ -220,7 +234,9 @@ function AdminBillPage() {
                                             wordWrap: "break-word",
                                         }}
                                     >
-                                        Thời gian: {detail && moment(detail.checkoutDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}
+                                        Thời gian:{" "}
+                                        {detail &&
+                                            moment(detail.checkoutDate).tz("Asia/Ho_Chi_Minh").format("DD/MM/YYYY")}
                                     </Typography>
                                 </div>
                             </Grid>
@@ -356,587 +372,90 @@ function AdminBillPage() {
                                                 {detail && detail.summaryPrice.toLocaleString() + "đ"}
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "50px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "400px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "150px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "150px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "200px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                        </tr>
-                                        <tr>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "50px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "400px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "150px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "150px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "200px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                        </tr>
-                                        <tr>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "50px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "400px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "150px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "150px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "200px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                        </tr>
-                                        <tr>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "50px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "400px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "150px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "150px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "200px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                        </tr>
-                                        <tr>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "50px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "400px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "150px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "150px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "200px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                        </tr>
-                                        <tr>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "50px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "400px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "150px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "150px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "200px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                        </tr>
-                                        <tr>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "50px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "400px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "150px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "150px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "200px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                        </tr>
-                                        <tr>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "50px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "400px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "150px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "150px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "200px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                        </tr>
-                                        <tr>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "50px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "400px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "150px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "150px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "200px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                        </tr>
-                                        <tr>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "50px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "400px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    width: "150px",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "150px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                            <td
-                                                style={{
-                                                    border: "1px solid #ccc",
-                                                    borderCollapse: "collapse",
-                                                    fontSize: "1.2rem",
-                                                    textAlign: "center",
-                                                    padding: "6px",
-                                                    width: "200px",
-                                                    height: "25px",
-                                                }}
-                                            ></td>
-                                        </tr>
+                                        {orders &&
+                                            orders.map((item, index) => {
+                                                return (
+                                                    <tr key={index}>
+                                                        <td
+                                                            style={{
+                                                                border: "1px solid #ccc",
+                                                                borderCollapse: "collapse",
+                                                                width: "50px",
+                                                                fontSize: "1.2rem",
+                                                                textAlign: "center",
+                                                                padding: "6px",
+                                                            }}
+                                                        >
+                                                            {index + 2}
+                                                        </td>
+                                                        <td
+                                                            style={{
+                                                                border: "1px solid #ccc",
+                                                                borderCollapse: "collapse",
+                                                                width: "400px",
+                                                                fontSize: "1.2rem",
+                                                                textAlign: "center",
+                                                                padding: "6px",
+                                                            }}
+                                                        >
+                                                            {item.cuisineName}
+                                                        </td>
+                                                        <td
+                                                            style={{
+                                                                border: "1px solid #ccc",
+                                                                borderCollapse: "collapse",
+                                                                width: "150px",
+                                                                fontSize: "1.2rem",
+                                                                textAlign: "center",
+                                                                padding: "6px",
+                                                            }}
+                                                        >
+                                                            {item.quantity}
+                                                        </td>
+                                                        <td
+                                                            style={{
+                                                                border: "1px solid #ccc",
+                                                                borderCollapse: "collapse",
+                                                                fontSize: "1.2rem",
+                                                                textAlign: "center",
+                                                                padding: "6px",
+                                                                width: "150px",
+                                                            }}
+                                                        >
+                                                            {item.promotionalPrice.toLocaleString() + "đ"}
+                                                        </td>
+                                                        <td
+                                                            style={{
+                                                                border: "1px solid #ccc",
+                                                                borderCollapse: "collapse",
+                                                                fontSize: "1.2rem",
+                                                                textAlign: "center",
+                                                                padding: "6px",
+                                                                width: "200px",
+                                                            }}
+                                                        >
+                                                            {item.totalPrice.toLocaleString() + "đ"}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
                                     </tbody>
                                 </table>
                             </Grid>
-                            <Grid item sx={{ marginTop: "12px" }} lg={12}>
-                                <Typography sx={{ fontWeight: "600", fontSize: "1.3rem" }}>
-                                    Số tiền viết bằng chữ:{" "}
-                                    <span style={{ textTransform: "capitalize" }}>
-                                        {detail && VNnum2words(detail.summaryPrice) + " Đồng"}
-                                    </span>
-                                </Typography>
-                            </Grid>
+                            {detail && (
+                                <Grid item sx={{ marginTop: "12px" }} lg={12}>
+                                    <Typography sx={{ fontWeight: "600", fontSize: "1.3rem" }}>
+                                        Tổng cộng: {(detail.summaryPrice + total).toLocaleString() + "đ"}
+                                    </Typography>
+                                    <Typography sx={{ fontWeight: "600", fontSize: "1.3rem" }}>
+                                        Số tiền viết bằng chữ:{" "}
+                                        <span style={{ textTransform: "capitalize" }}>
+                                            {detail && VNnum2words(detail.summaryPrice + total) + " Đồng"}
+                                        </span>
+                                    </Typography>
+                                </Grid>
+                            )}
+
                             <Grid item lg={4}>
                                 <p style={{ fontSize: "1.4rem", textAlign: "center", width: "100%" }}>
                                     Người mua hàng

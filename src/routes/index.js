@@ -39,6 +39,10 @@ import EmailVerify from "../pages/EmailVerify/EmailVerify";
 import ForgotPassword from "../pages/ForgotPassword";
 import PasswordReset from "../pages/PasswordReset";
 import NotificationPage from "../pages/NotificationPage/NotificationPage";
+import PaymentSuccess from "../pages/PaymentSuccess/PaymentSuccess";
+import BookingDetailPage from "../pages/BookingDetailPage/BookingDetailPage";
+import AdminNotificationPage from "../pages/AdminPage/AdminNotificationPage";
+import OrderDetailPage from "../pages/OrderDetailPage/OrderDetailPage";
 export const routes = [
     {
         path: "/",
@@ -64,6 +68,16 @@ export const routes = [
     {
         path: "/room/:id",
         page: RoomDetailPage,
+        isShowHeader: true,
+    },
+    {
+        path: "/booking/:id",
+        page: BookingDetailPage,
+        isShowHeader: true,
+    },
+    {
+        path: "/order/:id",
+        page: OrderDetailPage,
         isShowHeader: true,
     },
     {
@@ -120,6 +134,14 @@ export const routes = [
     {
         path: "/admin",
         page: AdminPage,
+    },
+    {
+        path: "/admin/notification",
+        page: AdminNotificationPage,
+    },
+    {
+        path: "/admin/booking/:id",
+        page: AdminBookingPage,
     },
     {
         path: "/admin/user",
@@ -224,6 +246,11 @@ export const routes = [
     {
         path: "/password-reset/:id/:token",
         page: PasswordReset,
+        isShowHeader: false,
+    },
+    {
+        path: "/payment-success",
+        page: PaymentSuccess,
         isShowHeader: false,
     },
     {

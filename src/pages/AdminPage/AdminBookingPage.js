@@ -1,20 +1,25 @@
 import DefaultAdminLayout from "./DefaultAdminLayout";
 import { Box, Button, Divider, Paper, Typography } from "@mui/material";
-import { DataGrid, GridCheckCircleIcon, GridCloseIcon } from "@mui/x-data-grid";
+import { DataGrid, GridCheckCircleIcon, GridCloseIcon, } from "@mui/x-data-grid";
 import moment from "moment-timezone";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { HotelState } from "../../components/MyContext/MyContext";
 import { blue, grey } from "@mui/material/colors";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { getSocketInstance } from "../../socket";
 
 function AdminBookingPage() {
     const socket = getSocketInstance();
+    
     const [newStatus, setNewStatus] = useState(false);
     const navigate = useNavigate();
     const [flag, setFlag] = useState(false);
     const [booking, setBooking] = useState([]);
+
+   
+
+
     useEffect(() => {
         socket.on("updatedetail", () => {
             setNewStatus(!newStatus);
@@ -270,14 +275,18 @@ function AdminBookingPage() {
                         Danh sách đặt phòng
                     </Typography>
                 </div>
+                
                 <Divider />
                 <Box sx={{ height: 754, width: "100%" }}>
                     <DataGrid
+                        
                         sx={{ fontSize: "1.6rem" }}
                         rows={rows}
                         columns={columns}
+                        pageSizeOptions={[5, 10, 25]}
                         hideFooterSelectedRowCount
                         disableSelectionOnClick
+                        
                     />
                 </Box>
             </Paper>

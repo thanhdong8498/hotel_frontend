@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { HotelState } from "../../components/MyContext/MyContext";
 import { getSocketInstance } from "../../socket";
+import { useNavigate } from "react-router-dom";
 
 function OrderPage() {
+    const navigate = useNavigate();
     const socket = getSocketInstance();
     const [newStatus, setNewStatus] = useState(false);
     const get_day_of_time = (d1, d2) => {
@@ -14,16 +16,19 @@ function OrderPage() {
         return Math.ceil((ms2 - ms1) / (24 * 60 * 60 * 1000));
     };
     const [clickCancel, setClickCancel] = useState(false);
-    const [userOrder, setUserOrder] = useState([]);
+    const [userBooking, setUserBooking] = useState([]);
     useEffect(() => {
         socket.on("updateuserbooking", () => {
             setNewStatus(!newStatus);
         });
-        async function getUserOrder() {
-            const orders = await axios.get("/api/booking/user");
-            setUserOrder(orders.data);
+        async function getUserBooking() {
+            const bookings = await axios.get("api/booking/user");
+            setUserBooking(bookings.data);
         }
-        getUserOrder();
+        getUserBooking();
+        return () => {
+            socket.off("updateuserbooking");
+        };
     }, [clickCancel, newStatus]);
     const { setAlert } = HotelState();
 
@@ -43,7 +48,24 @@ function OrderPage() {
             setClickCancel(!clickCancel);
         }
     };
-    const orderList = userOrder.map((item, index) => {
+
+    const handlePayment = async (id, amount) => {
+        const confirm = window.confirm("Xác nhận chuyển đến trang thanh toán?");
+        if (confirm) {
+            const response = await axios.post("/api/payment/create_payment_url", {
+                amount: amount,
+                language: "vn",
+                bankCode: "",
+                targetType: "booking",
+                id: id,
+            });
+            if (response.status === 200) {
+                window.location.href = response.data;
+            }
+        }
+    };
+
+    const orderList = userBooking.map((item, index) => {
         return (
             <div
                 style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 0" }}
@@ -175,17 +197,43 @@ function OrderPage() {
                         </Typography>
                     )}
                 </Box>
-
-                <Button
-                    onClick={() => {
-                        handleCancel(item._id);
+                <Box
+                    sx={{
+                        width: "16%",
+                        display: "flex",
+                        flexDirection: "column",
                     }}
-                    disabled={item.isReceived || item.isCancelled}
-                    sx={{ width: "16%" }}
-                    variant="contained"
                 >
-                    Hủy
-                </Button>
+                    <Button
+                        onClick={() => {
+                            handleCancel(item._id);
+                        }}
+                        disabled={item.isReceived || item.isCancelled}
+                        sx={{ width: "100%", marginBottom: "12px" }}
+                        variant="contained"
+                    >
+                        Hủy
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            navigate(`/booking/${item._id}`);
+                        }}
+                        sx={{ width: "100%", marginBottom: "12px" }}
+                        variant="contained"
+                    >
+                        Chi tiết
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            handlePayment(item._id, item.summaryPrice);
+                        }}
+                        disabled={item.isPaid || item.isCancelled}
+                        sx={{ width: "100%" }}
+                        variant="contained"
+                    >
+                        thanh toán
+                    </Button>
+                </Box>
             </div>
         );
     });

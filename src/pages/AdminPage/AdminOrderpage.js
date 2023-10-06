@@ -25,6 +25,9 @@ function AdminOrderpage() {
             setOrder(response.data);
         }
         getBookingList();
+        return () => {
+            socket.off("updateadminorder");
+        };
     }, [flag, newOrder]);
     const { setAlert } = HotelState();
     const handleAccept = async (id) => {
@@ -32,10 +35,24 @@ function AdminOrderpage() {
         if (confirm) {
             const response = await axios.put(`api/order/accept/${id}`);
             if (response.status === 200) {
-                socket.emit("accept");
                 setAlert({
                     open: true,
                     message: "Đã chấp nhận thành công!",
+                    type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
+                });
+                setFlag(!flag);
+            }
+        }
+    };
+    const handleDeny = async (id) => {
+        const confirm = window.confirm("Chấp nhận gọi món?");
+        if (confirm) {
+            const response = await axios.put(`api/order/deny/${id}`);
+            if (response.status === 200) {
+                setAlert({
+                    open: true,
+                    message: "Đã từ chối thành công!",
                     type: "success",
                     origin: { vertical: "bottom", horizontal: "center" },
                 });
@@ -48,7 +65,6 @@ function AdminOrderpage() {
         if (confirm) {
             const response = await axios.put(`api/order/deliveried/${id}`);
             if (response.status === 200) {
-                socket.emit("deliveried");
                 setAlert({
                     open: true,
                     message: "Đã xác nhận hoàn tất giao hàng!",
@@ -97,8 +113,35 @@ function AdminOrderpage() {
             width: 200,
         },
         {
+            field: "to",
+            headerName: "Giao tới",
+            width: 200,
+        },
+        {
             field: "isCancelled",
             headerName: "Đã hủy",
+            type: "boolean",
+            width: 140,
+            editable: true,
+            renderCell: (params) => {
+                return params.value ? (
+                    <CheckCircleIcon
+                        style={{
+                            color: blue[500],
+                        }}
+                    />
+                ) : (
+                    <GridCloseIcon
+                        style={{
+                            color: grey[500],
+                        }}
+                    />
+                );
+            },
+        },
+        {
+            field: "isDenied",
+            headerName: "Đã từ chối",
             type: "boolean",
             width: 140,
             editable: true,
@@ -141,9 +184,23 @@ function AdminOrderpage() {
                                 handleAccept(params.id);
                             }}
                             variant="contained"
-                            disabled={params.row.isAccept === "Đã xác nhận" || params.row.isCancelled}
+                            disabled={
+                                params.row.isAccept === "Đã xác nhận" || params.row.isCancelled || params.row.isDenied
+                            }
                         >
                             chấp nhận
+                        </Button>
+                        <Button
+                            sx={{ marginRight: "12px" }}
+                            onClick={() => {
+                                handleDeny(params.id);
+                            }}
+                            variant="contained"
+                            disabled={
+                                params.row.isAccept === "Đã xác nhận" || params.row.isCancelled || params.row.isDenied
+                            }
+                        >
+                            từ chối
                         </Button>
                         <Button
                             onClick={() => {
@@ -153,7 +210,8 @@ function AdminOrderpage() {
                             disabled={
                                 params.row.isDelivery === "Đã giao hàng" ||
                                 params.row.isAccept === "Chưa xác nhận" ||
-                                params.row.isCancelled
+                                params.row.isCancelled ||
+                                params.row.isDenied
                             }
                         >
                             giao xong
@@ -161,7 +219,7 @@ function AdminOrderpage() {
                     </>
                 );
             },
-            width: 250,
+            width: 350,
         },
     ];
     const rows = order.map((item) => ({
@@ -172,8 +230,10 @@ function AdminOrderpage() {
         cuisineName: item.cuisineName,
         quantity: item.quantity,
         totalPrice: item.totalPrice.toLocaleString() + "đ",
+        to: item.roomNo,
         isCancelled: item.isCancelled,
         isAccept: item.isAccept === true ? "Đã xác nhận" : "Chưa xác nhận",
+        isDenied: item.isDenied,
         isDelivery: item.isDelivery === true ? "Đã giao hàng" : "Chưa giao hàng",
     }));
 

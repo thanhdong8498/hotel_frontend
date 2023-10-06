@@ -46,10 +46,54 @@ function App() {
             });
         });
 
+        socket.on("cancelSuccessfully", (message) => {
+            notificationSound.play();
+            setAlert({
+                open: true,
+                message: message,
+                type: "success",
+                origin: { vertical: "top", horizontal: "right" },
+            });
+        });
+
+        socket.on("acceptOrder", (message) => {
+            notificationSound.play();
+            setAlert({
+                open: true,
+                message: message,
+                type: "success",
+                origin: { vertical: "top", horizontal: "right" },
+            });
+        });
+
+        socket.on("denyOrder", (message) => {
+            notificationSound.play();
+            setAlert({
+                open: true,
+                message: message,
+                type: "success",
+                origin: { vertical: "top", horizontal: "right" },
+            });
+        });
+
+        socket.on("deliveryOrder", (message) => {
+            notificationSound.play();
+            setAlert({
+                open: true,
+                message: message,
+                type: "success",
+                origin: { vertical: "top", horizontal: "right" },
+            });
+        });
+
         return () => {
             // Đảm bảo remove event listener khi component bị unmount
             socket.off("deliverySuccessfully");
             socket.off("checkoutSuccessfully");
+            socket.off("cancelSuccessfully");
+            socket.off("acceptOrder");
+            socket.off("denyOrder");
+            socket.off("deliveryOrder");
         };
     }, [userId, socket]);
 

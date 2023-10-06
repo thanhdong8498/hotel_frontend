@@ -199,7 +199,7 @@ function Login() {
                                 type="email"
                                 value={email}
                                 required
-                                autoComplete="false"
+                                autoComplete="current-email"
                                 onChange={handleChangeEmail}
                             />
 

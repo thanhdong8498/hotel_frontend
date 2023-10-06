@@ -5,8 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { HotelState } from "../../components/MyContext/MyContext";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+
 const StyledBox = styled(Box)({
     boxShadow: "0px 1px 69.16px 6.84px rgba(20,64,51,0.05)",
     width: "100%",
@@ -85,12 +84,12 @@ const Button = styled("button")`
     cursor: pointer;
 `;
 function Register() {
-    const [showPassword, setShowPassword] = useState(false);
     const [lastName, setLastName] = useState("");
     const [firstName, setFirstName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordRetype, setPasswordRetype] = useState("");
     const handleChangeLastName = (event) => {
         setLastName(event.target.value);
     };
@@ -109,38 +108,51 @@ function Register() {
         setPassword(event.target.value);
     };
 
+    const handleChangePasswordRetype = (event) => {
+        setPasswordRetype(event.target.value);
+    };
+
     const { setAlert } = HotelState();
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const response = await axios.post("api/auth/register", {
-            lastName,
-            firstName,
-            email,
-            phone,
-            password,
-        });
-        if (response.status === 200) {
-            setAlert({
-                open: true,
-                message: "Đăng ký thành công!",
-                type: "success",
-                origin: { vertical: "bottom", horizontal: "center" },
+        if (password === passwordRetype) {
+            const response = await axios.post("api/auth/register", {
+                lastName,
+                firstName,
+                email,
+                phone,
+                password,
             });
-            navigate("/login");
-            window.scrollTo(0, 0);
-        } else if (response.status === 202) {
+            if (response.status === 200) {
+                setAlert({
+                    open: true,
+                    message: "Đăng ký thành công!",
+                    type: "success",
+                    origin: { vertical: "bottom", horizontal: "center" },
+                });
+                navigate("/login");
+                window.scrollTo(0, 0);
+            } else if (response.status === 202) {
+                setAlert({
+                    open: true,
+                    message: response.data.title,
+                    type: "error",
+                    origin: { vertical: "bottom", horizontal: "center" },
+                });
+            } else if (response.status === 201) {
+                setAlert({
+                    open: true,
+                    message: response.data.message,
+                    type: "error",
+                    origin: { vertical: "bottom", horizontal: "center" },
+                });
+            }
+        } else {
             setAlert({
                 open: true,
-                message: response.data.title,
-                type: "error",
-                origin: { vertical: "bottom", horizontal: "center" },
-            });
-        } else if (response.status === 201) {
-            setAlert({
-                open: true,
-                message: response.data.message,
+                message: "Mật khẩu không khớp!",
                 type: "error",
                 origin: { vertical: "bottom", horizontal: "center" },
             });
@@ -191,7 +203,6 @@ function Register() {
                                 placeholder="Email"
                                 type="email"
                                 value={email}
-                                autoComplete="false"
                                 onChange={handleChangeEmail}
                             />
                             <StyledTextField
@@ -201,45 +212,24 @@ function Register() {
                                 placeholder="Số điện thoại"
                                 value={phone}
                                 onChange={handleChangePhone}
-                                autoComplete="false"
                             />
-                            <div style={{ width: "100%", position: "relative" }}>
-                                <StyledTextField
-                                    id="password"
-                                    name="password"
-                                    autoComplete="current-password"
-                                    placeholder="Mật khẩu"
-                                    type={showPassword ? "text" : "password"}
-                                    value={password}
-                                    onChange={handleChangePassword}
-                                />
-                                {!showPassword && (
-                                    <VisibilityIcon
-                                        onClick={() => setShowPassword(true)}
-                                        sx={{
-                                            position: "absolute",
-                                            right: 0,
-                                            top: "calc(50% - 7px)",
-                                            transform: "translateY(-50%)",
-                                            marginRight: "12px",
-                                            cursor: "pointer",
-                                        }}
-                                    />
-                                )}
-                                {showPassword && (
-                                    <VisibilityOffIcon
-                                        onClick={() => setShowPassword(false)}
-                                        sx={{
-                                            position: "absolute",
-                                            right: 0,
-                                            top: "calc(50% - 7px)",
-                                            transform: "translateY(-50%)",
-                                            marginRight: "12px",
-                                            cursor: "pointer",
-                                        }}
-                                    />
-                                )}
-                            </div>
+
+                            <StyledTextField
+                                id="password"
+                                name="password"
+                                type="password"
+                                placeholder="Mật khẩu"
+                                value={password}
+                                onChange={handleChangePassword}
+                            />
+                            <StyledTextField
+                                id="password"
+                                name="password"
+                                placeholder="Nhập lại mật khẩu"
+                                type="password"
+                                value={passwordRetype}
+                                onChange={handleChangePasswordRetype}
+                            />
                             <Button type="submit">Đăng ký</Button>
                         </StyledBox>
                     </Grid>

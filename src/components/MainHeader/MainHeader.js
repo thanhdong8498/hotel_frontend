@@ -1,5 +1,5 @@
-import { AppBar, Button, styled, Toolbar } from "@mui/material";
-import { Link } from "react-router-dom";
+import { AppBar, Badge, Button, IconButton, styled, Toolbar } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ContainerComponent from "../ContainerComponent/ContainerComponent";
@@ -7,7 +7,34 @@ import RoomMenuComponent from "../RoomMenuComponent/RoomMenuComponent";
 import CuisineMenuComponent from "../CuisineMenuComponent/CuisineMenuComponent";
 import LeftDrawer from "../LeftDrawer/LeftDrawer";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { getSocketInstance } from "../../socket";
+
 function MainHeader() {
+    const socket = getSocketInstance();
+    const [refreshNotifications, setRefreshNotifications] = useState(false);
+    useEffect(() => {
+        socket.on("notification", () => {
+            console.log("new notification");
+            setRefreshNotifications((prev) => !prev); // Toggle giá trị để trigger re-render
+        });
+
+        return () => {
+            // Đảm bảo remove event listener khi component bị unmount
+            socket.off("notification");
+        };
+    }, [socket]);
+    const [unread, setUnread] = useState(0);
+    const navigate = useNavigate();
+    useEffect(() => {
+        async function getUnreadNotifications() {
+            const unreadNotifcations = await axios.get("api/userNotification/unread");
+            setUnread(unreadNotifcations.data.length);
+        }
+        getUnreadNotifications();
+    }, [refreshNotifications]);
     const getColor = (curr) => {
         if (window.location.pathname === curr) {
             return "var(--primary-color)";
@@ -143,6 +170,23 @@ function MainHeader() {
                             visibility: { sm: "visible", md: "hidden" },
                         }}
                     >
+                        <IconButton
+                            onClick={() => {
+                                navigate("/notification");
+                            }}
+                            size="large"
+                            color="#000"
+                        >
+                            <Badge badgeContent={unread} color="error">
+                                <NotificationsIcon
+                                    sx={{
+                                        fill: "black",
+                                        width: "26px",
+                                        height: "24px",
+                                    }}
+                                />
+                            </Badge>
+                        </IconButton>
                         <Link to={"/order"}>
                             <ShoppingCartIcon
                                 sx={{

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ContainerComponent from "../../components/ContainerComponent/ContainerComponent";
 import { HotelState } from "../../components/MyContext/MyContext";
 import { getSocketInstance } from "../../socket";
+import { useNavigate } from "react-router-dom";
 
 function OrderPage() {
     const socket = getSocketInstance();
@@ -19,15 +20,18 @@ function OrderPage() {
             setUserOrder(orders.data);
         }
         getUserOrder();
+        return () => {
+            socket.off("updateuserorder");
+        };
     }, [clickCancel, newStatus]);
+    const navigate = useNavigate();
     const { setAlert } = HotelState();
 
     const handleCancel = async (id) => {
         const confirm = window.confirm("Xác nhận hủy???");
         if (confirm) {
-            const response = await axios.put(`api/order/cancelled/${id}`);
+            const response = await axios.put(`/api/order/cancelled/${id}`);
             if (response.status === 200) {
-                socket.emit("usercancelledorder");
                 setAlert({
                     open: true,
                     message: "Đã xác nhận hủy thành công!",
@@ -36,6 +40,22 @@ function OrderPage() {
                 });
             }
             setClickCancel(!clickCancel);
+        }
+    };
+
+    const handlePayment = async (price, quantity, id) => {
+        const confirm = window.confirm("Xác nhận thanh toán???");
+        if (confirm) {
+            const response = await axios.post("/api/payment/create_payment_url", {
+                amount: price * quantity,
+                language: "vn",
+                bankCode: "",
+                targetType: "order",
+                id: id,
+            });
+            if (response.status === 200) {
+                window.location.href = response.data;
+            }
         }
     };
     const orderList = userOrder.map((item, index) => {
@@ -98,7 +118,7 @@ function OrderPage() {
                             Đã xác nhận
                         </Typography>
                     )}
-                    {item.isAccept === false && item.isCancelled === false && (
+                    {item.isAccept === false && item.isDenied === false && item.isCancelled === false && (
                         <Typography
                             sx={{
                                 width: "100%",
@@ -111,7 +131,20 @@ function OrderPage() {
                             Chưa xác nhận
                         </Typography>
                     )}
-                    {item.isDelivery === true && item.isCancelled === false && (
+                    {item.isDenied === true && (
+                        <Typography
+                            sx={{
+                                width: "100%",
+                                textAlign: "center",
+                                fontSize: "1.6rem",
+                                fontWeight: "600",
+                                margin: "0 5px",
+                            }}
+                        >
+                            Đã từ chối
+                        </Typography>
+                    )}
+                    {item.isDelivery === true && item.isDenied === false && item.isCancelled === false && (
                         <Typography
                             sx={{
                                 width: "100%",
@@ -124,7 +157,7 @@ function OrderPage() {
                             Đã giao
                         </Typography>
                     )}
-                    {item.isDelivery === false && item.isCancelled === false && (
+                    {item.isDelivery === false && item.isDenied === false && item.isCancelled === false && (
                         <Typography
                             sx={{
                                 width: "100%",
@@ -137,7 +170,7 @@ function OrderPage() {
                             Chưa giao
                         </Typography>
                     )}
-                    {item.isCancelled === true && (
+                    {item.isCancelled === true && item.isDenied === false && (
                         <Typography
                             sx={{
                                 width: "100%",
@@ -151,24 +184,49 @@ function OrderPage() {
                         </Typography>
                     )}
                 </Box>
-
-                <Button
-                    onClick={() => {
-                        handleCancel(item._id);
+                <Box
+                    sx={{
+                        width: "16%",
+                        display: "flex",
+                        flexDirection: "column",
                     }}
-                    disabled={item.isDelivery || item.isCancelled || item.isAccept}
-                    sx={{ width: "16%" }}
-                    variant="contained"
                 >
-                    Hủy
-                </Button>
+                    <Button
+                        sx={{ marginBottom: "12px" }}
+                        onClick={() => {
+                            handleCancel(item._id);
+                        }}
+                        disabled={item.isDelivery || item.isCancelled || item.isAccept || item.isPaid || item.isDenied}
+                        variant="contained"
+                    >
+                        Hủy
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            handlePayment(item.promotionalPrice, item.quantity, item._id);
+                        }}
+                        disabled={item.isPaid || item.isCancelled || item.isDenied || item.isDelivery}
+                        sx={{ marginBottom: "12px" }}
+                    >
+                        Thanh toán
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            navigate(`/order/${item._id}`);
+                        }}
+                        variant="contained"
+                    >
+                        Chi tiết
+                    </Button>
+                </Box>
             </div>
         );
     });
 
     return (
         <ContainerComponent>
-            <Box sx={{ padding: "0 30px", backgroundColor: "transparent" }}>
+            <Box sx={{ backgroundColor: "transparent" }}>
                 <Paper
                     sx={{
                         padding: "10px",
@@ -184,7 +242,7 @@ function OrderPage() {
                     </h2>
                 </Paper>
             </Box>
-            <Box sx={{ padding: "0 30px", backgroundColor: "transparent" }}>
+            <Box sx={{ backgroundColor: "transparent" }}>
                 <Paper
                     sx={{
                         padding: "10px",

@@ -20,6 +20,7 @@ import { Button, Typography } from "@mui/material";
 import axios from "axios";
 import { loginSuccess, logOutSuccess } from "../../redux/slices/authSlice";
 import { HotelState } from "../../components/MyContext/MyContext";
+import { getSocketInstance } from "../../socket";
 
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== "open",
@@ -28,9 +29,13 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export default function NavComponent() {
+    const [refreshNotification, setRefreshNotification] = React.useState(false);
+    const [refreshMessage, setRefreshMessage] = React.useState(false);
+    const [messages, setMessages] = React.useState([]);
     const role = useSelector((state) => state.auth.user.role);
-
+    const [notification, setNotification] = React.useState([]);
     const navigate = useNavigate();
+    const socket = getSocketInstance();
 
     const dispatch = useDispatch();
 
@@ -51,9 +56,45 @@ export default function NavComponent() {
                 }
             }
         }
+
         getUserLogin();
     }, []);
-
+    useEffect(() => {
+        async function getNotifications() {
+            try {
+                const response = await axios.get("api/adminNotification/unread");
+                setNotification(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getNotifications();
+    }, [refreshNotification]);
+    useEffect(() => {
+        async function getMessages() {
+            try {
+                const response = await axios.get("/api/contact/unread");
+                console.log(response.data);
+                setMessages(response.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getMessages();
+    }, [refreshMessage]);
+    useEffect(() => {
+        socket.on("adminnotification", () => {
+            setRefreshNotification((prev) => !prev);
+        });
+        socket.on("admincontact", () => {
+            setRefreshMessage((prev) => !prev);
+        });
+        return () => {
+            // Đảm bảo remove event listener khi component bị unmount
+            socket.off("adminnotification");
+            socket.off("admincontact");
+        };
+    }, []);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -224,8 +265,16 @@ export default function NavComponent() {
                         {lastName} {firstName} ({role})
                     </Typography>
                     <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                        <IconButton size="large" aria-label="show 4 new mails" color="#000">
-                            <Badge badgeContent={4} color="error">
+                        <IconButton
+                            onClick={async () => {
+                                navigate("/admin/contact");
+                                await axios.put("/api/contact/mark-all-as-read");
+                            }}
+                            size="large"
+                            aria-label=""
+                            color="#000"
+                        >
+                            <Badge badgeContent={messages.length} color="error">
                                 <MailIcon
                                     sx={{
                                         fill: "black",
@@ -235,8 +284,14 @@ export default function NavComponent() {
                                 />
                             </Badge>
                         </IconButton>
-                        <IconButton size="large" aria-label="show 17 new notifications" color="#000">
-                            <Badge badgeContent={17} color="error">
+                        <IconButton
+                            onClick={() => {
+                                navigate("/admin/notification");
+                            }}
+                            size="large"
+                            color="#000"
+                        >
+                            <Badge badgeContent={notification.length} color="error">
                                 <NotificationsIcon
                                     sx={{
                                         fill: "black",
@@ -245,23 +300,6 @@ export default function NavComponent() {
                                     }}
                                 />
                             </Badge>
-                        </IconButton>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="#000"
-                        >
-                            <AccountCircle
-                                sx={{
-                                    fill: "black",
-                                    width: "26px",
-                                    height: "24px",
-                                }}
-                            />
                         </IconButton>
                     </Box>
                     <Box sx={{ display: { xs: "flex", md: "none" } }}>

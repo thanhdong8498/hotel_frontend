@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Button, Card, CardContent, CardMedia, Divider, Grid, Typography } from "@mui/material";
+import { Button, Card, CardContent, CardMedia, Divider, Grid, MenuItem, Select, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
@@ -9,7 +9,6 @@ import { HotelState } from "../../components/MyContext/MyContext";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
 import AliceCarousel from "react-alice-carousel";
-import { getSocketInstance } from "../../socket";
 
 const TagItem = styled("li")({
     display: "inline-block",
@@ -53,13 +52,13 @@ const StyledTextField = styled("input")`
     font-size: 1.4rem;
 `;
 function CuisineDetailPage() {
-    const socket = getSocketInstance();
     const navigate = useNavigate();
     const isLogined = useSelector((state) => state.auth.isLogined);
     const params = useParams();
     const cuisineId = params.id;
     const { setAlert } = HotelState();
     const [cuisineType, setCuisineType] = useState("");
+    const [bookingId, setbookingId] = useState("");
 
     useEffect(() => {
         async function getDetail() {
@@ -67,10 +66,34 @@ function CuisineDetailPage() {
             setDetail(detail.data);
             setCuisineType(detail.data.type);
         }
+        async function getCurrentBooking() {
+            const current = await axios.get("api/booking/current");
+            const cur = current.data.map((item) => ({
+                roomNo: item.roomNo,
+                bookingId: item._id, // Chuyển thông tin bookingId vào đối tượng
+            }));
+            setCurrentBooking(cur);
+        }
+        getCurrentBooking();
         getDetail();
     }, [cuisineId]);
+    const [currentBooking, setCurrentBooking] = useState([]);
+    const [selectedRoomNo, setSelectedRoomNo] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [detail, setDetail] = useState();
+    const handleChange = (event) => {
+        const selectedRoomNo = event.target.value;
+        console.log(selectedRoomNo);
+        // Tìm đối tượng có roomNo tương ứng trong currentBooking
+        const selectedBooking = currentBooking.find((item) => item.roomNo.includes(selectedRoomNo));
+        console.log(selectedBooking, currentBooking);
+        if (selectedBooking) {
+            const bookingId = selectedBooking.bookingId;
+            // Sử dụng bookingId theo nhu cầu của bạn
+            setbookingId(bookingId);
+        }
+        setSelectedRoomNo(selectedRoomNo);
+    };
 
     const caroselItem =
         detail &&
@@ -177,9 +200,10 @@ function CuisineDetailPage() {
                     totalPrice: Number(quantity * detail.promotionalPrice),
                     quantity: quantity,
                     cuisineId: cuisineId,
+                    roomNo: selectedRoomNo,
+                    bookingId: bookingId,
                 });
                 if (response.status === 200) {
-                    socket.emit("ordered");
                     setAlert({
                         open: true,
                         message: "Đã đặt đồ ăn thành công!",
@@ -249,11 +273,35 @@ function CuisineDetailPage() {
                                 justifyContent: "space-between",
                             }}
                         >
+                            <Typography sx={{ fontSize: "18px" }} variant="body2" color="initial">
+                                Chọn nơi nhận: Phòng số
+                            </Typography>
+                            <Select labelId="room-No" id="room-No" value={selectedRoomNo} onChange={handleChange}>
+                                {currentBooking.map((item, index) => {
+                                    return (
+                                        <MenuItem key={index} value={item.roomNo.toString()}>
+                                            {" "}
+                                            {/* Sử dụng item.roomNo.toString() */}
+                                            {item.roomNo.toString()}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </Select>
+                        </div>
+                        <div
+                            style={{
+                                margin: "20px 0",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                            }}
+                        >
                             <div
                                 style={{
                                     margin: "20px 0",
                                     display: "flex",
                                     alignItems: "center",
+                                    width: "100%",
                                 }}
                             >
                                 <StyledTextField
